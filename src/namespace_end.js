@@ -1,2 +1,2 @@
-	return res;
+	return PUBLIC;
 }());

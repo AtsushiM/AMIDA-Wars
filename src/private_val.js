@@ -21,4 +21,39 @@ var GAME,
 		MIDIUM:'MIDIUM',
 		HEAVY:'NOARMOR',
 		NOARMOR:'LIGHT'
-	};
+	},
+	/**
+	 * Override object property
+	 * @name propOverride
+	 * @function
+	 * @param {Object} prop overrided object
+	 * @param {Object} config add
+	 * @returns {Object}
+	 */
+	propOverride = function(prop,config){
+		if(prop === undefined){
+			prop = {};
+		}
+		for(var i in config){
+			if(config.hasOwnProperty(i)){
+				prop[i] = config[i];
+			}
+		}
+		return prop;
+	},
+	/**
+	 * Add a layer Sprite
+	 * @name addLayer
+	 * @function
+	 * @param {Object} config / layer:target Group / sprite:add Sprite /
+	 * @returns sprite 
+	 */
+	addLayer: function(config){
+		var layer = config.layer,
+			sprite = config.sprite;
+
+		layer.addChild(sprite);
+		return sprite;
+	},
+	//return Public
+	PUBLIC = {};
