@@ -1,0 +1,2 @@
+enchant();
+var AW = (function(){
