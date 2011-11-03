@@ -74,11 +74,19 @@ PUBLIC.Thumb = function(config){
 				
 				//create unit
 				this.lastUnit = new AW.Unit(this.unit);
+				this.lastUnit.thumb = this;
 			}
 			this.x = defaultX;
 			this.y = defaultY;
 		}
 	});
+
+
+	//sprite drag
+	sprite.dragStart = function(){
+		sprite.canDrag = true;
+		sprite.opacity = 1;
+	};
 
 	//add array
 	THUMBS[mode].push(sprite);

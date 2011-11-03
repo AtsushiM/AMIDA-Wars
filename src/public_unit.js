@@ -7,14 +7,18 @@
  */
 PUBLIC.Unit = function(config){
 	var size = CONST_CASH.UNIT.CHIP_SIZE,
+		map_chip_size = CONST_CASH.MAP.CHIP_SIZE,
+		unit_size_diff_x = size / 2,
+		unit_size_diff_y = size / 8,
 		image = GAME.assets[CONST_CASH.UNIT.IMAGE],
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
 		have = CONST_CASH.HAVE,
 		line_num = CONST_CASH.UNIT.FRAME_LINE,
 		walk_count = 0, walk_true = 0,
+		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
-		mapPoint,checkMoveSquere,getCollision,walk,move;
+		mapPoint,checkMoveSquere,getCollision,walk,move,kill;
 
 	//can user override prop
 	sprite.direction = 0;
@@ -23,23 +27,30 @@ PUBLIC.Unit = function(config){
 
 	default_frame = sprite.frame;
 
+	/**
+	 * Get the sprite's position on the map
+	 * @name mapPoint
+	 * @function
+	 */
 	mapPoint = function(){
-		var size = CONST_CASH.MAP.CHIP_SIZE;
 		return {
-			x: Math.floor(sprite.x/size),
-			y: Math.floor(sprite.y/size)
+			x: Math.floor(sprite.x/map_chip_size),
+			y: Math.floor(sprite.y/map_chip_size)
 		};
 	};
 	//set before map squere point
 	sprite.beforePoint = mapPoint();
 
+	/**
+	 * unit move check
+	 * @name checkMoveSquere
+	 * @function
+	 * @return 
+	 */
 	checkMoveSquere = function(){
-		var map_size = CONST_CASH.MAP.CHIP_SIZE,
-			unit_size_diff_x = CONST_CASH.UNIT.CHIP_SIZE / 2,
-			unit_size_diff_y = unit_size_diff_x / 4,
-			ret = false;
+		var ret = false;
 
-		if(Math.floor(sprite.x - unit_size_diff_x) % map_size === 0 && Math.floor(sprite.y - unit_size_diff_y) % map_size === 0){
+		if(Math.floor(sprite.x - unit_size_diff_x) % map_chip_size === 0 && Math.floor(sprite.y - unit_size_diff_y) % map_chip_size === 0){
 			var now = mapPoint(),
 				before = sprite.beforePoint;
 			if(now.x !== before.x || now.y !== before.y){
@@ -49,13 +60,18 @@ PUBLIC.Unit = function(config){
 		}
 		return ret;
 	};
+	/**
+	 * Gets an array for collision detection
+	 * @name getCollision
+	 * @function
+	 * @return 
+	 */
 	getCollision = function(){
 		var unitPoint = mapPoint(),
-			colision = MAP.COLLISION,
-			have = CONST_CASH.HAVE,
+			mc = MAP.COLLISION,
 			ret = false;
 
-		if((colision = colision[unitPoint.y]) && (colision = colision[unitPoint.x])){
+		if((mc = mc[unitPoint.y]) && (mc = mc[unitPoint.x])){
 			// TODO: hit enemy castle
 			if(mc[0] === 0 && mc[1] === 0 && mc[2] === 1 && mc[3] === 0){
 				ret = {CASTLE:have.ENEMY};
@@ -64,11 +80,18 @@ PUBLIC.Unit = function(config){
 			else if(mc[0] === 1 && mc[1] === 0 && mc[2] === 0 && mc[3] === 0){
 				ret = {CASTLE:have.USER};
 			}
-			ret = colision;
+			else {
+				ret = mc;
+			}
 		}
 		return ret;
 	};
 
+	/**
+	 * walk movie
+	 * @name walk
+	 * @function
+	 */
 	walk = function(){
 		if(GAME.frame % 5 === 0){
 			walk_count++;
@@ -85,40 +108,77 @@ PUBLIC.Unit = function(config){
 		sprite.frame = default_frame + walk_true * line_num + sprite.direction;
 	};
 
-	if(mode === have.USER){
-		// TODO: usermove
-		move = function(){
-			walk();
-			if(sprite.direction === 0){
-				sprite.y -= sprite.speed;
+	move = function(){
+		var d = sprite.direction,
+			s = sprite.speed,
+			i,len,aii,colision;
+
+		for(i = 0,len = ai.length; i < len; i++) {
+			aii = ai[i];
+			if(d === aii.direction){
+				sprite[aii.prop] += (s * aii.sign);
 				if(checkMoveSquere()){
-					/* console.log('change'); */
+					colision = getCollision();
+					var a= 1;
+					if(colision !== false){
+						if(!colision.CASTLE){
+							if(colision[aii.order[0]] === 1){
+								sprite.direction = aii.order[0];
+								break;
+							}
+							else if(colision[aii.order[1]] === 1){
+								sprite.direction = aii.order[1];
+								break;
+							}
+							else if(colision[aii.order[2]] === 1){
+								sprite.direction = aii.order[2];
+								break;
+							}
+							else {
+								sprite.direction = aii.order[3];
+							}
+						}
+						else if(colision.CASTLE === have.ENEMY){
+							// TODO:enemy
+							kill();
+						}
+						else if(colision.CASTLE === have.USER){
+							// TODO:user
+							kill();
+						}
+					}
 				}
 			}
-			else if(sprite.direction === 1){
-				sprite.x += sprite.speed;
-			}
-			else if(sprite.direction === 2){
-				sprite.y += sprite.speed;
-			}
-			else if(sprite.direction === 3){
-				sprite.x -= sprite.speed;
-			}
-		};
-	}
-	else if(mode === have.ENEMY){
-		// TODO: enemymove
-		move = function(){
-			sprite.y += 1;
-		};
-	}
+		}
+	};
 
+	/**
+	 * unit kill
+	 * @name kill
+	 * @function
+	 */
+	kill = function(){
+		console.dir(sprite);
+		delete UNITS[mode][sprite.myNo];
+		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
+
+		if(sprite.thumb){
+			setTimeout(function(){
+				sprite.thumb.dragStart();
+			},sprite.reverse);
+		}
+	};
+
+	//unit action
 	sprite.addEventListener(enchant.Event.ENTER_FRAME,function(e){
+		walk();
 		move();
 	});
 
 	//add array
-	UNITS[mode].push(sprite);
+	sprite.myNo = UNITS.no;
+	UNITS[mode][UNITS.no] = sprite;
+	UNITS.no++;
 
 	//add Layer
 	return addLayer({

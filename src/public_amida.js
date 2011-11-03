@@ -23,6 +23,15 @@ PUBLIC.Amida = function(){
 	//map set
 	map.image = GAME.assets[CONST_CASH.MAP.IMAGE];
 	map.loadData(chipset);
+
+	//depth set
+	root.addChild(map);
+	root.addChild(group_enemy.CASTLE);
+	root.addChild(group_enemy.UNIT);
+	root.addChild(group_user.UNIT);
+	root.addChild(group_user.CASTLE);
+	root.addChild(group_user.THUMB);
+	root.addChild(group_enemy.THUMB);
 	
 	//castle set
 	for(i in castle_point){
@@ -53,13 +62,4 @@ PUBLIC.Amida = function(){
 			y: thumb_position[i][1]
 		});
 	}
-	
-	//depth set
-	root.addChild(map);
-	root.addChild(group_user.CASTLE);
-	root.addChild(group_enemy.UNIT);
-	root.addChild(group_user.UNIT);
-	root.addChild(group_enemy.CASTLE);
-	root.addChild(group_user.THUMB);
-	root.addChild(group_enemy.THUMB);
 };

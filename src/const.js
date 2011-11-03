@@ -38,6 +38,16 @@ var CONST = function(){
 						SHADE:           { name:'SHADE',           frame:152, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
 						UNDEAD_SPIDER:   { name:'UNDEAD_SPIDER',   frame:156, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM }
 					}
+				},
+				AI: {
+					USER: [ { direction:0, prop:'y', sign:-1, order:[1,3,0,2] },
+							{ direction:3, prop:'x', sign:-1, order:[0,2,3,1] },
+							{ direction:1, prop:'x', sign: 1, order:[0,2,1,3] },
+							{ direction:2, prop:'y', sign: 1, order:[3,1,2,0] } ],
+					ENEMY: [{ direction:2, prop:'y', sign: 1, order:[3,1,0,2] },
+							{ direction:3, prop:'x', sign:-1, order:[2,0,3,1] },
+							{ direction:1, prop:'x', sign: 1, order:[2,0,1,3] },
+							{ direction:2, prop:'y', sign: 1, order:[3,1,0,2] } ]
 				}
 			};
 		},

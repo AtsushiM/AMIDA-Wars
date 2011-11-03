@@ -6,7 +6,7 @@ var GAME,
 	},
 	USER_RACE = '',
 	USER_ORDER = [],
-	UNITS = { USER: [], ENEMY: [] },
+	UNITS = { USER: {}, ENEMY: {}, no: 0 },
 	THUMBS = { USER: [], ENEMY: [] },
 	CASTLE = { USER: [], ENEMY: [] },
 	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [] },
@@ -48,12 +48,9 @@ var GAME,
 	 * @param {Object} config / layer:target Group / sprite:add Sprite /
 	 * @returns sprite 
 	 */
-	addLayer: function(config){
-		var layer = config.layer,
-			sprite = config.sprite;
-
-		layer.addChild(sprite);
-		return sprite;
+	addLayer = function(config){
+		config.layer.addChild(config.sprite);
+		return config.sprite;
 	},
 	//return Public
 	PUBLIC = {};
