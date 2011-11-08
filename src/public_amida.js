@@ -62,4 +62,53 @@ PUBLIC.Amida = function(){
 			y: thumb_position[i][1]
 		});
 	}
+
+	//map methods
+	/**
+	* 
+	* @name getSquere
+	* @function
+	* @param obj 
+	*/
+	map.getSquere = function(obj){
+		var x = Math.floor(obj.x/chip_size),
+			y = Math.floor(obj.y/chip_size);
+
+		return {
+			x: x,
+			y: y
+		};
+	};
+
+	map.getCollision = function(obj){
+		var unitPoint = map.getSquere(obj),
+			mc = MAP.COLLISION,
+			ret = false,
+			calc = 0,
+			i,j,len,castles,castle;
+
+		if((mc = mc[unitPoint.y]) && (mc = mc[unitPoint.x])){
+			calc = mc[0] + mc[1] + mc[2] + mc[3];
+			if(calc === 1){
+				for(i in CASTLE) {
+					if(CASTLE.hasOwnProperty(i)){
+						castles = CASTLE[i];
+						for(j = 0,len = castles.length; j < len; j++){
+							castle = castles[j];
+							if(obj.intersect(castle)){
+								ret = castle;
+								break;
+							}
+						}
+					}
+				}
+			} 
+			else {
+				ret = mc;
+			}
+		}
+		return ret;
+	};
+	//set global
+	MAP.PATH = map;
 };

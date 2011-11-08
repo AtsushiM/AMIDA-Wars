@@ -11,7 +11,7 @@ var GAME,
 	UNITS = { USER: {}, ENEMY: {}, no: 0 },
 	THUMBS = { USER: [], ENEMY: [] },
 	CASTLE = { USER: [], ENEMY: [] },
-	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [] },
+	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [], PATH: {} },
 	TYPE = {
 		LIGHT:'LIGHT',
 		MIDIUM:'MIDIUM',
@@ -77,24 +77,24 @@ var CONST = function(){
 				},
 				STATUS: {
 					HUMAN: {
-						WARRIOR:         { name:'WARRIOR',         frame:  0, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						LANCER:          { name:'LANCER',          frame:  4, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						KNIGHT:          { name:'KNIGHT',          frame:  8, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						ARCHER:          { name:'ARCHER',          frame: 12, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						CLELIC:          { name:'CLELIC',          frame: 48, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						FIRE_MAGE:       { name:'FIRE_MAGE',       frame: 52, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						FROST_MAGE:      { name:'FROST_MAGE',      frame: 56, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						WIZARD:          { name:'WIZARD',          frame: 60, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM }
+						WARRIOR:         { name:'WARRIOR',         frame:  0, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						LANCER:          { name:'LANCER',          frame:  4, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						KNIGHT:          { name:'KNIGHT',          frame:  8, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						ARCHER:          { name:'ARCHER',          frame: 12, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						CLELIC:          { name:'CLELIC',          frame: 48, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						FIRE_MAGE:       { name:'FIRE_MAGE',       frame: 52, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						FROST_MAGE:      { name:'FROST_MAGE',      frame: 56, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						WIZARD:          { name:'WIZARD',          frame: 60, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 }
 					},
 					UNDEAD: {
-						SKELTON_DOG:     { name:'SKELTON_DOG',     frame: 96, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						SKELTON_WARRIER: { name:'SKELTON_WARRIER', frame:100, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						SKELTON_ARCHER:  { name:'SKELTON_ARCHER',  frame:104, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						SPECTOR:         { name:'SPECTOR',         frame:108, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						SKELTON_SNAKE:   { name:'SKELTON_SNAKE',   frame:144, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						GOLEM:           { name:'GOLEM',           frame:148, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						SHADE:           { name:'SHADE',           frame:152, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM },
-						UNDEAD_SPIDER:   { name:'UNDEAD_SPIDER',   frame:156, hp:1, armor:1, speed:1, damage:1, reverse:1000, type:TYPE.MIDIUM }
+						SKELTON_DOG:     { name:'SKELTON_DOG',     frame: 96, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						SKELTON_WARRIER: { name:'SKELTON_WARRIER', frame:100, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						SKELTON_ARCHER:  { name:'SKELTON_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						SPECTOR:         { name:'SPECTOR',         frame:108, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						SKELTON_SNAKE:   { name:'SKELTON_SNAKE',   frame:144, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						GOLEM:           { name:'GOLEM',           frame:148, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						SHADE:           { name:'SHADE',           frame:152, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						UNDEAD_SPIDER:   { name:'UNDEAD_SPIDER',   frame:156, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 }
 					}
 				},
 				AI: {
@@ -139,6 +139,13 @@ var CONST = function(){
 				ENEMY: { UNIT: GROUP.ENEMY.UNIT, CASTLE: GROUP.ENEMY.CASTLE, THUMB: GROUP.ENEMY.THUMB }
 			};
 		},
+		TYPE: function(){
+			return {
+				CASTLE: 'CASTLE',
+				THUMB: 'THUMB',
+				UNIT: 'UNIT'
+			};
+		},
 		HAVE: function(){
 			return {
 				USER: 'USER', ENEMY: 'ENEMY'
@@ -164,6 +171,7 @@ PUBLIC.init = function(config){
 		MAP: CONST_CASH.MAP(),
 		CASTLE: CONST_CASH.CASTLE(),
 		LAYER: CONST_CASH.LAYER(),
+		TYPE: CONST_CASH.TYPE(),
 		HAVE: CONST_CASH.HAVE(),
 		POINT: CONST_CASH.POINT() 
 	};
@@ -258,6 +266,7 @@ PUBLIC.init = function(config){
 			for(j = 0, jlen = calc2.length; j < jlen; j++){
 				calc2[j] = txt2num(calc2[j]);
 				calc1[j] = datamap[calc2[j]];
+
 				if(calc2[j] === 25){
 					castle_point.ENEMY.push([j,i]);
 				}
@@ -353,6 +362,55 @@ PUBLIC.Amida = function(){
 			y: thumb_position[i][1]
 		});
 	}
+
+	//map methods
+	/**
+	* 
+	* @name getSquere
+	* @function
+	* @param obj 
+	*/
+	map.getSquere = function(obj){
+		var x = Math.floor(obj.x/chip_size),
+			y = Math.floor(obj.y/chip_size);
+
+		return {
+			x: x,
+			y: y
+		};
+	};
+
+	map.getCollision = function(obj){
+		var unitPoint = map.getSquere(obj),
+			mc = MAP.COLLISION,
+			ret = false,
+			calc = 0,
+			i,j,len,castles,castle;
+
+		if((mc = mc[unitPoint.y]) && (mc = mc[unitPoint.x])){
+			calc = mc[0] + mc[1] + mc[2] + mc[3];
+			if(calc === 1){
+				for(i in CASTLE) {
+					if(CASTLE.hasOwnProperty(i)){
+						castles = CASTLE[i];
+						for(j = 0,len = castles.length; j < len; j++){
+							castle = castles[j];
+							if(obj.intersect(castle)){
+								ret = castle;
+								break;
+							}
+						}
+					}
+				}
+			} 
+			else {
+				ret = mc;
+			}
+		}
+		return ret;
+	};
+	//set global
+	MAP.PATH = map;
 };
 /**
  * Create Castle Object
@@ -375,8 +433,15 @@ PUBLIC.Castle = function(config){
 	sprite.image = image;
 	sprite = propOverride(sprite,prop);
 
+	//set type
+	sprite.type = CONST_CASH.TYPE.CASTLE;
+
 	//add array
 	CASTLE[mode].push(sprite);
+
+	// TODO:
+	this.broken = function(){
+	};
 
 	//add Layer
 	return addLayer({
@@ -385,7 +450,7 @@ PUBLIC.Castle = function(config){
 	});
 };
 /**
- * Create Thumbnail Object
+ * Create Thumbnail Class
  * @name Thumb
  * @function
  * @param {Object} config / mode:'USER' || 'ENEMY' /
@@ -425,6 +490,9 @@ PUBLIC.Thumb = function(config){
 		mode:mode
 	};
 	sprite.unit = propOverride(sprite.unit,unitData);
+
+	//set type
+	sprite.type = CONST_CASH.TYPE.THUMB;
 
 	//can drag flg
 	sprite.canDrag = true;
@@ -484,7 +552,7 @@ PUBLIC.Thumb = function(config){
 	});
 };
 /**
- * Create Unit Object
+ * Create Unit Class
  * @name Unit 
  * @function
  * @param {Object} config 
@@ -503,12 +571,33 @@ PUBLIC.Unit = function(config){
 		walk_count = 0, walk_true = 0,
 		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
-		mapPoint,checkMoveSquere,getCollision,walk,move,kill;
+		mapPoint,checkMoveSquere,getCollision,walk,move;
+
 
 	//can user override prop
 	sprite.direction = 0;
 	sprite.image = image;
 	sprite = propOverride(sprite,config);
+
+	//set Class
+	sprite.type = CONST_CASH.TYPE.UNIT;
+
+	/**
+	 * unit kill
+	 * @name kill
+	 * @function
+	 */
+	sprite.kill = function(){
+		delete UNITS[mode][sprite.myNo];
+		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
+
+		//thumb drag start
+		if(sprite.thumb){
+			setTimeout(function(){
+				sprite.thumb.dragStart();
+			},sprite.reverse);
+		}
+	};
 
 	default_frame = sprite.frame;
 
@@ -518,10 +607,7 @@ PUBLIC.Unit = function(config){
 	 * @function
 	 */
 	mapPoint = function(){
-		return {
-			x: Math.floor(sprite.x/map_chip_size),
-			y: Math.floor(sprite.y/map_chip_size)
-		};
+		return MAP.PATH.getSquere(sprite);
 	};
 	//set before map squere point
 	sprite.beforePoint = mapPoint();
@@ -552,24 +638,7 @@ PUBLIC.Unit = function(config){
 	 * @return 
 	 */
 	getCollision = function(){
-		var unitPoint = mapPoint(),
-			mc = MAP.COLLISION,
-			ret = false;
-
-		if((mc = mc[unitPoint.y]) && (mc = mc[unitPoint.x])){
-			// TODO: hit enemy castle
-			if(mc[0] === 0 && mc[1] === 0 && mc[2] === 1 && mc[3] === 0){
-				ret = {CASTLE:have.ENEMY};
-			} 
-			// TODO: hit user castle
-			else if(mc[0] === 1 && mc[1] === 0 && mc[2] === 0 && mc[3] === 0){
-				ret = {CASTLE:have.USER};
-			}
-			else {
-				ret = mc;
-			}
-		}
-		return ret;
+		return MAP.PATH.getCollision(sprite);
 	};
 
 	/**
@@ -596,6 +665,8 @@ PUBLIC.Unit = function(config){
 	move = function(){
 		var d = sprite.direction,
 			s = sprite.speed,
+			sprite_type = CONST_CASH.TYPE,
+			have = CONST_CASH.HAVE,
 			i,len,aii,colision;
 
 		for(i = 0,len = ai.length; i < len; i++) {
@@ -623,34 +694,19 @@ PUBLIC.Unit = function(config){
 								sprite.direction = aii.order[3];
 							}
 						}
-						else if(colision.CASTLE === have.ENEMY){
-							// TODO:enemy
-							kill();
-						}
-						else if(colision.CASTLE === have.USER){
-							// TODO:user
-							kill();
+						else if(colision.TYPE === sprite_type.CASTLE){
+							if(mode === have.ENEMY){
+								// TODO:enemy
+								sprite.kill();
+							}
+							else if(mode === have.USER){
+								// TODO:user
+								sprite.kill();
+							}
 						}
 					}
 				}
 			}
-		}
-	};
-
-	/**
-	 * unit kill
-	 * @name kill
-	 * @function
-	 */
-	kill = function(){
-		console.dir(sprite);
-		delete UNITS[mode][sprite.myNo];
-		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
-
-		if(sprite.thumb){
-			setTimeout(function(){
-				sprite.thumb.dragStart();
-			},sprite.reverse);
 		}
 	};
 
@@ -696,6 +752,68 @@ PUBLIC.Score = function(config){
 		rate: rate,
 		point: AW.CONST().POINT
 	};
+};
+var observer = {
+	subscribers: {
+		UNIT: {
+			USER:{},
+			ENEMY:{}
+		},
+		THUMB: {
+			USER:{},
+			ENEMY:{}
+		},
+		CASTLE: {
+			USER:{},
+			ENEMY:{}
+		}
+	},
+	methods: {
+		UNIT: {
+			kill:[
+				function(){
+					//damage castle
+					console.log('damage castle');
+				},
+				function(){
+					//update score
+					console.log('update score unit');
+				}
+			]
+		},
+		THUMB: {
+			thouchEnd:[
+				function(){
+					//create unit 
+					console.log('create unit');
+				}
+			]
+		},
+		CASTLE: {
+			broke:[
+				function(){
+					//update score
+					console.log('update score castle');
+				}
+			]
+		}
+	},
+	register: function(that,state){
+		// TODO: methods
+	},
+	update: function(that,action){
+		var type = that.type,
+			mode = that.mode,
+			i = 0,
+			targets = subscribers[type][mode],
+			method = methods[type];
+
+		for(i in targets){
+			if(targets.hasOwnProperties(i)){
+			}
+		}
+		Observer.methods[that.className][action](that);
+	}
 };
 	return PUBLIC;
 }());

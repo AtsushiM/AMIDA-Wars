@@ -19,8 +19,15 @@ PUBLIC.Castle = function(config){
 	sprite.image = image;
 	sprite = propOverride(sprite,prop);
 
+	//set type
+	sprite.type = CONST_CASH.TYPE.CASTLE;
+
 	//add array
 	CASTLE[mode].push(sprite);
+
+	// TODO:
+	this.broken = function(){
+	};
 
 	//add Layer
 	return addLayer({

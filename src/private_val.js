@@ -9,7 +9,7 @@ var GAME,
 	UNITS = { USER: {}, ENEMY: {}, no: 0 },
 	THUMBS = { USER: [], ENEMY: [] },
 	CASTLE = { USER: [], ENEMY: [] },
-	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [] },
+	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [], PATH: {} },
 	TYPE = {
 		LIGHT:'LIGHT',
 		MIDIUM:'MIDIUM',

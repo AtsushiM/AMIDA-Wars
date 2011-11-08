@@ -1,5 +1,5 @@
 /**
- * Create Thumbnail Object
+ * Create Thumbnail Class
  * @name Thumb
  * @function
  * @param {Object} config / mode:'USER' || 'ENEMY' /
@@ -39,6 +39,9 @@ PUBLIC.Thumb = function(config){
 		mode:mode
 	};
 	sprite.unit = propOverride(sprite.unit,unitData);
+
+	//set type
+	sprite.type = CONST_CASH.TYPE.THUMB;
 
 	//can drag flg
 	sprite.canDrag = true;

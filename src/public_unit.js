@@ -1,5 +1,5 @@
 /**
- * Create Unit Object
+ * Create Unit Class
  * @name Unit 
  * @function
  * @param {Object} config 
@@ -18,12 +18,33 @@ PUBLIC.Unit = function(config){
 		walk_count = 0, walk_true = 0,
 		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
-		mapPoint,checkMoveSquere,getCollision,walk,move,kill;
+		mapPoint,checkMoveSquere,getCollision,walk,move;
+
 
 	//can user override prop
 	sprite.direction = 0;
 	sprite.image = image;
 	sprite = propOverride(sprite,config);
+
+	//set Class
+	sprite.type = CONST_CASH.TYPE.UNIT;
+
+	/**
+	 * unit kill
+	 * @name kill
+	 * @function
+	 */
+	sprite.kill = function(){
+		delete UNITS[mode][sprite.myNo];
+		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
+
+		//thumb drag start
+		if(sprite.thumb){
+			setTimeout(function(){
+				sprite.thumb.dragStart();
+			},sprite.reverse);
+		}
+	};
 
 	default_frame = sprite.frame;
 
@@ -33,10 +54,7 @@ PUBLIC.Unit = function(config){
 	 * @function
 	 */
 	mapPoint = function(){
-		return {
-			x: Math.floor(sprite.x/map_chip_size),
-			y: Math.floor(sprite.y/map_chip_size)
-		};
+		return MAP.PATH.getSquere(sprite);
 	};
 	//set before map squere point
 	sprite.beforePoint = mapPoint();
@@ -67,24 +85,7 @@ PUBLIC.Unit = function(config){
 	 * @return 
 	 */
 	getCollision = function(){
-		var unitPoint = mapPoint(),
-			mc = MAP.COLLISION,
-			ret = false;
-
-		if((mc = mc[unitPoint.y]) && (mc = mc[unitPoint.x])){
-			// TODO: hit enemy castle
-			if(mc[0] === 0 && mc[1] === 0 && mc[2] === 1 && mc[3] === 0){
-				ret = {CASTLE:have.ENEMY};
-			} 
-			// TODO: hit user castle
-			else if(mc[0] === 1 && mc[1] === 0 && mc[2] === 0 && mc[3] === 0){
-				ret = {CASTLE:have.USER};
-			}
-			else {
-				ret = mc;
-			}
-		}
-		return ret;
+		return MAP.PATH.getCollision(sprite);
 	};
 
 	/**
@@ -111,6 +112,8 @@ PUBLIC.Unit = function(config){
 	move = function(){
 		var d = sprite.direction,
 			s = sprite.speed,
+			sprite_type = CONST_CASH.TYPE,
+			have = CONST_CASH.HAVE,
 			i,len,aii,colision;
 
 		for(i = 0,len = ai.length; i < len; i++) {
@@ -138,34 +141,19 @@ PUBLIC.Unit = function(config){
 								sprite.direction = aii.order[3];
 							}
 						}
-						else if(colision.CASTLE === have.ENEMY){
-							// TODO:enemy
-							kill();
-						}
-						else if(colision.CASTLE === have.USER){
-							// TODO:user
-							kill();
+						else if(colision.TYPE === sprite_type.CASTLE){
+							if(mode === have.ENEMY){
+								// TODO:enemy
+								sprite.kill();
+							}
+							else if(mode === have.USER){
+								// TODO:user
+								sprite.kill();
+							}
 						}
 					}
 				}
 			}
-		}
-	};
-
-	/**
-	 * unit kill
-	 * @name kill
-	 * @function
-	 */
-	kill = function(){
-		console.dir(sprite);
-		delete UNITS[mode][sprite.myNo];
-		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
-
-		if(sprite.thumb){
-			setTimeout(function(){
-				sprite.thumb.dragStart();
-			},sprite.reverse);
 		}
 	};
 

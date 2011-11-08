@@ -10,6 +10,7 @@ PUBLIC.init = function(config){
 		MAP: CONST_CASH.MAP(),
 		CASTLE: CONST_CASH.CASTLE(),
 		LAYER: CONST_CASH.LAYER(),
+		TYPE: CONST_CASH.TYPE(),
 		HAVE: CONST_CASH.HAVE(),
 		POINT: CONST_CASH.POINT() 
 	};
@@ -104,6 +105,7 @@ PUBLIC.init = function(config){
 			for(j = 0, jlen = calc2.length; j < jlen; j++){
 				calc2[j] = txt2num(calc2[j]);
 				calc1[j] = datamap[calc2[j]];
+
 				if(calc2[j] === 25){
 					castle_point.ENEMY.push([j,i]);
 				}
