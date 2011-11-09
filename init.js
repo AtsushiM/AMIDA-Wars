@@ -434,13 +434,25 @@ PUBLIC.Castle = function(config){
 	sprite = propOverride(sprite,prop);
 
 	//set type
-	sprite.type = CONST_CASH.TYPE.CASTLE;
+	sprite.TYPE = CONST_CASH.TYPE.CASTLE;
 
 	//add array
 	CASTLE[mode].push(sprite);
 
-	// TODO:
-	this.broken = function(){
+	// TODO: 
+	sprite.damage = function(unit) {
+		sprite.hp -= unit.damage;
+		if(sprite.hp <= 0) {
+			sprite.broke();
+		}
+		else if(sprite.mhp / 2 >= sprite.hp) {
+			sprite.frame = sprite.brake;
+		}
+	};
+	sprite.broke = function(){
+		sprite.hp = 0;
+		sprite.opacity = 0;
+		//TODO: check game end;
 	};
 
 	//add Layer
@@ -665,6 +677,7 @@ PUBLIC.Unit = function(config){
 	move = function(){
 		var d = sprite.direction,
 			s = sprite.speed,
+			m = sprite.mode,
 			sprite_type = CONST_CASH.TYPE,
 			have = CONST_CASH.HAVE,
 			i,len,aii,colision;
@@ -677,35 +690,34 @@ PUBLIC.Unit = function(config){
 					colision = getCollision();
 					var a= 1;
 					if(colision !== false){
-						if(!colision.CASTLE){
+						if(colision.TYPE !== sprite_type.CASTLE){
 							if(colision[aii.order[0]] === 1){
 								sprite.direction = aii.order[0];
-								break;
 							}
 							else if(colision[aii.order[1]] === 1){
 								sprite.direction = aii.order[1];
-								break;
 							}
 							else if(colision[aii.order[2]] === 1){
 								sprite.direction = aii.order[2];
-								break;
 							}
 							else {
 								sprite.direction = aii.order[3];
 							}
 						}
-						else if(colision.TYPE === sprite_type.CASTLE){
-							if(mode === have.ENEMY){
+						else {
+							sprite.kill();
+							colision.damage(sprite);
+							if(m === have.ENEMY){
 								// TODO:enemy
-								sprite.kill();
 							}
-							else if(mode === have.USER){
+							else if(m === have.USER){
 								// TODO:user
-								sprite.kill();
 							}
 						}
 					}
 				}
+
+				break;
 			}
 		}
 	};
