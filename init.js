@@ -365,7 +365,7 @@ PUBLIC.Amida = function(){
 
 	//map methods
 	/**
-	* 
+	* Gets the point on the map.
 	* @name getSquere
 	* @function
 	* @param obj 
@@ -380,6 +380,13 @@ PUBLIC.Amida = function(){
 		};
 	};
 
+	/**
+	 * Gets the obj point Collision
+	 * @name getCollision
+	 * @function
+	 * @param obj 
+	 * @return 
+	 */
 	map.getCollision = function(obj){
 		var unitPoint = map.getSquere(obj),
 			mc = MAP.COLLISION,
@@ -411,6 +418,9 @@ PUBLIC.Amida = function(){
 	};
 	//set global
 	MAP.PATH = map;
+
+	//surveillant start
+	surveillant.init();
 };
 /**
  * Create Castle Object
@@ -440,6 +450,12 @@ PUBLIC.Castle = function(config){
 	CASTLE[mode].push(sprite);
 
 	// TODO: 
+	/**
+	 * castle damage
+	 * @name damage
+	 * @function
+	 * @param unit 
+	 */
 	sprite.damage = function(unit) {
 		sprite.hp -= unit.damage;
 		if(sprite.hp <= 0) {
@@ -449,6 +465,11 @@ PUBLIC.Castle = function(config){
 			sprite.frame = sprite.brake;
 		}
 	};
+	/**
+	 * castle broke
+	 * @name broke
+	 * @function
+	 */
 	sprite.broke = function(){
 		sprite.hp = 0;
 		sprite.opacity = 0;
@@ -477,6 +498,13 @@ PUBLIC.Thumb = function(config){
 		sprite = new Sprite(size,size),
 		originX,originY,defaultX,defaultY,
 		eEv = enchant.Event,
+		/**
+		 * Check if hit in the castle
+		 * @name hitMyCastle
+		 * @function
+		 * @param obj 
+		 * @return 
+		 */
 		hitMyCastle = function(obj){
 			var hit = false,
 				castles = CASTLE.USER,
@@ -674,15 +702,20 @@ PUBLIC.Unit = function(config){
 		sprite.frame = default_frame + walk_true * line_num + sprite.direction;
 	};
 
+	/**
+	 * unit move
+	 * @name move
+	 * @function
+	 */
 	move = function(){
 		var d = sprite.direction,
 			s = sprite.speed,
 			m = sprite.mode,
 			sprite_type = CONST_CASH.TYPE,
 			have = CONST_CASH.HAVE,
-			i,len,aii,colision;
+			i,len = ai.length,aii,colision;
 
-		for(i = 0,len = ai.length; i < len; i++) {
+		for(i = 0,len; i < len; i++) {
 			aii = ai[i];
 			if(d === aii.direction){
 				sprite[aii.prop] += (s * aii.sign);
@@ -765,76 +798,60 @@ PUBLIC.Score = function(config){
 		point: AW.CONST().POINT
 	};
 };
-var observer = {
-	subscribers: {
-		UNIT: {
-			USER:{},
-			ENEMY:{}
-		},
-		THUMB: {
-			USER:{},
-			ENEMY:{}
-		},
-		CASTLE: {
-			USER:{},
-			ENEMY:{}
-		}
-	},
-	methods: {
-		UNIT: {
-			kill:[
-				function(){
-					//damage castle
-					console.log('damage castle');
-				},
-				function(){
-					//update score
-					console.log('update score unit');
+var EnemyAction = {
+	init: function() {
+		var castle, unit, r, i, 
+			castles = CASTLE.ENEMY,
+			unit_status = CONST_CASH.UNIT.STATUS.UNDEAD, 
+			units = (function(){
+				var ret = [];
+				for (i in unit_status) {
+					if(unit_status.hasOwnProperty(i)) {
+						ret.push(i);
+					}
 				}
-			]
-		},
-		THUMB: {
-			thouchEnd:[
-				function(){
-					//create unit 
-					console.log('create unit');
-				}
-			]
-		},
-		CASTLE: {
-			broke:[
-				function(){
-					//update score
-					console.log('update score castle');
-				}
-			]
-		}
-	},
-	register: function(that,state){
-		// TODO: methods
-	},
-	update: function(that,action){
-		var type = that.type,
-			mode = that.mode,
-			i = 0,
-			targets = subscribers[type][mode],
-			method = methods[type];
+				return ret;
+			}()), 
+			castles_len = castles.length, 
+			units_len = units.length;
 
-		for(i in targets){
-			if(targets.hasOwnProperties(i)){
+		console.log(castles);
+
+		AIID = setInterval(function() {
+			r = Math.floor(Math.random() * castles_len);
+			if(r >= castles_len) {
+				r = castles_len - 1;
 			}
-		}
-		Observer.methods[that.className][action](that);
+			castle = castles[r];
+
+			r = Math.floor(Math.random() * units_len);
+			if(r >= units_len) {
+				r = units_len - 1;
+			}
+			unit = units[r];
+			
+			console.log(castle);
+			console.log(unit);
+		}, 3000);
+	}
+};
+var surveillant = {
+	init: function() {
+		EnemyAction.init();
 	}
 };
 	return PUBLIC;
 }());
 //AMIDA Wars init
 AW.init({
+	//select race
 	race: 'HUMAN',
+	//race: 'UNDEAD',
+
 	//unit order
 	order: ['lancer','warrior','knight','archer',
 			'clelic','fire_mage','frost_mage','wizard'],
+
 	// easy map creater
 	/*
 	│─├┤┌┐└┘:road

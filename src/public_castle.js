@@ -26,6 +26,12 @@ PUBLIC.Castle = function(config){
 	CASTLE[mode].push(sprite);
 
 	// TODO: 
+	/**
+	 * castle damage
+	 * @name damage
+	 * @function
+	 * @param unit 
+	 */
 	sprite.damage = function(unit) {
 		sprite.hp -= unit.damage;
 		if(sprite.hp <= 0) {
@@ -35,6 +41,11 @@ PUBLIC.Castle = function(config){
 			sprite.frame = sprite.brake;
 		}
 	};
+	/**
+	 * castle broke
+	 * @name broke
+	 * @function
+	 */
 	sprite.broke = function(){
 		sprite.hp = 0;
 		sprite.opacity = 0;

@@ -14,6 +14,13 @@ PUBLIC.Thumb = function(config){
 		sprite = new Sprite(size,size),
 		originX,originY,defaultX,defaultY,
 		eEv = enchant.Event,
+		/**
+		 * Check if hit in the castle
+		 * @name hitMyCastle
+		 * @function
+		 * @param obj 
+		 * @return 
+		 */
 		hitMyCastle = function(obj){
 			var hit = false,
 				castles = CASTLE.USER,

@@ -65,7 +65,7 @@ PUBLIC.Amida = function(){
 
 	//map methods
 	/**
-	* 
+	* Gets the point on the map.
 	* @name getSquere
 	* @function
 	* @param obj 
@@ -80,6 +80,13 @@ PUBLIC.Amida = function(){
 		};
 	};
 
+	/**
+	 * Gets the obj point Collision
+	 * @name getCollision
+	 * @function
+	 * @param obj 
+	 * @return 
+	 */
 	map.getCollision = function(obj){
 		var unitPoint = map.getSquere(obj),
 			mc = MAP.COLLISION,
@@ -111,4 +118,7 @@ PUBLIC.Amida = function(){
 	};
 	//set global
 	MAP.PATH = map;
+
+	//surveillant start
+	surveillant.init();
 };

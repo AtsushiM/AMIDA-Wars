@@ -109,15 +109,20 @@ PUBLIC.Unit = function(config){
 		sprite.frame = default_frame + walk_true * line_num + sprite.direction;
 	};
 
+	/**
+	 * unit move
+	 * @name move
+	 * @function
+	 */
 	move = function(){
 		var d = sprite.direction,
 			s = sprite.speed,
 			m = sprite.mode,
 			sprite_type = CONST_CASH.TYPE,
 			have = CONST_CASH.HAVE,
-			i,len,aii,colision;
+			i,len = ai.length,aii,colision;
 
-		for(i = 0,len = ai.length; i < len; i++) {
+		for(i = 0,len; i < len; i++) {
 			aii = ai[i];
 			if(d === aii.direction){
 				sprite[aii.prop] += (s * aii.sign);
