@@ -120,5 +120,5 @@ PUBLIC.Amida = function(){
 	MAP.PATH = map;
 
 	//surveillant start
-	surveillant.init();
+	Surveillant.init();
 };

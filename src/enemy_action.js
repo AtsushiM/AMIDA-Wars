@@ -1,10 +1,11 @@
 var EnemyAction = {
 	init: function() {
-		var castle, unit, r, i, 
+		var mode = CONST_CASH.HAVE.ENEMY, 
+			castle, unit, r, 
 			castles = CASTLE.ENEMY,
 			unit_status = CONST_CASH.UNIT.STATUS.UNDEAD, 
 			units = (function(){
-				var ret = [];
+				var ret = [], i;
 				for (i in unit_status) {
 					if(unit_status.hasOwnProperty(i)) {
 						ret.push(i);
@@ -14,8 +15,6 @@ var EnemyAction = {
 			}()), 
 			castles_len = castles.length, 
 			units_len = units.length;
-
-		console.log(castles);
 
 		AIID = setInterval(function() {
 			r = Math.floor(Math.random() * castles_len);
@@ -28,10 +27,18 @@ var EnemyAction = {
 			if(r >= units_len) {
 				r = units_len - 1;
 			}
-			unit = units[r];
-			
-			console.log(castle);
-			console.log(unit);
-		}, 3000);
+			unit = unit_status[units[r]];
+
+			r = {
+				mode: mode, 
+				direction: 2, 
+				x: castle.unitX, 
+				y: castle.unitY
+			};
+
+			r = propOverride(r, unit);
+
+			unit = AW.Unit(r);
+		}, 5000);
 	}
 };

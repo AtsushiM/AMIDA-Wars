@@ -18,7 +18,7 @@ PUBLIC.Unit = function(config){
 		walk_count = 0, walk_true = 0,
 		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
-		mapPoint,checkMoveSquere,getCollision,walk,move;
+		mapPoint,checkMoveSquere,getCollision,walk,move,checkDeath;
 
 
 	//can user override prop
@@ -29,6 +29,17 @@ PUBLIC.Unit = function(config){
 	//set Class
 	sprite.type = CONST_CASH.TYPE.UNIT;
 
+	/**
+	 * attack Processing
+	 * @name attack
+	 * @function
+	 * @param vsUnit 
+	 */
+	sprite.attack = function(vsUnit) {
+		console.log('attack');
+		vsUnit.hp -= sprite.damage;
+		return vsUnit.hp;
+	};
 	/**
 	 * unit kill
 	 * @name kill
@@ -43,6 +54,17 @@ PUBLIC.Unit = function(config){
 			setTimeout(function(){
 				sprite.thumb.dragStart();
 			},sprite.reverse);
+		}
+	};
+
+	/**
+	 * check unit death
+	 * @name checkDeath
+	 * @function
+	 */
+	checkDeath = function() {
+		if(sprite.hp <= 0) {
+			sprite.kill();
 		}
 	};
 
@@ -89,11 +111,19 @@ PUBLIC.Unit = function(config){
 	};
 
 	/**
-	 * walk movie
-	 * @name walk
+	 * unit move
+	 * @name move
 	 * @function
 	 */
-	walk = function(){
+	move = function(){
+		var d = sprite.direction,
+			s = sprite.speed,
+			m = sprite.mode,
+			sprite_type = CONST_CASH.TYPE,
+			have = CONST_CASH.HAVE,
+			i,len = ai.length,aii,colision;
+
+		// animation
 		if(GAME.frame % 5 === 0){
 			walk_count++;
 
@@ -107,22 +137,9 @@ PUBLIC.Unit = function(config){
 			walk_true++;
 		}
 		sprite.frame = default_frame + walk_true * line_num + sprite.direction;
-	};
 
-	/**
-	 * unit move
-	 * @name move
-	 * @function
-	 */
-	move = function(){
-		var d = sprite.direction,
-			s = sprite.speed,
-			m = sprite.mode,
-			sprite_type = CONST_CASH.TYPE,
-			have = CONST_CASH.HAVE,
-			i,len = ai.length,aii,colision;
-
-		for(i = 0,len; i < len; i++) {
+		// unit move
+		for(i = 0; i < len; i++) {
 			aii = ai[i];
 			if(d === aii.direction){
 				sprite[aii.prop] += (s * aii.sign);
@@ -160,11 +177,12 @@ PUBLIC.Unit = function(config){
 				break;
 			}
 		}
+
+		checkDeath();
 	};
 
 	//unit action
 	sprite.addEventListener(enchant.Event.ENTER_FRAME,function(e){
-		walk();
 		move();
 	});
 

@@ -44,10 +44,10 @@ var CONST = function(){
 							{ direction:3, prop:'x', sign:-1, order:[0,2,3,1] },
 							{ direction:1, prop:'x', sign: 1, order:[0,2,1,3] },
 							{ direction:2, prop:'y', sign: 1, order:[3,1,2,0] } ],
-					ENEMY: [{ direction:2, prop:'y', sign: 1, order:[3,1,0,2] },
+					ENEMY: [{ direction:2, prop:'y', sign: 1, order:[3,1,2,0] },
 							{ direction:3, prop:'x', sign:-1, order:[2,0,3,1] },
 							{ direction:1, prop:'x', sign: 1, order:[2,0,1,3] },
-							{ direction:2, prop:'y', sign: 1, order:[3,1,0,2] } ]
+							{ direction:0, prop:'y', sign: 1, order:[3,1,0,2] } ]
 				}
 			};
 		},

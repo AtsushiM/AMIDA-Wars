@@ -102,10 +102,10 @@ var CONST = function(){
 							{ direction:3, prop:'x', sign:-1, order:[0,2,3,1] },
 							{ direction:1, prop:'x', sign: 1, order:[0,2,1,3] },
 							{ direction:2, prop:'y', sign: 1, order:[3,1,2,0] } ],
-					ENEMY: [{ direction:2, prop:'y', sign: 1, order:[3,1,0,2] },
+					ENEMY: [{ direction:2, prop:'y', sign: 1, order:[3,1,2,0] },
 							{ direction:3, prop:'x', sign:-1, order:[2,0,3,1] },
 							{ direction:1, prop:'x', sign: 1, order:[2,0,1,3] },
-							{ direction:2, prop:'y', sign: 1, order:[3,1,0,2] } ]
+							{ direction:0, prop:'y', sign: 1, order:[3,1,0,2] } ]
 				}
 			};
 		},
@@ -420,7 +420,7 @@ PUBLIC.Amida = function(){
 	MAP.PATH = map;
 
 	//surveillant start
-	surveillant.init();
+	Surveillant.init();
 };
 /**
  * Create Castle Object
@@ -611,7 +611,7 @@ PUBLIC.Unit = function(config){
 		walk_count = 0, walk_true = 0,
 		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
-		mapPoint,checkMoveSquere,getCollision,walk,move;
+		mapPoint,checkMoveSquere,getCollision,walk,move,checkDeath;
 
 
 	//can user override prop
@@ -622,6 +622,17 @@ PUBLIC.Unit = function(config){
 	//set Class
 	sprite.type = CONST_CASH.TYPE.UNIT;
 
+	/**
+	 * attack Processing
+	 * @name attack
+	 * @function
+	 * @param vsUnit 
+	 */
+	sprite.attack = function(vsUnit) {
+		console.log('attack');
+		vsUnit.hp -= sprite.damage;
+		return vsUnit.hp;
+	};
 	/**
 	 * unit kill
 	 * @name kill
@@ -636,6 +647,17 @@ PUBLIC.Unit = function(config){
 			setTimeout(function(){
 				sprite.thumb.dragStart();
 			},sprite.reverse);
+		}
+	};
+
+	/**
+	 * check unit death
+	 * @name checkDeath
+	 * @function
+	 */
+	checkDeath = function() {
+		if(sprite.hp <= 0) {
+			sprite.kill();
 		}
 	};
 
@@ -682,11 +704,19 @@ PUBLIC.Unit = function(config){
 	};
 
 	/**
-	 * walk movie
-	 * @name walk
+	 * unit move
+	 * @name move
 	 * @function
 	 */
-	walk = function(){
+	move = function(){
+		var d = sprite.direction,
+			s = sprite.speed,
+			m = sprite.mode,
+			sprite_type = CONST_CASH.TYPE,
+			have = CONST_CASH.HAVE,
+			i,len = ai.length,aii,colision;
+
+		// animation
 		if(GAME.frame % 5 === 0){
 			walk_count++;
 
@@ -700,22 +730,9 @@ PUBLIC.Unit = function(config){
 			walk_true++;
 		}
 		sprite.frame = default_frame + walk_true * line_num + sprite.direction;
-	};
 
-	/**
-	 * unit move
-	 * @name move
-	 * @function
-	 */
-	move = function(){
-		var d = sprite.direction,
-			s = sprite.speed,
-			m = sprite.mode,
-			sprite_type = CONST_CASH.TYPE,
-			have = CONST_CASH.HAVE,
-			i,len = ai.length,aii,colision;
-
-		for(i = 0,len; i < len; i++) {
+		// unit move
+		for(i = 0; i < len; i++) {
 			aii = ai[i];
 			if(d === aii.direction){
 				sprite[aii.prop] += (s * aii.sign);
@@ -753,11 +770,12 @@ PUBLIC.Unit = function(config){
 				break;
 			}
 		}
+
+		checkDeath();
 	};
 
 	//unit action
 	sprite.addEventListener(enchant.Event.ENTER_FRAME,function(e){
-		walk();
 		move();
 	});
 
@@ -800,11 +818,12 @@ PUBLIC.Score = function(config){
 };
 var EnemyAction = {
 	init: function() {
-		var castle, unit, r, i, 
+		var mode = CONST_CASH.HAVE.ENEMY, 
+			castle, unit, r, 
 			castles = CASTLE.ENEMY,
 			unit_status = CONST_CASH.UNIT.STATUS.UNDEAD, 
 			units = (function(){
-				var ret = [];
+				var ret = [], i;
 				for (i in unit_status) {
 					if(unit_status.hasOwnProperty(i)) {
 						ret.push(i);
@@ -814,8 +833,6 @@ var EnemyAction = {
 			}()), 
 			castles_len = castles.length, 
 			units_len = units.length;
-
-		console.log(castles);
 
 		AIID = setInterval(function() {
 			r = Math.floor(Math.random() * castles_len);
@@ -828,16 +845,84 @@ var EnemyAction = {
 			if(r >= units_len) {
 				r = units_len - 1;
 			}
-			unit = units[r];
-			
-			console.log(castle);
-			console.log(unit);
-		}, 3000);
+			unit = unit_status[units[r]];
+
+			r = {
+				mode: mode, 
+				direction: 2, 
+				x: castle.unitX, 
+				y: castle.unitY
+			};
+
+			r = propOverride(r, unit);
+
+			unit = AW.Unit(r);
+		}, 5000);
 	}
 };
-var surveillant = {
+var Battle = {
+	/**
+	 * initialise Battle
+	 * @name init
+	 * @function
+	 */
 	init: function() {
+	}, 
+	/**
+	 * battle for unit and unit
+	 * @name unitAndUnit
+	 * @function
+	 * @param unit1 
+	 * @param unit2 
+	 */
+	unitAndUnit: function(unit1, unit2) {
+		var unit1_hp = unit1.hp, 
+			unit2_hp = unit2.hp;
+
+
+		while(unit1_hp > 0 && unit2_hp > 0) {
+			unit1_hp = unit1.attack(unit2);
+			unit2_hp = unit2.attack(unit1);
+		}
+	}
+};
+var Surveillant = {
+	/**
+	 * initialise surveillant
+	 * @name init
+	 * @function
+	 */
+	init: function() {
+		var that = Surveillant;
 		EnemyAction.init();
+		GAME.addEventListener(enchant.Event.ENTER_FRAME, function() {
+			that.battle();
+		});
+	}, 
+	/**
+	 * check battle
+	 * @name battle
+	 * @function
+	 */
+	battle: function() {
+		var units_user = UNITS.USER, 
+			units_enemy = UNITS.ENEMY, 
+			unit_user, unit_enemy, 
+			i, j;
+
+		for(i in units_enemy) {
+			if(units_enemy.hasOwnProperty(i)) {
+				unit_enemy = units_enemy[i];
+				for(j in units_user) {
+					if(units_user.hasOwnProperty(j)) {
+						unit_user = units_user[j];
+						if(unit_enemy.intersect(unit_user)) {
+							Battle.unitAndUnit(unit_enemy, unit_user);
+						}
+					}
+				}
+			}
+		}
 	}
 };
 	return PUBLIC;
