@@ -18,7 +18,7 @@ PUBLIC.Unit = function(config){
 		walk_count = 0, walk_true = 0,
 		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
-		mapPoint,checkMoveSquere,getCollision,walk,move,checkDeath;
+		mapPoint,checkMoveSquere,getCollision,walk,move;
 
 
 	//can user override prop
@@ -36,8 +36,10 @@ PUBLIC.Unit = function(config){
 	 * @param vsUnit 
 	 */
 	sprite.attack = function(vsUnit) {
-		console.log('attack');
 		vsUnit.hp -= sprite.damage;
+		if(vsUnit.hp <= 0) {
+			vsUnit.kill();
+		}
 		return vsUnit.hp;
 	};
 	/**
@@ -61,11 +63,13 @@ PUBLIC.Unit = function(config){
 	 * check unit death
 	 * @name checkDeath
 	 * @function
+	 * @return 
 	 */
-	checkDeath = function() {
-		if(sprite.hp <= 0) {
-			sprite.kill();
+	sprite.checkDeath = function() {
+		if(sprite.hp === 0) {
+			return true;
 		}
+		return false;
 	};
 
 	default_frame = sprite.frame;
@@ -118,9 +122,7 @@ PUBLIC.Unit = function(config){
 	move = function(){
 		var d = sprite.direction,
 			s = sprite.speed,
-			m = sprite.mode,
 			sprite_type = CONST_CASH.TYPE,
-			have = CONST_CASH.HAVE,
 			i,len = ai.length,aii,colision;
 
 		// animation
@@ -147,7 +149,7 @@ PUBLIC.Unit = function(config){
 					colision = getCollision();
 					var a= 1;
 					if(colision !== false){
-						if(colision.TYPE !== sprite_type.CASTLE){
+						if(colision.type !== sprite_type.CASTLE){
 							if(colision[aii.order[0]] === 1){
 								sprite.direction = aii.order[0];
 							}
@@ -162,14 +164,7 @@ PUBLIC.Unit = function(config){
 							}
 						}
 						else {
-							sprite.kill();
-							colision.damage(sprite);
-							if(m === have.ENEMY){
-								// TODO:enemy
-							}
-							else if(m === have.USER){
-								// TODO:user
-							}
+							Battle.siege(sprite,colision);
 						}
 					}
 				}
@@ -177,8 +172,6 @@ PUBLIC.Unit = function(config){
 				break;
 			}
 		}
-
-		checkDeath();
 	};
 
 	//unit action

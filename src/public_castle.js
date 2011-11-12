@@ -20,7 +20,7 @@ PUBLIC.Castle = function(config){
 	sprite = propOverride(sprite,prop);
 
 	//set type
-	sprite.TYPE = CONST_CASH.TYPE.CASTLE;
+	sprite.type = CONST_CASH.TYPE.CASTLE;
 
 	//add array
 	CASTLE[mode].push(sprite);
@@ -35,21 +35,24 @@ PUBLIC.Castle = function(config){
 	sprite.damage = function(unit) {
 		sprite.hp -= unit.damage;
 		if(sprite.hp <= 0) {
-			sprite.broke();
+			sprite.hp = 0;
+			sprite.opacity = 0;
 		}
 		else if(sprite.mhp / 2 >= sprite.hp) {
 			sprite.frame = sprite.brake;
 		}
 	};
 	/**
-	 * castle broke
-	 * @name broke
+	 * 
+	 * @name checkBreak
 	 * @function
+	 * @return boolean
 	 */
-	sprite.broke = function(){
-		sprite.hp = 0;
-		sprite.opacity = 0;
-		//TODO: check game end;
+	sprite.checkBreak = function(){
+		if(sprite.hp === 0) {
+			return true;
+		}
+		return false;
 	};
 
 	//add Layer

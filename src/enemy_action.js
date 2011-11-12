@@ -1,4 +1,5 @@
 var EnemyAction = {
+	aiid: 0, 
 	init: function() {
 		var mode = CONST_CASH.HAVE.ENEMY, 
 			castle, unit, r, 
@@ -16,7 +17,7 @@ var EnemyAction = {
 			castles_len = castles.length, 
 			units_len = units.length;
 
-		AIID = setInterval(function() {
+		EnemyAction.aiid = setInterval(function() {
 			r = Math.floor(Math.random() * castles_len);
 			if(r >= castles_len) {
 				r = castles_len - 1;
@@ -40,5 +41,8 @@ var EnemyAction = {
 
 			unit = AW.Unit(r);
 		}, 5000);
+	}, 
+	end: function() {
+		clearInterval(EnemyAction.aiid);
 	}
 };

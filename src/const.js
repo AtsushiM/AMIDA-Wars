@@ -63,6 +63,11 @@ var CONST = function(){
 				ENEMY: { }, PROP: { }
 			};
 		},
+		SCORE: function(){
+			return {
+				POSITION: [5, 430]
+			};
+		},
 		MAP: function(){
 			return {
 				IMAGE: 'map.gif',

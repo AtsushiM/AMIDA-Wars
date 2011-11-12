@@ -11,6 +11,7 @@ var GAME,
 	UNITS = { USER: {}, ENEMY: {}, no: 0 },
 	THUMBS = { USER: [], ENEMY: [] },
 	CASTLE = { USER: [], ENEMY: [] },
+	LABEL =  { SCORE: {}},
 	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [], PATH: {} },
 	TYPE = {
 		LIGHT:'LIGHT',
@@ -121,6 +122,11 @@ var CONST = function(){
 				ENEMY: { }, PROP: { }
 			};
 		},
+		SCORE: function(){
+			return {
+				POSITION: [5, 430]
+			};
+		},
 		MAP: function(){
 			return {
 				IMAGE: 'map.gif',
@@ -168,6 +174,7 @@ PUBLIC.init = function(config){
 	CONST_CASH = {
 		UNIT: CONST_CASH.UNIT(),
 		THUMB: CONST_CASH.THUMB(),
+		SCORE: CONST_CASH.SCORE(),
 		MAP: CONST_CASH.MAP(),
 		CASTLE: CONST_CASH.CASTLE(),
 		LAYER: CONST_CASH.LAYER(),
@@ -318,11 +325,19 @@ PUBLIC.Amida = function(){
 		castle_point = MAP.CASTLE,
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
-		i,j,len,ary,label,castle,thumb;
+		score_position = CONST_CASH.SCORE.POSITION,
+		i, j, len, ary, name, castle, thumb, score;
 
 	//map set
 	map.image = GAME.assets[CONST_CASH.MAP.IMAGE];
 	map.loadData(chipset);
+
+	//score label set
+	score = LABEL.SCORE = PUBLIC.Score({
+		mode: user_mode, 
+		x: score_position[0], 
+		y: score_position[1]
+	});
 
 	//depth set
 	root.addChild(map);
@@ -332,6 +347,7 @@ PUBLIC.Amida = function(){
 	root.addChild(group_user.CASTLE);
 	root.addChild(group_user.THUMB);
 	root.addChild(group_enemy.THUMB);
+	root.addChild(score.label);
 	
 	//castle set
 	for(i in castle_point){
@@ -353,11 +369,11 @@ PUBLIC.Amida = function(){
 
 	//user unit-thumbnail set
 	for(i = 0, len = USER_ORDER.length; i < len; i++){
-		label = USER_ORDER[i].toUpperCase();
+		name = USER_ORDER[i].toUpperCase();
 		thumb = new AW.Thumb({
 			mode: user_mode,
-			name: label,
-			frame: CONST_CASH.THUMB.FRAME[USER_RACE][label],
+			name: name,
+			frame: CONST_CASH.THUMB.FRAME[USER_RACE][name],
 			x: thumb_position[i][0],
 			y: thumb_position[i][1]
 		});
@@ -444,7 +460,7 @@ PUBLIC.Castle = function(config){
 	sprite = propOverride(sprite,prop);
 
 	//set type
-	sprite.TYPE = CONST_CASH.TYPE.CASTLE;
+	sprite.type = CONST_CASH.TYPE.CASTLE;
 
 	//add array
 	CASTLE[mode].push(sprite);
@@ -459,21 +475,24 @@ PUBLIC.Castle = function(config){
 	sprite.damage = function(unit) {
 		sprite.hp -= unit.damage;
 		if(sprite.hp <= 0) {
-			sprite.broke();
+			sprite.hp = 0;
+			sprite.opacity = 0;
 		}
 		else if(sprite.mhp / 2 >= sprite.hp) {
 			sprite.frame = sprite.brake;
 		}
 	};
 	/**
-	 * castle broke
-	 * @name broke
+	 * 
+	 * @name checkBreak
 	 * @function
+	 * @return boolean
 	 */
-	sprite.broke = function(){
-		sprite.hp = 0;
-		sprite.opacity = 0;
-		//TODO: check game end;
+	sprite.checkBreak = function(){
+		if(sprite.hp === 0) {
+			return true;
+		}
+		return false;
 	};
 
 	//add Layer
@@ -611,7 +630,7 @@ PUBLIC.Unit = function(config){
 		walk_count = 0, walk_true = 0,
 		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
-		mapPoint,checkMoveSquere,getCollision,walk,move,checkDeath;
+		mapPoint,checkMoveSquere,getCollision,walk,move;
 
 
 	//can user override prop
@@ -629,8 +648,10 @@ PUBLIC.Unit = function(config){
 	 * @param vsUnit 
 	 */
 	sprite.attack = function(vsUnit) {
-		console.log('attack');
 		vsUnit.hp -= sprite.damage;
+		if(vsUnit.hp <= 0) {
+			vsUnit.kill();
+		}
 		return vsUnit.hp;
 	};
 	/**
@@ -654,11 +675,13 @@ PUBLIC.Unit = function(config){
 	 * check unit death
 	 * @name checkDeath
 	 * @function
+	 * @return 
 	 */
-	checkDeath = function() {
-		if(sprite.hp <= 0) {
-			sprite.kill();
+	sprite.checkDeath = function() {
+		if(sprite.hp === 0) {
+			return true;
 		}
+		return false;
 	};
 
 	default_frame = sprite.frame;
@@ -711,9 +734,7 @@ PUBLIC.Unit = function(config){
 	move = function(){
 		var d = sprite.direction,
 			s = sprite.speed,
-			m = sprite.mode,
 			sprite_type = CONST_CASH.TYPE,
-			have = CONST_CASH.HAVE,
 			i,len = ai.length,aii,colision;
 
 		// animation
@@ -740,7 +761,7 @@ PUBLIC.Unit = function(config){
 					colision = getCollision();
 					var a= 1;
 					if(colision !== false){
-						if(colision.TYPE !== sprite_type.CASTLE){
+						if(colision.type !== sprite_type.CASTLE){
 							if(colision[aii.order[0]] === 1){
 								sprite.direction = aii.order[0];
 							}
@@ -755,14 +776,7 @@ PUBLIC.Unit = function(config){
 							}
 						}
 						else {
-							sprite.kill();
-							colision.damage(sprite);
-							if(m === have.ENEMY){
-								// TODO:enemy
-							}
-							else if(m === have.USER){
-								// TODO:user
-							}
+							Battle.siege(sprite,colision);
 						}
 					}
 				}
@@ -770,8 +784,6 @@ PUBLIC.Unit = function(config){
 				break;
 			}
 		}
-
-		checkDeath();
 	};
 
 	//unit action
@@ -799,24 +811,64 @@ PUBLIC.Unit = function(config){
  */
 PUBLIC.Score = function(config){
 	var total = 0,
-		rate = 0,
+		//enemy point rate
+		rate = 0.5,
 		have = CONST_CASH.HAVE,
-		mode = config.mode;
-	
-	if(mode === have.USER){
-		rate = 1;
-	}
-	else if(mode === have.ENEMY){
-		rate = 0.5;
-	}
+		mode = config.mode, 
+		x = config.x, 
+		y = config.y, 
+		label = new Label(), 
+		ret =  {}, 
+		add = function(score) {
+			ret.total += score;
+			return ret.total;
+		};
 
-	return {
+	//set label position
+	label.x = x;
+	label.y = y;
+	
+	//enemy score
+	ret = {
+		label: label, 
 		total: total,
 		rate: rate,
-		point: AW.CONST().POINT
+		mode: mode, 
+		point: AW.CONST().POINT, 
+		/**
+		 * add score
+		 * @name add
+		 * @function
+		 * @param score 
+		 * @return total score
+		 */
+		add: add, 
+		/**
+		 * update score label
+		 * @name update
+		 * @function
+		 */
+		update: function(){}
 	};
+	//override user
+	if(mode === have.USER) {
+		ret.update = function() {
+			label.text = 'SCORE : ' + ret.total;
+		};
+		ret.add = function(score) {
+			add(score);
+			ret.update();
+			return ret.total;
+		};
+		ret.rate = 1;
+	}
+
+	ret.update();
+
+	return ret;
 };
 var EnemyAction = {
+	aiid: 0, 
 	init: function() {
 		var mode = CONST_CASH.HAVE.ENEMY, 
 			castle, unit, r, 
@@ -834,7 +886,7 @@ var EnemyAction = {
 			castles_len = castles.length, 
 			units_len = units.length;
 
-		AIID = setInterval(function() {
+		EnemyAction.aiid = setInterval(function() {
 			r = Math.floor(Math.random() * castles_len);
 			if(r >= castles_len) {
 				r = castles_len - 1;
@@ -858,15 +910,23 @@ var EnemyAction = {
 
 			unit = AW.Unit(r);
 		}, 5000);
+	}, 
+	end: function() {
+		clearInterval(EnemyAction.aiid);
 	}
 };
 var Battle = {
-	/**
-	 * initialise Battle
-	 * @name init
-	 * @function
-	 */
-	init: function() {
+	score: function(obj) {
+		var have = CONST_CASH.HAVE, 
+			obj_mode = obj.mode, 
+			type = CONST_CASH.TYPE, 
+			obj_type = obj.type, 
+			score = LABEL.SCORE, 
+			point = CONST_CASH.POINT;
+
+		if((obj_type !== type.CASTLE && obj_mode === have.USER) || (obj_type === type.CASTLE && obj_mode === have.ENEMY)) {
+			score.add(point[obj.type]);
+		}
 	}, 
 	/**
 	 * battle for unit and unit
@@ -879,25 +939,128 @@ var Battle = {
 		var unit1_hp = unit1.hp, 
 			unit2_hp = unit2.hp;
 
-
 		while(unit1_hp > 0 && unit2_hp > 0) {
 			unit1_hp = unit1.attack(unit2);
 			unit2_hp = unit2.attack(unit1);
 		}
+
+		//check death
+		if(unit1.checkDeath()) {
+			Battle.score(unit1);
+		}
+		if(unit2.checkDeath()) {
+			Battle.score(unit2);
+		}
+	}, 
+	/**
+	 * 
+	 * @name siege
+	 * @function
+	 * @param unit 
+	 * @param castle 
+	 */
+	siege: function(unit, castle) {
+		var m = unit.mode,
+			have = CONST_CASH.HAVE;
+
+		castle.damage(unit);
+		unit.kill();
+
+		if(castle.checkBreak()) {
+			Battle.score(castle);
+		}
 	}
 };
 var Surveillant = {
+	functions: {},
+	exefunc: function(){
+		var i, 
+			funcs = Surveillant.functions;
+		for(i in funcs) {
+			if(funcs.hasOwnProperty(i)) {
+				funcs[i]();
+			}
+		}
+	}, 
 	/**
 	 * initialise surveillant
 	 * @name init
 	 * @function
 	 */
 	init: function() {
-		var that = Surveillant;
-		EnemyAction.init();
-		GAME.addEventListener(enchant.Event.ENTER_FRAME, function() {
-			that.battle();
-		});
+		var s = Surveillant;
+		s.functions =  {
+			playStart: s.playStart, 
+			playEnd: s.playEnd, 
+			battle: s.battle
+		};
+		GAME.addEventListener(enchant.Event.ENTER_FRAME, s.exefunc, false);
+	}, 
+	/**
+	 * check play start
+	 * @name playStart
+	 * @function
+	 * @return 
+	 */
+	playStart: function() {
+		if(gameStart) {
+			EnemyAction.init();
+			delete Surveillant.functions.playStart;
+			return true;
+		}
+		return false;
+	}, 
+	/**
+	 * check play end
+	 * @name playEnd
+	 * @function
+	 * @return 
+	 */
+	playEnd: function() {
+		var i, j, castle, castles, len, count, 
+			end = false, 
+			have = CONST_CASH.HAVE;
+		
+		for(i in CASTLE) {
+			if(CASTLE.hasOwnProperty(i)) {
+				castles = CASTLE[i];
+				len = castles.length;
+				count = 0;
+				for(j = 0; j < len; j++) {
+					castle = castles[j];
+					if(castle.hp > 0) {
+						break;
+					}
+					else {
+						count++;
+					}
+				}
+				if(count === len) {
+					end = i;
+					break;
+				}
+			}
+		}
+
+		if(end !== false) {
+			GAME.removeEventListener(enchant.Event.ENTER_FRAME, Surveillant.exefunc);
+			EnemyAction.end();
+
+			if(end === have.ENEMY) {
+				end = 'WIN';
+				score = CONST_CASH.POINT.WIN;
+			}
+			else if(end === have.USER) {
+				end = 'LOSE';
+				score = CONST_CASH.POINT.LOSE;
+			}
+
+			score = LABEL.SCORE.add(score);
+			GAME.end(score, end+':'+score);
+			alert(end+':'+score);
+			return true;
+		}
+		return false;
 	}, 
 	/**
 	 * check battle

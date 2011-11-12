@@ -18,11 +18,19 @@ PUBLIC.Amida = function(){
 		castle_point = MAP.CASTLE,
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
-		i,j,len,ary,label,castle,thumb;
+		score_position = CONST_CASH.SCORE.POSITION,
+		i, j, len, ary, name, castle, thumb, score;
 
 	//map set
 	map.image = GAME.assets[CONST_CASH.MAP.IMAGE];
 	map.loadData(chipset);
+
+	//score label set
+	score = LABEL.SCORE = PUBLIC.Score({
+		mode: user_mode, 
+		x: score_position[0], 
+		y: score_position[1]
+	});
 
 	//depth set
 	root.addChild(map);
@@ -32,6 +40,7 @@ PUBLIC.Amida = function(){
 	root.addChild(group_user.CASTLE);
 	root.addChild(group_user.THUMB);
 	root.addChild(group_enemy.THUMB);
+	root.addChild(score.label);
 	
 	//castle set
 	for(i in castle_point){
@@ -53,11 +62,11 @@ PUBLIC.Amida = function(){
 
 	//user unit-thumbnail set
 	for(i = 0, len = USER_ORDER.length; i < len; i++){
-		label = USER_ORDER[i].toUpperCase();
+		name = USER_ORDER[i].toUpperCase();
 		thumb = new AW.Thumb({
 			mode: user_mode,
-			name: label,
-			frame: CONST_CASH.THUMB.FRAME[USER_RACE][label],
+			name: name,
+			frame: CONST_CASH.THUMB.FRAME[USER_RACE][name],
 			x: thumb_position[i][0],
 			y: thumb_position[i][1]
 		});
