@@ -80,17 +80,27 @@ var CONST = function(){
 				PROP: { frame: 0, brake: 0, hp: 2, mhp: 2, unitX: 0, unitY: 0 }
 			};
 		},
+		EFFECT: function(){
+			return {
+				IMAGE: 'effect.gif', 
+				FRAME:  {
+					EXPLOSION: [0, 5]
+				}
+			};
+		}, 
 		LAYER: function(){
 			return {
 				USER: { UNIT: GROUP.USER.UNIT, CASTLE: GROUP.USER.CASTLE, THUMB: GROUP.USER.THUMB },
-				ENEMY: { UNIT: GROUP.ENEMY.UNIT, CASTLE: GROUP.ENEMY.CASTLE, THUMB: GROUP.ENEMY.THUMB }
+				ENEMY: { UNIT: GROUP.ENEMY.UNIT, CASTLE: GROUP.ENEMY.CASTLE, THUMB: GROUP.ENEMY.THUMB },
+				EFFECT:  { UNIT: GROUP.EFFECT.UNIT }
 			};
 		},
 		TYPE: function(){
 			return {
 				CASTLE: 'CASTLE',
 				THUMB: 'THUMB',
-				UNIT: 'UNIT'
+				UNIT: 'UNIT', 
+				EFFECT: 'EFFECT'
 			};
 		},
 		HAVE: function(){
@@ -106,3 +116,15 @@ var CONST = function(){
 	};
 },
 CONST_CASH = CONST();
+CONST_CASH = {
+	UNIT: CONST_CASH.UNIT(),
+	THUMB: CONST_CASH.THUMB(),
+	SCORE: CONST_CASH.SCORE(),
+	MAP: CONST_CASH.MAP(),
+	CASTLE: CONST_CASH.CASTLE(),
+	EFFECT: CONST_CASH.EFFECT(),
+	LAYER: CONST_CASH.LAYER(),
+	TYPE: CONST_CASH.TYPE(),
+	HAVE: CONST_CASH.HAVE(),
+	POINT: CONST_CASH.POINT() 
+};

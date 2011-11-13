@@ -16,6 +16,7 @@ PUBLIC.Amida = function(){
 		thumb_position = CONST_CASH.THUMB.USER.POSITION,
 		user_mode = CONST_CASH.HAVE.USER,
 		castle_point = MAP.CASTLE,
+		effect_unit = GROUP.EFFECT.UNIT,
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
 		score_position = CONST_CASH.SCORE.POSITION,
@@ -40,6 +41,7 @@ PUBLIC.Amida = function(){
 	root.addChild(group_user.CASTLE);
 	root.addChild(group_user.THUMB);
 	root.addChild(group_enemy.THUMB);
+	root.addChild(effect_unit);
 	root.addChild(score.label);
 	
 	//castle set

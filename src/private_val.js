@@ -2,7 +2,8 @@
 var GAME,
 	GROUP = {
 		USER: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
-		ENEMY: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() }
+		ENEMY: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
+		EFFECT:  { UNIT: new Group() }
 	},
 	USER_RACE = '',
 	USER_ORDER = [],

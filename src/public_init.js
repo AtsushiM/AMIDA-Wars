@@ -4,21 +4,11 @@
   * @function
   */
 PUBLIC.init = function(config){
-	CONST_CASH = {
-		UNIT: CONST_CASH.UNIT(),
-		THUMB: CONST_CASH.THUMB(),
-		SCORE: CONST_CASH.SCORE(),
-		MAP: CONST_CASH.MAP(),
-		CASTLE: CONST_CASH.CASTLE(),
-		LAYER: CONST_CASH.LAYER(),
-		TYPE: CONST_CASH.TYPE(),
-		HAVE: CONST_CASH.HAVE(),
-		POINT: CONST_CASH.POINT() 
-	};
 	var img = {
 			UNIT: CONST_CASH.UNIT.IMAGE,
 			THUMB: CONST_CASH.THUMB.IMAGE,
-			MAP: CONST_CASH.MAP.IMAGE
+			MAP: CONST_CASH.MAP.IMAGE, 
+			EFFECT: CONST_CASH.EFFECT.IMAGE
 		},
 		size = {
 			W: CONST_CASH.MAP.W,
@@ -123,7 +113,7 @@ PUBLIC.init = function(config){
 	//new Game
 	GAME = new Game(size.W,size.H);
 	//preload set
-	GAME.preload(img.UNIT,img.THUMB,img.MAP);
+	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT);
 	//Game onloadSet
 	GAME.onload = AW.Amida;
 	//Game Start

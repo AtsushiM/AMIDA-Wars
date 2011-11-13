@@ -4,7 +4,8 @@ var AW = (function(){
 var GAME,
 	GROUP = {
 		USER: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
-		ENEMY: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() }
+		ENEMY: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
+		EFFECT:  { UNIT: new Group() }
 	},
 	USER_RACE = '',
 	USER_ORDER = [],
@@ -139,17 +140,27 @@ var CONST = function(){
 				PROP: { frame: 0, brake: 0, hp: 2, mhp: 2, unitX: 0, unitY: 0 }
 			};
 		},
+		EFFECT: function(){
+			return {
+				IMAGE: 'effect.gif', 
+				FRAME:  {
+					EXPLOSION: [0, 5]
+				}
+			};
+		}, 
 		LAYER: function(){
 			return {
 				USER: { UNIT: GROUP.USER.UNIT, CASTLE: GROUP.USER.CASTLE, THUMB: GROUP.USER.THUMB },
-				ENEMY: { UNIT: GROUP.ENEMY.UNIT, CASTLE: GROUP.ENEMY.CASTLE, THUMB: GROUP.ENEMY.THUMB }
+				ENEMY: { UNIT: GROUP.ENEMY.UNIT, CASTLE: GROUP.ENEMY.CASTLE, THUMB: GROUP.ENEMY.THUMB },
+				EFFECT:  { UNIT: GROUP.EFFECT.UNIT }
 			};
 		},
 		TYPE: function(){
 			return {
 				CASTLE: 'CASTLE',
 				THUMB: 'THUMB',
-				UNIT: 'UNIT'
+				UNIT: 'UNIT', 
+				EFFECT: 'EFFECT'
 			};
 		},
 		HAVE: function(){
@@ -165,27 +176,29 @@ var CONST = function(){
 	};
 },
 CONST_CASH = CONST();
+CONST_CASH = {
+	UNIT: CONST_CASH.UNIT(),
+	THUMB: CONST_CASH.THUMB(),
+	SCORE: CONST_CASH.SCORE(),
+	MAP: CONST_CASH.MAP(),
+	CASTLE: CONST_CASH.CASTLE(),
+	EFFECT: CONST_CASH.EFFECT(),
+	LAYER: CONST_CASH.LAYER(),
+	TYPE: CONST_CASH.TYPE(),
+	HAVE: CONST_CASH.HAVE(),
+	POINT: CONST_CASH.POINT() 
+};
  /**
   * Game Init
   * @name init
   * @function
   */
 PUBLIC.init = function(config){
-	CONST_CASH = {
-		UNIT: CONST_CASH.UNIT(),
-		THUMB: CONST_CASH.THUMB(),
-		SCORE: CONST_CASH.SCORE(),
-		MAP: CONST_CASH.MAP(),
-		CASTLE: CONST_CASH.CASTLE(),
-		LAYER: CONST_CASH.LAYER(),
-		TYPE: CONST_CASH.TYPE(),
-		HAVE: CONST_CASH.HAVE(),
-		POINT: CONST_CASH.POINT() 
-	};
 	var img = {
 			UNIT: CONST_CASH.UNIT.IMAGE,
 			THUMB: CONST_CASH.THUMB.IMAGE,
-			MAP: CONST_CASH.MAP.IMAGE
+			MAP: CONST_CASH.MAP.IMAGE, 
+			EFFECT: CONST_CASH.EFFECT.IMAGE
 		},
 		size = {
 			W: CONST_CASH.MAP.W,
@@ -290,7 +303,7 @@ PUBLIC.init = function(config){
 	//new Game
 	GAME = new Game(size.W,size.H);
 	//preload set
-	GAME.preload(img.UNIT,img.THUMB,img.MAP);
+	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT);
 	//Game onloadSet
 	GAME.onload = AW.Amida;
 	//Game Start
@@ -323,6 +336,7 @@ PUBLIC.Amida = function(){
 		thumb_position = CONST_CASH.THUMB.USER.POSITION,
 		user_mode = CONST_CASH.HAVE.USER,
 		castle_point = MAP.CASTLE,
+		effect_unit = GROUP.EFFECT.UNIT,
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
 		score_position = CONST_CASH.SCORE.POSITION,
@@ -347,6 +361,7 @@ PUBLIC.Amida = function(){
 	root.addChild(group_user.CASTLE);
 	root.addChild(group_user.THUMB);
 	root.addChild(group_enemy.THUMB);
+	root.addChild(effect_unit);
 	root.addChild(score.label);
 	
 	//castle set
@@ -646,6 +661,7 @@ PUBLIC.Unit = function(config){
 	 * @name attack
 	 * @function
 	 * @param vsUnit 
+	 * @return 
 	 */
 	sprite.attack = function(vsUnit) {
 		vsUnit.hp -= sprite.damage;
@@ -660,6 +676,15 @@ PUBLIC.Unit = function(config){
 	 * @function
 	 */
 	sprite.kill = function(){
+		var x = sprite.x, 
+			y = sprite.y, 
+			effect = new AW.Effect({
+				type: sprite.type.toUpperCase(), 
+				x: x, 
+				y: y, 
+				frames: CONST_CASH.EFFECT.FRAME.EXPLOSION
+			});
+
 		delete UNITS[mode][sprite.myNo];
 		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
 
@@ -866,6 +891,44 @@ PUBLIC.Score = function(config){
 	ret.update();
 
 	return ret;
+};
+/**
+ * Create Effect Object
+ * @name Effect
+ * @function
+ * @param {Object}
+ * @returns {Object}
+ */
+PUBLIC.Effect = function(config){
+	var size = CONST_CASH.UNIT.CHIP_SIZE, 
+		frame_start = config.frames[0], 
+		frame_end = config.frames[1], 
+		type = config.type.toUpperCase(), 
+		layer = CONST_CASH.LAYER.EFFECT[type], 
+		sprite = new Sprite(size, size),
+		effect = function(e) {
+			if(GAME.frame % 3 === 0) {
+				sprite.frame++;
+				if(sprite.frame >= frame_end) {
+					sprite.removeEventListener(enchant.Event.ENTER_FRAME, effect);
+					layer.removeChild(sprite);
+				}
+			}
+		};
+	
+	sprite.image = GAME.assets[CONST_CASH.EFFECT.IMAGE];
+	sprite.x = config.x;
+	sprite.y = config.y;
+	sprite.frame = frame_start;
+
+	//effect action
+	sprite.addEventListener(enchant.Event.ENTER_FRAME, effect);
+
+	//add Layer
+	return addLayer({
+		layer: layer,
+		sprite: sprite
+	});
 };
 var EnemyAction = {
 	aiid: 0, 
@@ -1079,7 +1142,7 @@ var Surveillant = {
 				for(j in units_user) {
 					if(units_user.hasOwnProperty(j)) {
 						unit_user = units_user[j];
-						if(unit_enemy.intersect(unit_user)) {
+						if(unit_enemy.intersect(unit_user) && (unit_user.x === unit_enemy.x || unit_user.y === unit_enemy.y)) {
 							Battle.unitAndUnit(unit_enemy, unit_user);
 						}
 					}

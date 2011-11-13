@@ -34,6 +34,7 @@ PUBLIC.Unit = function(config){
 	 * @name attack
 	 * @function
 	 * @param vsUnit 
+	 * @return 
 	 */
 	sprite.attack = function(vsUnit) {
 		vsUnit.hp -= sprite.damage;
@@ -48,6 +49,15 @@ PUBLIC.Unit = function(config){
 	 * @function
 	 */
 	sprite.kill = function(){
+		var x = sprite.x, 
+			y = sprite.y, 
+			effect = new AW.Effect({
+				type: sprite.type.toUpperCase(), 
+				x: x, 
+				y: y, 
+				frames: CONST_CASH.EFFECT.FRAME.EXPLOSION
+			});
+
 		delete UNITS[mode][sprite.myNo];
 		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
 

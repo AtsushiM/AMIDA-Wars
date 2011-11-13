@@ -106,7 +106,7 @@ var Surveillant = {
 				for(j in units_user) {
 					if(units_user.hasOwnProperty(j)) {
 						unit_user = units_user[j];
-						if(unit_enemy.intersect(unit_user)) {
+						if(unit_enemy.intersect(unit_user) && (unit_user.x === unit_enemy.x || unit_user.y === unit_enemy.y)) {
 							Battle.unitAndUnit(unit_enemy, unit_user);
 						}
 					}
