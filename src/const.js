@@ -71,7 +71,7 @@ var CONST = function(){
 		MAP: function(){
 			return {
 				IMAGE: 'map.gif',
-				W: 320, H: 450, CHIP_SIZE: 32
+				W: 320, H: 480, CHIP_SIZE: 32
 			};
 		},
 		CASTLE: function(){

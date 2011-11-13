@@ -20,6 +20,9 @@ PUBLIC.Score = function(config){
 			return ret.total;
 		};
 
+	//set label font
+	label.font = '12px cursive';
+
 	//set label position
 	label.x = x;
 	label.y = y;
