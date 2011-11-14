@@ -51,7 +51,7 @@ PUBLIC.Unit = function(config){
 	sprite.kill = function(){
 		var x = sprite.x, 
 			y = sprite.y, 
-			effect = new AW.Effect({
+			effect = new PUBLIC.Effect({
 				type: sprite.type.toUpperCase(), 
 				x: x, 
 				y: y, 

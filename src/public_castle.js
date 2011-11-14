@@ -25,7 +25,6 @@ PUBLIC.Castle = function(config){
 	//add array
 	CASTLE[mode].push(sprite);
 
-	// TODO: 
 	/**
 	 * castle damage
 	 * @name damage
@@ -37,6 +36,7 @@ PUBLIC.Castle = function(config){
 		if(sprite.hp <= 0) {
 			sprite.hp = 0;
 			sprite.opacity = 0;
+			sprite.base.opacity = 0;
 		}
 		else if(sprite.mhp / 2 >= sprite.hp) {
 			sprite.frame = sprite.brake;

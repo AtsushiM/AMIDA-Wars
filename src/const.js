@@ -32,10 +32,10 @@ var CONST = function(){
 						SKELTON_DOG:     { name:'SKELTON_DOG',     frame: 96, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
 						SKELTON_WARRIER: { name:'SKELTON_WARRIER', frame:100, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
 						SKELTON_ARCHER:  { name:'SKELTON_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
-						SPECTOR:         { name:'SPECTOR',         frame:108, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						SHADE:           { name:'SHADE',           frame:108, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
 						SKELTON_SNAKE:   { name:'SKELTON_SNAKE',   frame:144, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
 						GOLEM:           { name:'GOLEM',           frame:148, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
-						SHADE:           { name:'SHADE',           frame:152, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
+						SPECTOR:         { name:'SPECTOR',         frame:152, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 },
 						UNDEAD_SPIDER:   { name:'UNDEAD_SPIDER',   frame:156, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:1000 }
 					}
 				},

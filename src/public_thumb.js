@@ -83,7 +83,7 @@ PUBLIC.Thumb = function(config){
 				this.unit.y = hit.unitY;
 				
 				//create unit
-				this.lastUnit = new AW.Unit(this.unit);
+				this.lastUnit = new PUBLIC.Unit(this.unit);
 				this.lastUnit.thumb = this;
 			}
 			this.x = defaultX;

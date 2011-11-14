@@ -115,7 +115,7 @@ PUBLIC.init = function(config){
 	//preload set
 	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT);
 	//Game onloadSet
-	GAME.onload = AW.Amida;
+	GAME.onload = PUBLIC.Amida;
 	//Game Start
 	GAME.start();
 };

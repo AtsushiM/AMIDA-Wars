@@ -39,10 +39,10 @@ var EnemyAction = {
 
 			r = propOverride(r, unit);
 
-			unit = AW.Unit(r);
+			unit = new PUBLIC.Unit(r);
 		}, 5000);
 	}, 
 	end: function() {
 		clearInterval(EnemyAction.aiid);
 	}
-};
+}

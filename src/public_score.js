@@ -33,7 +33,7 @@ PUBLIC.Score = function(config){
 		total: total,
 		rate: rate,
 		mode: mode, 
-		point: AW.CONST().POINT, 
+		point: PUBLIC.CONST().POINT, 
 		/**
 		 * add score
 		 * @name add
