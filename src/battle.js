@@ -1,4 +1,27 @@
 var Battle = {
+	init: function() {
+		var func = function() {
+			var units_user = UNITS.USER, 
+				units_enemy = UNITS.ENEMY, 
+				unit_user, unit_enemy, 
+				i, j;
+
+			for(i in units_enemy) {
+				if(units_enemy.hasOwnProperty(i)) {
+					unit_enemy = units_enemy[i];
+					for(j in units_user) {
+						if(units_user.hasOwnProperty(j)) {
+							unit_user = units_user[j];
+							if(unit_enemy.intersect(unit_user) && (unit_user.x === unit_enemy.x || unit_user.y === unit_enemy.y)) {
+								Battle.unitAndUnit(unit_enemy, unit_user);
+							}
+						}
+					}
+				}
+			}
+		};
+		Surveillant.add(func, 'battle');
+	}, 
 	score: function(obj) {
 		var have = CONST_CASH.HAVE, 
 			obj_mode = obj.mode, 
