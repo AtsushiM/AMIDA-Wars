@@ -1,8 +1,19 @@
 enchant();
 var AW = (function(){
+//set scroll
+var doScroll = function() {
+	if (window.pageYOffset === 0) {
+		window.scrollTo(0,1);
+	}
+};
+window.addEventListener('load', function() {
+	setTimeout(doScroll, 100);
+}, false);
+window.onorientationchange = function(){
+	setTimeout(doScroll, 100);
+};
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
-・敵AIをルールに則った仕様に変更
 ・制限時間の設定
 ・制限時間の表示
 ・ステータス表示

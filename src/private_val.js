@@ -13,6 +13,7 @@ var GAME,
 	CASTLE = { USER: [], ENEMY: [] },
 	LABEL =  { SCORE: {}},
 	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [], PATH: {} },
+	SOUND =  { BGM:  {} }, 
 	TYPE = {
 		LIGHT:'LIGHT',
 		MIDIUM:'MIDIUM',

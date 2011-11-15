@@ -88,6 +88,11 @@ var CONST = function(){
 				}
 			};
 		}, 
+		SOUND: function() {
+			return  {
+				BGM: 'bgm.wav'
+			};
+		}, 
 		LAYER: function(){
 			return {
 				USER: { UNIT: GROUP.USER.UNIT, CASTLE: GROUP.USER.CASTLE, THUMB: GROUP.USER.THUMB },
@@ -124,6 +129,7 @@ CONST_CASH = {
 	MAP: CONST_CASH.MAP(),
 	CASTLE: CONST_CASH.CASTLE(),
 	EFFECT: CONST_CASH.EFFECT(),
+	SOUND: CONST_CASH.SOUND(), 
 	LAYER: CONST_CASH.LAYER(),
 	TYPE: CONST_CASH.TYPE(),
 	HAVE: CONST_CASH.HAVE(),

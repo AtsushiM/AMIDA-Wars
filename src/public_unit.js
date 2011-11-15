@@ -61,6 +61,12 @@ PUBLIC.Unit = function(config){
 		delete UNITS[mode][sprite.myNo];
 		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
 
+		//enemy unit after death action
+		if(typeof sprite.after_death === 'function') {
+			setTimeout(function() {
+				sprite.after_death(sprite);
+			}, sprite.reverse);
+		}
 		//thumb drag start
 		if(sprite.thumb){
 			setTimeout(function(){

@@ -1,8 +1,19 @@
 enchant();
 var AW = (function(){
+//set scroll
+var doScroll = function() {
+	if (window.pageYOffset === 0) {
+		window.scrollTo(0,1);
+	}
+};
+window.addEventListener('load', function() {
+	setTimeout(doScroll, 100);
+}, false);
+window.onorientationchange = function(){
+	setTimeout(doScroll, 100);
+};
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
-・敵AIをルールに則った仕様に変更
 ・制限時間の設定
 ・制限時間の表示
 ・ステータス表示
@@ -62,6 +73,7 @@ var GAME,
 	CASTLE = { USER: [], ENEMY: [] },
 	LABEL =  { SCORE: {}},
 	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [], PATH: {} },
+	SOUND =  { BGM:  {} }, 
 	TYPE = {
 		LIGHT:'LIGHT',
 		MIDIUM:'MIDIUM',
@@ -196,6 +208,11 @@ var CONST = function(){
 				}
 			};
 		}, 
+		SOUND: function() {
+			return  {
+				BGM: 'bgm.wav'
+			};
+		}, 
 		LAYER: function(){
 			return {
 				USER: { UNIT: GROUP.USER.UNIT, CASTLE: GROUP.USER.CASTLE, THUMB: GROUP.USER.THUMB },
@@ -232,6 +249,7 @@ CONST_CASH = {
 	MAP: CONST_CASH.MAP(),
 	CASTLE: CONST_CASH.CASTLE(),
 	EFFECT: CONST_CASH.EFFECT(),
+	SOUND: CONST_CASH.SOUND(), 
 	LAYER: CONST_CASH.LAYER(),
 	TYPE: CONST_CASH.TYPE(),
 	HAVE: CONST_CASH.HAVE(),
@@ -248,6 +266,9 @@ PUBLIC.init = function(config){
 			THUMB: CONST_CASH.THUMB.IMAGE,
 			MAP: CONST_CASH.MAP.IMAGE, 
 			EFFECT: CONST_CASH.EFFECT.IMAGE
+		},
+		sound =  {
+			BGM: CONST_CASH.SOUND.BGM
 		},
 		size = {
 			W: CONST_CASH.MAP.W,
@@ -357,7 +378,7 @@ PUBLIC.init = function(config){
 	//new Game
 	GAME = new Game(size.W,size.H);
 	//preload set
-	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT);
+	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.BGM);
 	//Game onloadSet
 	GAME.onload = PUBLIC.Amida;
 	//Game Start
@@ -410,18 +431,18 @@ PUBLIC.Amida = function(){
 		y: score_position[1]
 	});
 
-	//copy right set
-	copy_mizoue = new Label();
-	copy_mizoue.text = '(c) Atsushi Mizoue: <a href="http://www.facebook.com/atsushi.mizoue" target="_blank">www.facebook.com/atsushi.mizoue</a>';
-	copy_mizoue.x = 10;
-	copy_mizoue.y = 450;
-	copy_mizoue.font = '10px cursive';
+	// //copy right set
+	// copy_mizoue = new Label();
+	// copy_mizoue.text = '(c) Atsushi Mizoue: <a href="http://www.facebook.com/atsushi.mizoue" target="_blank">www.facebook.com/atsushi.mizoue</a>';
+	// copy_mizoue.x = 10;
+	// copy_mizoue.y = 450;
+	// copy_mizoue.font = '10px cursive';
 
-	copy_denzi = new Label();
-	copy_denzi.text = 'Graphic: (c) Denzi日記: <a href="http://d.hatena.ne.jp/Denzi/" target="_blank">d.hatena.ne.jp/Denzi/</a>';
-	copy_denzi.x = 10;
-	copy_denzi.y = 463;
-	copy_denzi.font = '10px cursive';
+	// copy_denzi = new Label();
+	// copy_denzi.text = 'Graphic: (c) Denzi日記: <a href="http://d.hatena.ne.jp/Denzi/" target="_blank">d.hatena.ne.jp/Denzi/</a>';
+	// copy_denzi.x = 10;
+	// copy_denzi.y = 463;
+	// copy_denzi.font = '10px cursive';
 
 	//depth set
 	root.addChild(map);
@@ -434,8 +455,8 @@ PUBLIC.Amida = function(){
 	root.addChild(group_enemy.THUMB);
 	root.addChild(effect_unit);
 	root.addChild(score.label);
-	root.addChild(copy_mizoue);
-	root.addChild(copy_denzi);
+	// root.addChild(copy_mizoue);
+	// root.addChild(copy_denzi);
 	
 	//castle set
 	for(i in castle_point){
@@ -531,6 +552,9 @@ PUBLIC.Amida = function(){
 		if(gameStart) {
 			EnemyAction.init();
 			delete Surveillant.functions.playStart;
+
+			// SOUND.BGM = GAME.assets[CONST_CASH.SOUND.BGM];
+			// SOUND.BGM.play();
 			return true;
 		}
 		return false;
@@ -832,6 +856,12 @@ PUBLIC.Unit = function(config){
 		delete UNITS[mode][sprite.myNo];
 		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
 
+		//enemy unit after death action
+		if(typeof sprite.after_death === 'function') {
+			setTimeout(function() {
+				sprite.after_death(sprite);
+			}, sprite.reverse);
+		}
 		//thumb drag start
 		if(sprite.thumb){
 			setTimeout(function(){
@@ -1079,47 +1109,51 @@ PUBLIC.Effect = function(config){
 };
 var EnemyAction = {
 	aiid: 0, 
+	race: 'UNDEAD', 
+	onMap: [], 
+	order: ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE',
+			'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'],
 	init: function() {
 		var mode = CONST_CASH.HAVE.ENEMY, 
 			castle, unit, r, 
 			castles = CASTLE.ENEMY,
-			unit_status = CONST_CASH.UNIT.STATUS.UNDEAD, 
-			units = (function(){
-				var ret = [], i;
-				for (i in unit_status) {
-					if(unit_status.hasOwnProperty(i)) {
-						ret.push(i);
-					}
-				}
-				return ret;
-			}()), 
-			castles_len = castles.length, 
-			units_len = units.length;
+			castles_len = castles.length,
+			unit_status = CONST_CASH.UNIT.STATUS.UNDEAD,
+			order = EnemyAction.order, 
+			order_len, unit_name;
 
 		EnemyAction.aiid = setInterval(function() {
-			r = Math.floor(Math.random() * castles_len);
-			if(r >= castles_len) {
-				r = castles_len - 1;
+			order_len = order.length;
+			if(order_len > 0) {
+				r = Math.floor(Math.random() * castles_len);
+				if(r >= castles_len) {
+					r = castles_len - 1;
+				}
+				castle = castles[r];
+
+				r = Math.floor(Math.random() * order_len);
+				if(r >= order_len) {
+					r = order_len - 1;
+				}
+				unit_name = order[r];
+				unit = unit_status[unit_name];
+				order.splice(r, 1);
+
+				r = {
+					mode: mode, 
+					direction: 2, 
+					x: castle.unitX, 
+					y: castle.unitY, 
+					after_death: function(unit) {
+						order.push(unit.name);
+					}
+				};
+
+				r = propOverride(r, unit);
+
+				unit = new PUBLIC.Unit(r);
 			}
-			castle = castles[r];
-
-			r = Math.floor(Math.random() * units_len);
-			if(r >= units_len) {
-				r = units_len - 1;
-			}
-			unit = unit_status[units[r]];
-
-			r = {
-				mode: mode, 
-				direction: 2, 
-				x: castle.unitX, 
-				y: castle.unitY
-			};
-
-			r = propOverride(r, unit);
-
-			unit = new PUBLIC.Unit(r);
-		}, 5000);
+		}, 3000);
 	}, 
 	end: function() {
 		clearInterval(EnemyAction.aiid);
