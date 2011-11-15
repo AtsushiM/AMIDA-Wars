@@ -8,8 +8,6 @@ PUBLIC.Amida = function(){
 		chipset = MAP.BASE,
 		map = new Map(chip_size,chip_size),
 		map_image = GAME.assets[CONST_CASH.MAP.IMAGE], 
-		castle_bases = new Group(),
-		castle_base,
 		group_user = GROUP.USER,
 		user_castle = group_user.CASTLE,
 		group_enemy = GROUP.ENEMY,
@@ -19,6 +17,7 @@ PUBLIC.Amida = function(){
 		thumb_position = CONST_CASH.THUMB.USER.POSITION,
 		user_mode = CONST_CASH.HAVE.USER,
 		castle_point = MAP.CASTLE,
+		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
 		effect_unit = GROUP.EFFECT.UNIT,
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
@@ -50,9 +49,6 @@ PUBLIC.Amida = function(){
 	copy_denzi.y = 463;
 	copy_denzi.font = '10px cursive';
 
-
-	//castle base set
-
 	//depth set
 	root.addChild(map);
 	root.addChild(castle_bases);
@@ -72,22 +68,12 @@ PUBLIC.Amida = function(){
 		if(castle_point.hasOwnProperty(i)){
 			ary = castle_point[i];
 			for(j = 0,len = ary.length; j < len; j++){
-				castle_base = new Sprite(chip_size, chip_size);
-				castle_base.image = map_image;
-				castle_base.frame = 24;
-				castle_base.x = ary[j][0] * chip_size;
-				castle_base.y = ary[j][1] * chip_size;
-				addLayer({
-					layer: castle_bases, 
-					sprite: castle_base
-				});
 				castle = new PUBLIC.Castle({
 					mode: i,
 					frame: castle_frames[j].NORMAL,
 					brake: castle_frames[j].BRAKE,
 					x: ary[j][0] * chip_size,
-					y: ary[j][1] * chip_size, 
-					base: castle_base
+					y: ary[j][1] * chip_size
 				});
 				castle.unitX = castle.x + unit_chip_size / 2;
 				castle.unitY = castle.y + unit_chip_size / 2;
@@ -97,7 +83,7 @@ PUBLIC.Amida = function(){
 
 	//user unit-thumbnail set
 	for(i = 0, len = USER_ORDER.length; i < len; i++){
-		name = USER_ORDER[i].toUpperCase();
+		name = USER_ORDER[i].name;
 		thumb = new PUBLIC.Thumb({
 			mode: user_mode,
 			name: name,

@@ -10,7 +10,21 @@ PUBLIC.Castle = function(config){
 		image = GAME.assets[CONST_CASH.MAP.IMAGE],
 		prop = CONST().CASTLE().PROP,
 		mode = config.mode.toUpperCase(),
-		sprite = new Sprite(size,size);
+		sprite = new Sprite(size,size),
+		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
+		caslt_base;
+
+	//castle base set
+	castle_base = new Sprite(size, size);
+	castle_base.image = image;
+	castle_base.frame = 24;
+	castle_base.x = config.x;
+	castle_base.y = config.y;
+	addLayer({
+		layer: castle_bases, 
+		sprite: castle_base
+	});
+	prop.base = castle_base;
 
 	//default override
 	prop = propOverride(prop,config);

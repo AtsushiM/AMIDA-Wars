@@ -16,13 +16,18 @@ PUBLIC.init = function(config){
 		},
 		castle_point = MAP.CASTLE,
 		collision = MAP.COLLISION,
-		chipset;
+		chipset, order = config.order, i;
 
 	//set user race
 	USER_RACE = config.race;
 
 	//set user order
-	USER_ORDER = config.order;
+	for(i = 0, len = order.length; i < len; i++) {
+		USER_ORDER.push({
+			name: order[i].toUpperCase(), 
+			onMap: false
+		});
+	}
 
 	//set map
 	MAP.BASE = chipset = config.map;

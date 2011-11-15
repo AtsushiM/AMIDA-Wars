@@ -1,20 +1,21 @@
 enchant();
 var AW = (function(){
 /* TODO:
-・ユニットの性能設定
-・城破壊エフェクト
-・得点の調整（自城破壊時のマイナス含む）
+☆各クラスの最適＆効率化（常時タスク）
+・敵AIをルールに則った仕様に変更
 ・制限時間の設定
 ・制限時間の表示
-・各クラスの最適＆効率化（優先度低）
+・ステータス表示
+・ユニットの性能設定
+・効果音設定
+・城破壊エフェクト
 ・サムネイルドラッグ中に城にドロップできる事を明確に表示する
 ・ユーザーの行動を保存する（AI作成のため）
 ・ランキング作成
-・ステータス表示
-・効果音設定
+・得点の調整（自城破壊時のマイナス含む）
 ・ヒーロー実装（自ユニットが死んだ回数や、敵城の状態等を見て使えるかどうか判断するなど）
-・敵AIをルールに則った仕様に変更
 ・イラストを独自に
+
 
 //ユニット性能原案
 ・見た目の印象と実際の操作の乖離を少なくする。
@@ -26,6 +27,13 @@ var AW = (function(){
 ▼Human
 バランス型
 性能は基本を抑えた使いやすい種族という設定を保つ。
+他のユニットとの組み合わせで敵を掃討する特性をもたせる。
+
+・WIZARDは一度だけ敵との戦闘を回避する
+・FROST-MAGEは敵を戦闘場所に一定時間停止させ、攻撃できなくする。
+・FIRE-MAGEは敵の防御力を0にする。
+・CLELICはマップに出ていない場合、自軍の復活速度を早くする
+
 
 ▼Undead
 ピーキーな設定にする。
@@ -44,6 +52,7 @@ var GAME,
 	GROUP = {
 		USER: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
 		ENEMY: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
+		MAP_OPTION:  { CASTLE_BASE: new Group() }, 
 		EFFECT:  { UNIT: new Group() }
 	},
 	USER_RACE = '',
@@ -191,6 +200,7 @@ var CONST = function(){
 			return {
 				USER: { UNIT: GROUP.USER.UNIT, CASTLE: GROUP.USER.CASTLE, THUMB: GROUP.USER.THUMB },
 				ENEMY: { UNIT: GROUP.ENEMY.UNIT, CASTLE: GROUP.ENEMY.CASTLE, THUMB: GROUP.ENEMY.THUMB },
+				MAP_OPTION:  { CASTLE_BASE: GROUP.MAP_OPTION.CASTLE_BASE }, 
 				EFFECT:  { UNIT: GROUP.EFFECT.UNIT }
 			};
 		},
@@ -245,13 +255,18 @@ PUBLIC.init = function(config){
 		},
 		castle_point = MAP.CASTLE,
 		collision = MAP.COLLISION,
-		chipset;
+		chipset, order = config.order, i;
 
 	//set user race
 	USER_RACE = config.race;
 
 	//set user order
-	USER_ORDER = config.order;
+	for(i = 0, len = order.length; i < len; i++) {
+		USER_ORDER.push({
+			name: order[i].toUpperCase(), 
+			onMap: false
+		});
+	}
 
 	//set map
 	MAP.BASE = chipset = config.map;
@@ -367,8 +382,6 @@ PUBLIC.Amida = function(){
 		chipset = MAP.BASE,
 		map = new Map(chip_size,chip_size),
 		map_image = GAME.assets[CONST_CASH.MAP.IMAGE], 
-		castle_bases = new Group(),
-		castle_base,
 		group_user = GROUP.USER,
 		user_castle = group_user.CASTLE,
 		group_enemy = GROUP.ENEMY,
@@ -378,6 +391,7 @@ PUBLIC.Amida = function(){
 		thumb_position = CONST_CASH.THUMB.USER.POSITION,
 		user_mode = CONST_CASH.HAVE.USER,
 		castle_point = MAP.CASTLE,
+		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
 		effect_unit = GROUP.EFFECT.UNIT,
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
@@ -409,9 +423,6 @@ PUBLIC.Amida = function(){
 	copy_denzi.y = 463;
 	copy_denzi.font = '10px cursive';
 
-
-	//castle base set
-
 	//depth set
 	root.addChild(map);
 	root.addChild(castle_bases);
@@ -431,22 +442,12 @@ PUBLIC.Amida = function(){
 		if(castle_point.hasOwnProperty(i)){
 			ary = castle_point[i];
 			for(j = 0,len = ary.length; j < len; j++){
-				castle_base = new Sprite(chip_size, chip_size);
-				castle_base.image = map_image;
-				castle_base.frame = 24;
-				castle_base.x = ary[j][0] * chip_size;
-				castle_base.y = ary[j][1] * chip_size;
-				addLayer({
-					layer: castle_bases, 
-					sprite: castle_base
-				});
 				castle = new PUBLIC.Castle({
 					mode: i,
 					frame: castle_frames[j].NORMAL,
 					brake: castle_frames[j].BRAKE,
 					x: ary[j][0] * chip_size,
-					y: ary[j][1] * chip_size, 
-					base: castle_base
+					y: ary[j][1] * chip_size
 				});
 				castle.unitX = castle.x + unit_chip_size / 2;
 				castle.unitY = castle.y + unit_chip_size / 2;
@@ -456,7 +457,7 @@ PUBLIC.Amida = function(){
 
 	//user unit-thumbnail set
 	for(i = 0, len = USER_ORDER.length; i < len; i++){
-		name = USER_ORDER[i].toUpperCase();
+		name = USER_ORDER[i].name;
 		thumb = new PUBLIC.Thumb({
 			mode: user_mode,
 			name: name,
@@ -594,7 +595,21 @@ PUBLIC.Castle = function(config){
 		image = GAME.assets[CONST_CASH.MAP.IMAGE],
 		prop = CONST().CASTLE().PROP,
 		mode = config.mode.toUpperCase(),
-		sprite = new Sprite(size,size);
+		sprite = new Sprite(size,size),
+		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
+		caslt_base;
+
+	//castle base set
+	castle_base = new Sprite(size, size);
+	castle_base.image = image;
+	castle_base.frame = 24;
+	castle_base.x = config.x;
+	castle_base.y = config.y;
+	addLayer({
+		layer: castle_bases, 
+		sprite: castle_base
+	});
+	prop.base = castle_base;
 
 	//default override
 	prop = propOverride(prop,config);
