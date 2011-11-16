@@ -180,6 +180,7 @@ PUBLIC.Amida = function(){
 
 				score = LABEL.SCORE.add(score);
 				GAME.end(score, end+':'+score);
+				clearInterval(timerID);
 				alert(end+':'+score);
 			};
 
