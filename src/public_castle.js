@@ -12,12 +12,15 @@ PUBLIC.Castle = function(config){
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
 		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
-		caslt_base;
+		castle_base;
 
 	//castle base set
 	castle_base = new Sprite(size, size);
 	castle_base.image = image;
 	castle_base.frame = 24;
+	if(mode === 'USER') {
+		castle_base.frame = 16;
+	}
 	castle_base.x = config.x;
 	castle_base.y = config.y;
 	addLayer({

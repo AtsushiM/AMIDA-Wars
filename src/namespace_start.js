@@ -14,7 +14,6 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
-・制限時間の設定
 ・制限時間の表示
 ・ステータス表示
 ・ユニットの性能設定

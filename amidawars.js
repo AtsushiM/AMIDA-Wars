@@ -14,7 +14,6 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
-・制限時間の設定
 ・制限時間の表示
 ・ステータス表示
 ・ユニットの性能設定
@@ -126,6 +125,7 @@ var GAME,
  */
 var CONST = function(){
 	return {
+		TIMELIMIT: 3*60*1000, 
 		UNIT: function(){
 			return {
 				IMAGE: 'char.gif',
@@ -239,13 +239,14 @@ var CONST = function(){
 		},
 		POINT: function(){ 
 			return {
-				UNIT: 100, CASTLE: 1000, WIN: 5000, LOSE: -5000
+				UNIT: 100, CASTLE: 1000, WIN: 5000, LOSE: -5000, TIME: 10
 			};
 		}
 	};
 },
 CONST_CASH = CONST();
 CONST_CASH = {
+	TIMELIMIT: CONST_CASH.TIMELIMIT, 
 	UNIT: CONST_CASH.UNIT(),
 	THUMB: CONST_CASH.THUMB(),
 	SCORE: CONST_CASH.SCORE(),
@@ -424,6 +425,7 @@ PUBLIC.Amida = function(){
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
 		score_position = CONST_CASH.SCORE.POSITION,
+		timelimit = CONST_CASH.TIMELIMIT, 
 		i, j, len, ary, name, castle, thumb, score, 
 		copy_mizoue, copy_denzi;
 
@@ -557,62 +559,77 @@ PUBLIC.Amida = function(){
 	//Battle init
 	Battle.init();
 
-	//surveillant start
-	Surveillant.add(function() {
-		if(gameStart) {
-			EnemyAction.init();
-			delete Surveillant.functions.playStart;
-			return true;
-		}
-		return false;
-	}, 'playStart');
-	Surveillant.add(function() {
-		var i, j, castle, castles, len, count, 
-			end = false, 
-			have = CONST_CASH.HAVE;
-		
-		for(i in CASTLE) {
-			if(CASTLE.hasOwnProperty(i)) {
-				castles = CASTLE[i];
-				len = castles.length;
-				count = 0;
-				for(j = 0; j < len; j++) {
-					castle = castles[j];
-					if(castle.hp > 0) {
+	//surveillant setting
+	(function() {
+		var end = false, 
+			have = CONST_CASH.HAVE, 
+			timeupID, 
+			endAction = function() {
+				GAME.removeEventListener(enchant.Event.ENTER_FRAME, Surveillant.exefunc);
+				EnemyAction.end();
+
+				if(end === have.ENEMY) {
+					end = 'WIN';
+					score = CONST_CASH.POINT.WIN;
+				}
+				else if(end === have.USER) {
+					end = 'LOSE';
+					score = CONST_CASH.POINT.LOSE;
+				}
+				else {
+					end = 'DRAW';
+					score = 0;
+				}
+
+				score = LABEL.SCORE.add(score);
+				GAME.end(score, end+':'+score);
+				alert(end+':'+score);
+			};
+
+		Surveillant.add(function() {
+			if(gameStart) {
+				EnemyAction.init();
+				timeupID = setTimeout(function() {
+					end = true;
+					endAction();
+					return true;
+				}, timelimit);
+				delete Surveillant.functions.playStart;
+				return true;
+			}
+			return false;
+		}, 'playStart');
+		Surveillant.add(function() {
+			var i, j, len, castles, castle, count;
+
+			if(end !== false) {
+				endAction();
+				return true;
+			}
+			for(i in CASTLE) {
+				if(CASTLE.hasOwnProperty(i)) {
+					castles = CASTLE[i];
+					len = castles.length;
+					count = 0;
+					for(j = 0; j < len; j++) {
+						castle = castles[j];
+						if(castle.hp > 0) {
+							break;
+						}
+						else {
+							count++;
+						}
+					}
+					if(count === len) {
+						end = i;
 						break;
 					}
-					else {
-						count++;
-					}
-				}
-				if(count === len) {
-					end = i;
-					break;
 				}
 			}
-		}
-
-		if(end !== false) {
-			GAME.removeEventListener(enchant.Event.ENTER_FRAME, Surveillant.exefunc);
-			EnemyAction.end();
-
-			if(end === have.ENEMY) {
-				end = 'WIN';
-				score = CONST_CASH.POINT.WIN;
-			}
-			else if(end === have.USER) {
-				end = 'LOSE';
-				score = CONST_CASH.POINT.LOSE;
-			}
-
-			score = LABEL.SCORE.add(score);
-			GAME.end(score, end+':'+score);
-			alert(end+':'+score);
-			return true;
-		}
-		return false;
-	}, 'playEnd');
-	Surveillant.init();
+			return false;
+		}, 'playEnd');
+		Surveillant.init();
+	}());
 };
 /**
  * Create Castle Object
@@ -628,12 +645,15 @@ PUBLIC.Castle = function(config){
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
 		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
-		caslt_base;
+		castle_base;
 
 	//castle base set
 	castle_base = new Sprite(size, size);
 	castle_base.image = image;
 	castle_base.frame = 24;
+	if(mode === 'USER') {
+		castle_base.frame = 16;
+	}
 	castle_base.x = config.x;
 	castle_base.y = config.y;
 	addLayer({

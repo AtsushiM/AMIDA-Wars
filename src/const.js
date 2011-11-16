@@ -6,6 +6,7 @@
  */
 var CONST = function(){
 	return {
+		TIMELIMIT: 3*60*1000, 
 		UNIT: function(){
 			return {
 				IMAGE: 'char.gif',
@@ -119,13 +120,14 @@ var CONST = function(){
 		},
 		POINT: function(){ 
 			return {
-				UNIT: 100, CASTLE: 1000, WIN: 5000, LOSE: -5000
+				UNIT: 100, CASTLE: 1000, WIN: 5000, LOSE: -5000, TIME: 10
 			};
 		}
 	};
 },
 CONST_CASH = CONST();
 CONST_CASH = {
+	TIMELIMIT: CONST_CASH.TIMELIMIT, 
 	UNIT: CONST_CASH.UNIT(),
 	THUMB: CONST_CASH.THUMB(),
 	SCORE: CONST_CASH.SCORE(),
