@@ -73,7 +73,7 @@ var GAME,
 	CASTLE = { USER: [], ENEMY: [] },
 	LABEL =  { SCORE: {}},
 	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [], PATH: {} },
-	SOUND =  { BGM:  {} }, 
+	SOUND =  { BGM:  {}, EFFECT:  {} }, 
 	TYPE = {
 		LIGHT:'LIGHT',
 		MIDIUM:'MIDIUM',
@@ -210,7 +210,10 @@ var CONST = function(){
 		}, 
 		SOUND: function() {
 			return  {
-				BGM: 'bgm.wav'
+				BGM: 'bgm.wav', 
+				EFFECT:  {
+					EXPLOSION: 'explosion.wav'
+				}
 			};
 		}, 
 		LAYER: function(){
@@ -268,7 +271,10 @@ PUBLIC.init = function(config){
 			EFFECT: CONST_CASH.EFFECT.IMAGE
 		},
 		sound =  {
-			BGM: CONST_CASH.SOUND.BGM
+			BGM: CONST_CASH.SOUND.BGM, 
+			EFFECT: {
+				EXPLOSION: CONST_CASH.SOUND.EFFECT.EXPLOSION
+			}
 		},
 		size = {
 			W: CONST_CASH.MAP.W,
@@ -378,7 +384,8 @@ PUBLIC.init = function(config){
 	//new Game
 	GAME = new Game(size.W,size.H);
 	//preload set
-	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.BGM);
+	/* GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.BGM); */
+	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.EFFECT.EXPLOSION);
 	//Game onloadSet
 	GAME.onload = PUBLIC.Amida;
 	//Game Start
@@ -544,6 +551,9 @@ PUBLIC.Amida = function(){
 	//set global
 	MAP.PATH = map;
 
+	//set sound
+	SOUND.EFFECT.EXPLOSION = GAME.assets[CONST_CASH.SOUND.EFFECT.EXPLOSION];
+
 	//Battle init
 	Battle.init();
 
@@ -552,9 +562,6 @@ PUBLIC.Amida = function(){
 		if(gameStart) {
 			EnemyAction.init();
 			delete Surveillant.functions.playStart;
-
-			// SOUND.BGM = GAME.assets[CONST_CASH.SOUND.BGM];
-			// SOUND.BGM.play();
 			return true;
 		}
 		return false;
@@ -813,7 +820,7 @@ PUBLIC.Unit = function(config){
 		walk_count = 0, walk_true = 0,
 		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
-		mapPoint,checkMoveSquere,getCollision,walk,move;
+		mapPoint,checkMoveSquere,getCollision,walk,move,after;
 
 
 	//can user override prop
@@ -853,20 +860,24 @@ PUBLIC.Unit = function(config){
 				frames: CONST_CASH.EFFECT.FRAME.EXPLOSION
 			});
 
+		SOUND.EFFECT.EXPLOSION.play();
+
 		delete UNITS[mode][sprite.myNo];
 		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
 
-		//enemy unit after death action
+		//after action enemy kill
 		if(typeof sprite.after_death === 'function') {
-			setTimeout(function() {
+			after = function() {
 				sprite.after_death(sprite);
-			}, sprite.reverse);
+			};
 		}
-		//thumb drag start
-		if(sprite.thumb){
-			setTimeout(function(){
-				sprite.thumb.dragStart();
-			},sprite.reverse);
+		//after action user kill
+		else if(sprite.thumb){
+			after = sprite.thumb.dragStart;
+		}
+
+		if(typeof after === 'function') {
+			setTimeout(after, sprite.reverse);
 		}
 	};
 
@@ -1192,7 +1203,10 @@ var Battle = {
 			point = CONST_CASH.POINT;
 
 		if((obj_type !== type.CASTLE && obj_mode === have.USER) || (obj_type === type.CASTLE && obj_mode === have.ENEMY)) {
-			score.add(point[obj.type]);
+			score.add(point[obj_type]);
+		}
+		else if(obj_type === type.CASTLE && obj_mode === have.USER) {
+			score.add(-point[obj_type]);
 		}
 	}, 
 	/**

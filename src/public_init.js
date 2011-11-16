@@ -11,7 +11,10 @@ PUBLIC.init = function(config){
 			EFFECT: CONST_CASH.EFFECT.IMAGE
 		},
 		sound =  {
-			BGM: CONST_CASH.SOUND.BGM
+			BGM: CONST_CASH.SOUND.BGM, 
+			EFFECT: {
+				EXPLOSION: CONST_CASH.SOUND.EFFECT.EXPLOSION
+			}
 		},
 		size = {
 			W: CONST_CASH.MAP.W,
@@ -121,7 +124,8 @@ PUBLIC.init = function(config){
 	//new Game
 	GAME = new Game(size.W,size.H);
 	//preload set
-	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.BGM);
+	/* GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.BGM); */
+	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.EFFECT.EXPLOSION);
 	//Game onloadSet
 	GAME.onload = PUBLIC.Amida;
 	//Game Start

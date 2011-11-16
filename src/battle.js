@@ -31,7 +31,10 @@ var Battle = {
 			point = CONST_CASH.POINT;
 
 		if((obj_type !== type.CASTLE && obj_mode === have.USER) || (obj_type === type.CASTLE && obj_mode === have.ENEMY)) {
-			score.add(point[obj.type]);
+			score.add(point[obj_type]);
+		}
+		else if(obj_type === type.CASTLE && obj_mode === have.USER) {
+			score.add(-point[obj_type]);
 		}
 	}, 
 	/**

@@ -90,7 +90,10 @@ var CONST = function(){
 		}, 
 		SOUND: function() {
 			return  {
-				BGM: 'bgm.wav'
+				BGM: 'bgm.wav', 
+				EFFECT:  {
+					EXPLOSION: 'explosion.wav'
+				}
 			};
 		}, 
 		LAYER: function(){

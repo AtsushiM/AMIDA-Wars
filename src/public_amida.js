@@ -149,6 +149,9 @@ PUBLIC.Amida = function(){
 	//set global
 	MAP.PATH = map;
 
+	//set sound
+	SOUND.EFFECT.EXPLOSION = GAME.assets[CONST_CASH.SOUND.EFFECT.EXPLOSION];
+
 	//Battle init
 	Battle.init();
 
@@ -157,9 +160,6 @@ PUBLIC.Amida = function(){
 		if(gameStart) {
 			EnemyAction.init();
 			delete Surveillant.functions.playStart;
-
-			// SOUND.BGM = GAME.assets[CONST_CASH.SOUND.BGM];
-			// SOUND.BGM.play();
 			return true;
 		}
 		return false;
