@@ -14,6 +14,7 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・UI再考
 ・クリア演出
 ・リセットボタン
 ・ステータス表示
@@ -71,7 +72,7 @@ var GAME,
 	UNITS = { USER: {}, ENEMY: {}, no: 0 },
 	THUMBS = { USER: [], ENEMY: [] },
 	CASTLE = { USER: [], ENEMY: [] },
-	LABEL =  { SCORE: {}, COUNTDOWN: {} },
+	LABEL =  { SCORE: {}, COUNTDOWN: {}, STATUS_VIEWER:  {} },
 	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [], PATH: {} },
 	SOUND =  { BGM:  {}, EFFECT:  {} }, 
 	TYPE = {
@@ -191,7 +192,12 @@ var CONST = function(){
 		},
 		COUNTDOWN: function() {
 			return {
-				POSITION: [200, 430]
+				POSITION: [150, 430]
+			};
+		}, 
+		STATUS_VIEWER: function() {
+			return {
+				POSITION: [200, 352]
 			};
 		}, 
 		MAP: function(){
@@ -257,6 +263,7 @@ CONST_CASH = {
 	THUMB: CONST_CASH.THUMB(),
 	SCORE: CONST_CASH.SCORE(),
 	COUNTDOWN: CONST_CASH.COUNTDOWN(),
+	STATUS_VIEWER: CONST_CASH.STATUS_VIEWER(),
 	MAP: CONST_CASH.MAP(),
 	CASTLE: CONST_CASH.CASTLE(),
 	EFFECT: CONST_CASH.EFFECT(),
@@ -432,12 +439,21 @@ PUBLIC.Amida = function(){
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
 		score_position = CONST_CASH.SCORE.POSITION,
-		countdown_position = CONST_CASH.COUNTDOWN.POSITION, 
+		countdown, countdown_position = CONST_CASH.COUNTDOWN.POSITION, 
+		statusviewer, statusviewer_position = CONST_CASH.STATUS_VIEWER.POSITION, 
 		i, j, len, ary, name, castle, thumb, score;
 
 	//map set
 	map.image = map_image;
 	map.loadData(chipset);
+
+	//status viewer set
+	statusViewer = LABEL.STATUS_VIEWER = new StatusViwer({
+		mode: user_mode, 
+		x: statusviewer_position[0], 
+		y: statusviewer_position[1]
+	});
+	statusViewer.update();
 
 	//score label set
 	score = LABEL.SCORE = new Score({
@@ -478,6 +494,7 @@ PUBLIC.Amida = function(){
 	root.addChild(effect_unit);
 	root.addChild(score.label);
 	root.addChild(countdown);
+	root.addChild(statusViewer);
 	// root.addChild(copy_mizoue);
 	// root.addChild(copy_denzi);
 	
@@ -1372,6 +1389,31 @@ var Surveillant = {
 	init: function() {
 		GAME.addEventListener(enchant.Event.ENTER_FRAME, Surveillant.exefunc, false);
 	}
+};
+StatusViwer = function(config){
+	var label = new Label(), 
+		statuslist = CONST_CASH.UNIT.STATUS[USER_RACE];
+
+	//set label font
+	label.font = '9px cursive';
+
+	//set label position
+	label.x = config.x;
+	label.y = config.y;
+
+	label.update = function(unit) {
+		var i, sta, txt = '';
+		sta = statuslist.WIZARD;
+		for(i in sta) {
+			if(sta.hasOwnProperty(i)) {
+				txt += i + ':' + sta[i] + '<br />';
+			}
+		}
+		console.log(txt);
+		label.text = txt;
+	};
+
+	return label;
 };
 	return PUBLIC;
 }());

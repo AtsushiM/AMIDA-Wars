@@ -71,7 +71,12 @@ var CONST = function(){
 		},
 		COUNTDOWN: function() {
 			return {
-				POSITION: [200, 430]
+				POSITION: [150, 430]
+			};
+		}, 
+		STATUS_VIEWER: function() {
+			return {
+				POSITION: [200, 352]
 			};
 		}, 
 		MAP: function(){
@@ -137,6 +142,7 @@ CONST_CASH = {
 	THUMB: CONST_CASH.THUMB(),
 	SCORE: CONST_CASH.SCORE(),
 	COUNTDOWN: CONST_CASH.COUNTDOWN(),
+	STATUS_VIEWER: CONST_CASH.STATUS_VIEWER(),
 	MAP: CONST_CASH.MAP(),
 	CASTLE: CONST_CASH.CASTLE(),
 	EFFECT: CONST_CASH.EFFECT(),

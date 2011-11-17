@@ -22,12 +22,21 @@ PUBLIC.Amida = function(){
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
 		score_position = CONST_CASH.SCORE.POSITION,
-		countdown_position = CONST_CASH.COUNTDOWN.POSITION, 
+		countdown, countdown_position = CONST_CASH.COUNTDOWN.POSITION, 
+		statusviewer, statusviewer_position = CONST_CASH.STATUS_VIEWER.POSITION, 
 		i, j, len, ary, name, castle, thumb, score;
 
 	//map set
 	map.image = map_image;
 	map.loadData(chipset);
+
+	//status viewer set
+	statusViewer = LABEL.STATUS_VIEWER = new StatusViwer({
+		mode: user_mode, 
+		x: statusviewer_position[0], 
+		y: statusviewer_position[1]
+	});
+	statusViewer.update();
 
 	//score label set
 	score = LABEL.SCORE = new Score({
@@ -68,6 +77,7 @@ PUBLIC.Amida = function(){
 	root.addChild(effect_unit);
 	root.addChild(score.label);
 	root.addChild(countdown);
+	root.addChild(statusViewer);
 	// root.addChild(copy_mizoue);
 	// root.addChild(copy_denzi);
 	

@@ -14,6 +14,7 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・UI再考
 ・クリア演出
 ・リセットボタン
 ・ステータス表示
