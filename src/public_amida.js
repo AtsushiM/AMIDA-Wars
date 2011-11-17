@@ -173,7 +173,7 @@ PUBLIC.Amida = function(){
 
 				if(end === have.ENEMY) {
 					end = 'WIN';
-					score = CONST_CASH.POINT.WIN;
+					score = CONST_CASH.POINT.WIN +  countdown.getDiff() * CONST_CASH.POINT.TIME;
 				}
 				else if(end === have.USER) {
 					end = 'LOSE';
@@ -185,9 +185,6 @@ PUBLIC.Amida = function(){
 				}
 
 				//get time score
-				console.log(score);
-				score += countdown.getDiff() * CONST_CASH.POINT.TIME;
-				console.log(score);
 
 				score = LABEL.SCORE.add(score);
 				GAME.end(score, end+':'+score);
