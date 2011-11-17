@@ -6,7 +6,7 @@
  */
 var CONST = function(){
 	return {
-		TIMELIMIT: 3*60*1000, 
+		TIMELIMIT: 3*60, 
 		UNIT: function(){
 			return {
 				IMAGE: 'char.gif',
@@ -69,6 +69,11 @@ var CONST = function(){
 				POSITION: [5, 430]
 			};
 		},
+		COUNTDOWN: function() {
+			return {
+				POSITION: [200, 430]
+			};
+		}, 
 		MAP: function(){
 			return {
 				IMAGE: 'map.gif',
@@ -131,6 +136,7 @@ CONST_CASH = {
 	UNIT: CONST_CASH.UNIT(),
 	THUMB: CONST_CASH.THUMB(),
 	SCORE: CONST_CASH.SCORE(),
+	COUNTDOWN: CONST_CASH.COUNTDOWN(),
 	MAP: CONST_CASH.MAP(),
 	CASTLE: CONST_CASH.CASTLE(),
 	EFFECT: CONST_CASH.EFFECT(),

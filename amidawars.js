@@ -14,6 +14,7 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・リセットボタン
 ・制限時間の表示
 ・ステータス表示
 ・ユニットの性能設定
@@ -70,7 +71,7 @@ var GAME,
 	UNITS = { USER: {}, ENEMY: {}, no: 0 },
 	THUMBS = { USER: [], ENEMY: [] },
 	CASTLE = { USER: [], ENEMY: [] },
-	LABEL =  { SCORE: {}},
+	LABEL =  { SCORE: {}, COUNTDOWN: {} },
 	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [], PATH: {} },
 	SOUND =  { BGM:  {}, EFFECT:  {} }, 
 	TYPE = {
@@ -125,7 +126,7 @@ var GAME,
  */
 var CONST = function(){
 	return {
-		TIMELIMIT: 3*60*1000, 
+		TIMELIMIT: 3*60, 
 		UNIT: function(){
 			return {
 				IMAGE: 'char.gif',
@@ -188,6 +189,11 @@ var CONST = function(){
 				POSITION: [5, 430]
 			};
 		},
+		COUNTDOWN: function() {
+			return {
+				POSITION: [200, 430]
+			};
+		}, 
 		MAP: function(){
 			return {
 				IMAGE: 'map.gif',
@@ -250,6 +256,7 @@ CONST_CASH = {
 	UNIT: CONST_CASH.UNIT(),
 	THUMB: CONST_CASH.THUMB(),
 	SCORE: CONST_CASH.SCORE(),
+	COUNTDOWN: CONST_CASH.COUNTDOWN(),
 	MAP: CONST_CASH.MAP(),
 	CASTLE: CONST_CASH.CASTLE(),
 	EFFECT: CONST_CASH.EFFECT(),
@@ -425,20 +432,26 @@ PUBLIC.Amida = function(){
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
 		score_position = CONST_CASH.SCORE.POSITION,
-		timelimit = CONST_CASH.TIMELIMIT, 
-		i, j, len, ary, name, castle, thumb, score, 
-		copy_mizoue, copy_denzi;
+		countdown_position = CONST_CASH.COUNTDOWN.POSITION, 
+		i, j, len, ary, name, castle, thumb, score;
 
 	//map set
 	map.image = map_image;
 	map.loadData(chipset);
 
 	//score label set
-	score = LABEL.SCORE = PUBLIC.Score({
+	score = LABEL.SCORE = new PUBLIC.Score({
 		mode: user_mode, 
 		x: score_position[0], 
 		y: score_position[1]
 	});
+
+	//countdown label set
+	countdown = LABEL.COUNTDOWN = new PUBLIC.Countdown({
+		x: countdown_position[0], 
+		y: countdown_position[1]
+	});
+	countdown.update();
 
 	// //copy right set
 	// copy_mizoue = new Label();
@@ -464,6 +477,7 @@ PUBLIC.Amida = function(){
 	root.addChild(group_enemy.THUMB);
 	root.addChild(effect_unit);
 	root.addChild(score.label);
+	root.addChild(countdown);
 	// root.addChild(copy_mizoue);
 	// root.addChild(copy_denzi);
 	
@@ -583,18 +597,19 @@ PUBLIC.Amida = function(){
 
 				score = LABEL.SCORE.add(score);
 				GAME.end(score, end+':'+score);
-				clearInterval(timerID);
+				clearInterval(timeupID);
 				alert(end+':'+score);
 			};
 
 		Surveillant.add(function() {
 			if(gameStart) {
 				EnemyAction.init();
-				timeupID = setTimeout(function() {
+				countdown.setAfter(function() {
 					end = true;
 					endAction();
 					return true;
-				}, timelimit);
+				});
+				countdown.init();
 				delete Surveillant.functions.playStart;
 				return true;
 			}
@@ -1100,6 +1115,56 @@ PUBLIC.Score = function(config){
 	ret.update();
 
 	return ret;
+};
+/**
+ * Countdown display obj
+ * @name Countdown
+ * @function
+ * @param {Object} 
+ * @returns {Object}
+ */
+PUBLIC.Countdown = function(config){
+	var label = new Label(), 
+		timelimit = CONST_CASH.TIMELIMIT, 
+		sec = 0, 
+		limitID, 
+		after = function() {},
+		count = function() {
+			sec++;
+			if(sec >= timelimit) {
+				after();
+				clearInterval(limitID);
+			}
+		};
+
+	//set label font
+	label.font = '12px cursive';
+
+	//set label position
+	label.x = config.x;
+	label.y = config.y;
+
+	label.update = function() {
+		label.text = timelimit - sec;
+	};
+
+	label.init = function() {
+		clearInterval(limitID);
+		limitID = setInterval(function() {
+			count();
+			label.update();
+		}, 1000);
+		return limitID;
+	};
+
+	label.setAfter = function(func) {
+		after = function() {
+			func();
+			clearInterval(limitID);
+		};
+	};
+	
+	return label;
 };
 /**
  * Create Effect Object

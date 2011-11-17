@@ -11,7 +11,7 @@ var GAME,
 	UNITS = { USER: {}, ENEMY: {}, no: 0 },
 	THUMBS = { USER: [], ENEMY: [] },
 	CASTLE = { USER: [], ENEMY: [] },
-	LABEL =  { SCORE: {}},
+	LABEL =  { SCORE: {}, COUNTDOWN: {} },
 	MAP = { BASE: [], CASTLE: { USER: [], ENEMY: [] }, COLLISION: [], PATH: {} },
 	SOUND =  { BGM:  {}, EFFECT:  {} }, 
 	TYPE = {

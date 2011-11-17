@@ -22,20 +22,26 @@ PUBLIC.Amida = function(){
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
 		score_position = CONST_CASH.SCORE.POSITION,
-		timelimit = CONST_CASH.TIMELIMIT, 
-		i, j, len, ary, name, castle, thumb, score, 
-		copy_mizoue, copy_denzi;
+		countdown_position = CONST_CASH.COUNTDOWN.POSITION, 
+		i, j, len, ary, name, castle, thumb, score;
 
 	//map set
 	map.image = map_image;
 	map.loadData(chipset);
 
 	//score label set
-	score = LABEL.SCORE = PUBLIC.Score({
+	score = LABEL.SCORE = new PUBLIC.Score({
 		mode: user_mode, 
 		x: score_position[0], 
 		y: score_position[1]
 	});
+
+	//countdown label set
+	countdown = LABEL.COUNTDOWN = new PUBLIC.Countdown({
+		x: countdown_position[0], 
+		y: countdown_position[1]
+	});
+	countdown.update();
 
 	// //copy right set
 	// copy_mizoue = new Label();
@@ -61,6 +67,7 @@ PUBLIC.Amida = function(){
 	root.addChild(group_enemy.THUMB);
 	root.addChild(effect_unit);
 	root.addChild(score.label);
+	root.addChild(countdown);
 	// root.addChild(copy_mizoue);
 	// root.addChild(copy_denzi);
 	
@@ -180,18 +187,19 @@ PUBLIC.Amida = function(){
 
 				score = LABEL.SCORE.add(score);
 				GAME.end(score, end+':'+score);
-				clearInterval(timerID);
+				clearInterval(timeupID);
 				alert(end+':'+score);
 			};
 
 		Surveillant.add(function() {
 			if(gameStart) {
 				EnemyAction.init();
-				timeupID = setTimeout(function() {
+				countdown.setAfter(function() {
 					end = true;
 					endAction();
 					return true;
-				}, timelimit);
+				});
+				countdown.init();
 				delete Surveillant.functions.playStart;
 				return true;
 			}
