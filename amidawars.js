@@ -16,7 +16,6 @@ window.onorientationchange = function(){
 ☆各クラスの最適＆効率化（常時タスク）
 ・クリア演出
 ・リセットボタン
-・残り時間をスコアに変換
 ・ステータス表示
 ・ユニットの性能設定
 ・効果音設定
@@ -441,14 +440,14 @@ PUBLIC.Amida = function(){
 	map.loadData(chipset);
 
 	//score label set
-	score = LABEL.SCORE = new PUBLIC.Score({
+	score = LABEL.SCORE = new Score({
 		mode: user_mode, 
 		x: score_position[0], 
 		y: score_position[1]
 	});
 
 	//countdown label set
-	countdown = LABEL.COUNTDOWN = new PUBLIC.Countdown({
+	countdown = LABEL.COUNTDOWN = new Countdown({
 		x: countdown_position[0], 
 		y: countdown_position[1]
 	});
@@ -1057,7 +1056,7 @@ PUBLIC.Unit = function(config){
  * @param {Object} config 
  * @returns {Object}
  */
-PUBLIC.Score = function(config){
+Score = function(config){
 	var total = 0,
 		//enemy point rate
 		rate = 0.5,
@@ -1125,7 +1124,7 @@ PUBLIC.Score = function(config){
  * @param {Object} 
  * @returns {Object}
  */
-PUBLIC.Countdown = function(config){
+Countdown = function(config){
 	var label = new Label(), 
 		timelimit = CONST_CASH.TIMELIMIT, 
 		sec = 0, 

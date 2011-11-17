@@ -30,14 +30,14 @@ PUBLIC.Amida = function(){
 	map.loadData(chipset);
 
 	//score label set
-	score = LABEL.SCORE = new PUBLIC.Score({
+	score = LABEL.SCORE = new Score({
 		mode: user_mode, 
 		x: score_position[0], 
 		y: score_position[1]
 	});
 
 	//countdown label set
-	countdown = LABEL.COUNTDOWN = new PUBLIC.Countdown({
+	countdown = LABEL.COUNTDOWN = new Countdown({
 		x: countdown_position[0], 
 		y: countdown_position[1]
 	});
