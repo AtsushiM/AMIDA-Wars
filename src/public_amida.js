@@ -167,7 +167,6 @@ PUBLIC.Amida = function(){
 	(function() {
 		var end = false, 
 			have = CONST_CASH.HAVE, 
-			timeupID, 
 			endAction = function() {
 				GAME.removeEventListener(enchant.Event.ENTER_FRAME, Surveillant.exefunc);
 				EnemyAction.end();
@@ -185,9 +184,14 @@ PUBLIC.Amida = function(){
 					score = 0;
 				}
 
+				//get time score
+				console.log(score);
+				score += countdown.getDiff() * CONST_CASH.POINT.TIME;
+				console.log(score);
+
 				score = LABEL.SCORE.add(score);
 				GAME.end(score, end+':'+score);
-				clearInterval(timeupID);
+				countdown.stop();
 				alert(end+':'+score);
 			};
 

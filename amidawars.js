@@ -14,8 +14,9 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・クリア演出
 ・リセットボタン
-・制限時間の表示
+・残り時間をスコアに変換
 ・ステータス表示
 ・ユニットの性能設定
 ・効果音設定
@@ -577,7 +578,6 @@ PUBLIC.Amida = function(){
 	(function() {
 		var end = false, 
 			have = CONST_CASH.HAVE, 
-			timeupID, 
 			endAction = function() {
 				GAME.removeEventListener(enchant.Event.ENTER_FRAME, Surveillant.exefunc);
 				EnemyAction.end();
@@ -595,9 +595,14 @@ PUBLIC.Amida = function(){
 					score = 0;
 				}
 
+				//get time score
+				console.log(score);
+				score += countdown.getDiff() * CONST_CASH.POINT.TIME;
+				console.log(score);
+
 				score = LABEL.SCORE.add(score);
 				GAME.end(score, end+':'+score);
-				clearInterval(timeupID);
+				countdown.stop();
 				alert(end+':'+score);
 			};
 
@@ -1052,7 +1057,7 @@ PUBLIC.Unit = function(config){
  * Score display obj
  * @name Score
  * @function
- * @param {Object} config /mode:'USER' || 'ENEMY'/
+ * @param {Object} config 
  * @returns {Object}
  */
 PUBLIC.Score = function(config){
@@ -1133,7 +1138,7 @@ PUBLIC.Countdown = function(config){
 			sec++;
 			if(sec >= timelimit) {
 				after();
-				clearInterval(limitID);
+				label.stop();
 			}
 		};
 
@@ -1149,19 +1154,23 @@ PUBLIC.Countdown = function(config){
 	};
 
 	label.init = function() {
-		clearInterval(limitID);
+		label.stop();
 		limitID = setInterval(function() {
 			count();
 			label.update();
 		}, 1000);
-		return limitID;
 	};
 
 	label.setAfter = function(func) {
-		after = function() {
-			func();
-			clearInterval(limitID);
-		};
+		after = func;
+	};
+
+	label.getDiff = function() {
+		return timelimit - sec;
+	};
+
+	label.stop = function() {
+		clearInterval(limitID);
 	};
 	
 	return label;

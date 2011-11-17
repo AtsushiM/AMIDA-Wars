@@ -15,7 +15,7 @@ PUBLIC.Countdown = function(config){
 			sec++;
 			if(sec >= timelimit) {
 				after();
-				clearInterval(limitID);
+				label.stop();
 			}
 		};
 
@@ -31,19 +31,23 @@ PUBLIC.Countdown = function(config){
 	};
 
 	label.init = function() {
-		clearInterval(limitID);
+		label.stop();
 		limitID = setInterval(function() {
 			count();
 			label.update();
 		}, 1000);
-		return limitID;
 	};
 
 	label.setAfter = function(func) {
-		after = function() {
-			func();
-			clearInterval(limitID);
-		};
+		after = func;
+	};
+
+	label.getDiff = function() {
+		return timelimit - sec;
+	};
+
+	label.stop = function() {
+		clearInterval(limitID);
 	};
 	
 	return label;

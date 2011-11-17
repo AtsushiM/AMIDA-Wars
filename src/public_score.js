@@ -2,7 +2,7 @@
  * Score display obj
  * @name Score
  * @function
- * @param {Object} config /mode:'USER' || 'ENEMY'/
+ * @param {Object} config 
  * @returns {Object}
  */
 PUBLIC.Score = function(config){
