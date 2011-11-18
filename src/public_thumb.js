@@ -51,9 +51,6 @@ PUBLIC.Thumb = function(config){
 	//set type
 	sprite.type = CONST_CASH.TYPE.THUMB;
 
-	//can drag flg
-	sprite.canDrag = true;
-
 	//set default
 	defaultX = sprite.x;
 	defaultY = sprite.y;
@@ -77,8 +74,7 @@ PUBLIC.Thumb = function(config){
 			var hit = hitMyCastle(this);
 			if(hit){
 				//thumb can't drag
-				this.canDrag = false;
-				this.opacity = 0.5;
+				this.dragStop();
 
 				//set unit point
 				this.unit.x = hit.unitX;
@@ -93,15 +89,29 @@ PUBLIC.Thumb = function(config){
 		}
 	});
 
-
 	//sprite drag
 	sprite.dragStart = function(){
 		sprite.canDrag = true;
 		sprite.opacity = 1;
 	};
+	sprite.dragStop = function() {
+		sprite.canDrag = false;
+		sprite.opacity = 0.5;
+	};
+
+	//reverse
+	sprite.reverse = function(unit) {
+		return setTimeout(sprite.dragStart, unit.reverse);
+	};
 
 	//add array
 	THUMBS[mode].push(sprite);
+
+	//set dragmode
+	sprite.dragStop();
+	sprite.init = function() {
+		sprite.reverse(sprite.unit);
+	};
 
 	//add Layer
 	return addLayer({

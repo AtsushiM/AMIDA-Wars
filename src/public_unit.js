@@ -18,7 +18,7 @@ PUBLIC.Unit = function(config){
 		walk_count = 0, walk_true = 0,
 		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
-		mapPoint,checkMoveSquere,getCollision,walk,move,after;
+		mapPoint,checkMoveSquere,getCollision,walk,move;
 
 
 	//can user override prop
@@ -63,19 +63,15 @@ PUBLIC.Unit = function(config){
 		delete UNITS[mode][sprite.myNo];
 		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
 
-		//after action enemy kill
+		//after action
 		if(typeof sprite.after_death === 'function') {
-			after = function() {
+			setTimeout(function() {
 				sprite.after_death(sprite);
-			};
-		}
-		//after action user kill
-		else if(sprite.thumb){
-			after = sprite.thumb.dragStart;
+			}, sprite.reverse);
 		}
 
-		if(typeof after === 'function') {
-			setTimeout(after, sprite.reverse);
+		if(sprite.thumb){
+			sprite.thumb.reverse(sprite);
 		}
 	};
 

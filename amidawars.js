@@ -623,6 +623,8 @@ PUBLIC.Amida = function(){
 
 		Surveillant.add(function() {
 			if(gameStart) {
+				var i, thumbs;
+				thumbs = THUMBS.USER;
 				EnemyAction.init();
 				countdown.setAfter(function() {
 					end = true;
@@ -630,6 +632,11 @@ PUBLIC.Amida = function(){
 					return true;
 				});
 				countdown.init();
+				for(i in thumbs) {
+					if(thumbs.hasOwnProperty(i)) {
+						thumbs[i].init();
+					}
+				}
 				delete Surveillant.functions.playStart;
 				return true;
 			}
@@ -800,9 +807,6 @@ PUBLIC.Thumb = function(config){
 	//set type
 	sprite.type = CONST_CASH.TYPE.THUMB;
 
-	//can drag flg
-	sprite.canDrag = true;
-
 	//set default
 	defaultX = sprite.x;
 	defaultY = sprite.y;
@@ -826,8 +830,7 @@ PUBLIC.Thumb = function(config){
 			var hit = hitMyCastle(this);
 			if(hit){
 				//thumb can't drag
-				this.canDrag = false;
-				this.opacity = 0.5;
+				this.dragStop();
 
 				//set unit point
 				this.unit.x = hit.unitX;
@@ -842,15 +845,29 @@ PUBLIC.Thumb = function(config){
 		}
 	});
 
-
 	//sprite drag
 	sprite.dragStart = function(){
 		sprite.canDrag = true;
 		sprite.opacity = 1;
 	};
+	sprite.dragStop = function() {
+		sprite.canDrag = false;
+		sprite.opacity = 0.5;
+	};
+
+	//reverse
+	sprite.reverse = function(unit) {
+		return setTimeout(sprite.dragStart, unit.reverse);
+	};
 
 	//add array
 	THUMBS[mode].push(sprite);
+
+	//set dragmode
+	sprite.dragStop();
+	sprite.init = function() {
+		sprite.reverse(sprite.unit);
+	};
 
 	//add Layer
 	return addLayer({
@@ -878,7 +895,7 @@ PUBLIC.Unit = function(config){
 		walk_count = 0, walk_true = 0,
 		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
-		mapPoint,checkMoveSquere,getCollision,walk,move,after;
+		mapPoint,checkMoveSquere,getCollision,walk,move;
 
 
 	//can user override prop
@@ -923,19 +940,15 @@ PUBLIC.Unit = function(config){
 		delete UNITS[mode][sprite.myNo];
 		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
 
-		//after action enemy kill
+		//after action
 		if(typeof sprite.after_death === 'function') {
-			after = function() {
+			setTimeout(function() {
 				sprite.after_death(sprite);
-			};
-		}
-		//after action user kill
-		else if(sprite.thumb){
-			after = sprite.thumb.dragStart;
+			}, sprite.reverse);
 		}
 
-		if(typeof after === 'function') {
-			setTimeout(after, sprite.reverse);
+		if(sprite.thumb){
+			sprite.thumb.reverse(sprite);
 		}
 	};
 

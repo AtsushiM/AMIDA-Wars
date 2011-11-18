@@ -204,6 +204,8 @@ PUBLIC.Amida = function(){
 
 		Surveillant.add(function() {
 			if(gameStart) {
+				var i, thumbs;
+				thumbs = THUMBS.USER;
 				EnemyAction.init();
 				countdown.setAfter(function() {
 					end = true;
@@ -211,6 +213,11 @@ PUBLIC.Amida = function(){
 					return true;
 				});
 				countdown.init();
+				for(i in thumbs) {
+					if(thumbs.hasOwnProperty(i)) {
+						thumbs[i].init();
+					}
+				}
 				delete Surveillant.functions.playStart;
 				return true;
 			}
