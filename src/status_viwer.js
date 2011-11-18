@@ -10,13 +10,21 @@ StatusViwer = function(config){
 	label.y = config.y;
 
 	label.update = function(unit) {
-		var i, sta, txt = '';
+		var i, sta, txt = '', br = '<br />';
 		sta = statuslist.WIZARD;
-		for(i in sta) {
-			if(sta.hasOwnProperty(i)) {
-				txt += i + ':' + sta[i] + '<br />';
-			}
+		if(unit) {
+			sta = statuslist[unit.name];
 		}
+		txt = 'name: ' + sta.name + br +
+			  'hp: ' + sta.hp + br +
+			  'armor: ' + sta.armor + br +
+			  'damage: ' + sta.damage + br +
+			  'speed: ' + sta.speed;
+		// for(i in sta) {
+		// 	if(sta.hasOwnProperty(i)) {
+		// 		txt += i + ':' + sta[i] + '<br />';
+		// 	}
+		// }
 		console.log(txt);
 		label.text = txt;
 	};

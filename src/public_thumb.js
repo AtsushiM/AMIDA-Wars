@@ -14,6 +14,7 @@ PUBLIC.Thumb = function(config){
 		sprite = new Sprite(size,size),
 		originX,originY,defaultX,defaultY,
 		eEv = enchant.Event,
+		statusViwer = LABEL.STATUS_VIEWER,
 		/**
 		 * Check if hit in the castle
 		 * @name hitMyCastle
@@ -62,6 +63,7 @@ PUBLIC.Thumb = function(config){
 		if(this.canDrag === true){
 			originX = e.x - this.x;
 			originY = e.y - this.y;
+			statusViwer.update(sprite.unit);
 		}
 	});
 	sprite.addEventListener(eEv.TOUCH_MOVE, function(e){

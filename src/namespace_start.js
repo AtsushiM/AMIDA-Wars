@@ -14,6 +14,8 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・相性を表示
+・JSDOC編集
 ・UI再考
 ・クリア演出
 ・リセットボタン
