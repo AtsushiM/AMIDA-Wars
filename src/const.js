@@ -54,29 +54,32 @@ var CONST = function(){
 		},
 		THUMB: function(){
 			return {
-				IMAGE: 'thumb.gif',
-				CHIP_SIZE: 32,
+				IMAGE: 'thumb.png',
+				CHIP_SIZE: 48,
 				FRAME: {
 					HUMAN: { LANCER: 0, WARRIOR: 1, KNIGHT: 2, ARCHER: 3, CLELIC: 4, FIRE_MAGE: 5, FROST_MAGE: 6, WIZARD: 7 },
-					UNDEAD: { SKELTON_DOG: 8, SKELTON_WARRIER: 9, SKELTON_ARCHER: 10, SPECTOR: 11, SKELTON_SNAKE: 12, GOLEM: 13, SHADE: 14, UNDEAD_SPIDER: 15 }
+					UNDEAD: { SKELTON_DOG: 8, SKELTON_SNAKE: 9, SKELTON_WARRIER: 10, SKELTON_ARCHER: 11, GOLEM: 12, UNDEAD_SPIDER: 13, SHADE: 14, SPECTOR: 15 }
 				},
-				USER: { POSITION: [ [0, 352], [50, 352], [100, 352], [150, 352], [0, 392], [50, 392], [100, 392], [150, 392] ] },
+				USER: { POSITION: [ [0, 384], [48, 384], [96, 384], [144, 384], [0, 432], [48, 432], [96, 432], [144, 432] ] },
 				ENEMY: { }, PROP: { }
 			};
 		},
 		SCORE: function(){
 			return {
-				POSITION: [5, 430]
+				POSITION: [20, 7]
 			};
 		},
 		COUNTDOWN: function() {
 			return {
-				POSITION: [150, 430]
+				POSITION: [200, 7]
 			};
 		}, 
 		STATUS_VIEWER: function() {
 			return {
-				POSITION: [200, 352]
+				IMAGE: 'window_status.png',
+				POSITION: [237, 395], 
+				BG_SIZE: [128, 96], 
+				BG_POSITION: [192, 384]
 			};
 		}, 
 		MAP: function(){
@@ -111,7 +114,7 @@ var CONST = function(){
 			return {
 				USER: { UNIT: GROUP.USER.UNIT, CASTLE: GROUP.USER.CASTLE, THUMB: GROUP.USER.THUMB },
 				ENEMY: { UNIT: GROUP.ENEMY.UNIT, CASTLE: GROUP.ENEMY.CASTLE, THUMB: GROUP.ENEMY.THUMB },
-				MAP_OPTION:  { CASTLE_BASE: GROUP.MAP_OPTION.CASTLE_BASE }, 
+				MAP_OPTION:  { CASTLE_BASE: GROUP.MAP_OPTION.CASTLE_BASE, THUMB_BASE: GROUP.MAP_OPTION.THUMB_BASE }, 
 				EFFECT:  { UNIT: GROUP.EFFECT.UNIT }
 			};
 		},

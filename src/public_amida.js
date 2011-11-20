@@ -18,6 +18,7 @@ PUBLIC.Amida = function(){
 		user_mode = CONST_CASH.HAVE.USER,
 		castle_point = MAP.CASTLE,
 		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
+		thumb_bases = CONST_CASH.LAYER.MAP_OPTION.THUMB_BASE, 
 		effect_unit = GROUP.EFFECT.UNIT,
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
@@ -36,7 +37,6 @@ PUBLIC.Amida = function(){
 		x: statusviewer_position[0], 
 		y: statusviewer_position[1]
 	});
-	statusViewer.update();
 
 	//score label set
 	score = LABEL.SCORE = new Score({
@@ -52,22 +52,10 @@ PUBLIC.Amida = function(){
 	});
 	countdown.update();
 
-	// //copy right set
-	// copy_mizoue = new Label();
-	// copy_mizoue.text = '(c) Atsushi Mizoue: <a href="http://www.facebook.com/atsushi.mizoue" target="_blank">www.facebook.com/atsushi.mizoue</a>';
-	// copy_mizoue.x = 10;
-	// copy_mizoue.y = 450;
-	// copy_mizoue.font = '10px cursive';
-
-	// copy_denzi = new Label();
-	// copy_denzi.text = 'Graphic: (c) Denzi日記: <a href="http://d.hatena.ne.jp/Denzi/" target="_blank">d.hatena.ne.jp/Denzi/</a>';
-	// copy_denzi.x = 10;
-	// copy_denzi.y = 463;
-	// copy_denzi.font = '10px cursive';
-
 	//depth set
 	root.addChild(map);
 	root.addChild(castle_bases);
+	root.addChild(thumb_bases);
 	root.addChild(group_enemy.CASTLE);
 	root.addChild(group_enemy.UNIT);
 	root.addChild(group_user.UNIT);
@@ -78,8 +66,6 @@ PUBLIC.Amida = function(){
 	root.addChild(score.label);
 	root.addChild(countdown);
 	root.addChild(statusViewer);
-	// root.addChild(copy_mizoue);
-	// root.addChild(copy_denzi);
 	
 	//castle set
 	for(i in castle_point){
@@ -90,7 +76,7 @@ PUBLIC.Amida = function(){
 					mode: i,
 					frame: castle_frames[j].NORMAL,
 					brake: castle_frames[j].BRAKE,
-					x: ary[j][0] * chip_size,
+					x: ary[j][0] * chip_size, 
 					y: ary[j][1] * chip_size
 				});
 				castle.unitX = castle.x + unit_chip_size / 2;

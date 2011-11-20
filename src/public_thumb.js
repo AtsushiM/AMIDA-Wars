@@ -12,6 +12,7 @@ PUBLIC.Thumb = function(config){
 		unitData = CONST_CASH.UNIT.STATUS[USER_RACE][config.name],
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
+		bg = new Sprite(size, size), 
 		originX,originY,defaultX,defaultY,
 		eEv = enchant.Event,
 		statusViwer = LABEL.STATUS_VIEWER,
@@ -34,6 +35,16 @@ PUBLIC.Thumb = function(config){
 			}
 			return hit;
 		};
+
+	bg.image = image;
+	bg.frame = 16;
+	bg.x = config.x;
+	bg.y = config.y;
+
+	addLayer({
+		layer: GROUP.MAP_OPTION.THUMB_BASE, 
+		sprite: bg
+	});
 
 	//default override
 	prop = propOverride(prop,config);

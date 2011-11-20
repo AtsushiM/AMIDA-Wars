@@ -22,6 +22,7 @@ Score = function(config){
 
 	//set label font
 	label.font = '12px cursive';
+	label.color = '#ccc';
 
 	//set label position
 	label.x = x;

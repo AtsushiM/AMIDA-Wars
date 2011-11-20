@@ -21,13 +21,14 @@ Countdown = function(config){
 
 	//set label font
 	label.font = '12px cursive';
+	label.color = '#ccc';
 
 	//set label position
 	label.x = config.x;
 	label.y = config.y;
 
 	label.update = function() {
-		label.text = timelimit - sec;
+		label.text = 'TIME-LIMIT : ' + (timelimit - sec);
 	};
 
 	label.init = function() {

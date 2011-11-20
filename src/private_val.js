@@ -3,7 +3,7 @@ var GAME,
 	GROUP = {
 		USER: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
 		ENEMY: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
-		MAP_OPTION:  { CASTLE_BASE: new Group() }, 
+		MAP_OPTION:  { CASTLE_BASE: new Group(), THUMB_BASE: new Group() }, 
 		EFFECT:  { UNIT: new Group() }
 	},
 	USER_RACE = '',

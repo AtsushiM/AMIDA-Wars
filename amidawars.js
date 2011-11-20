@@ -14,11 +14,15 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・自分のAIを投稿するフォーム？（UIを書いてもらうor自動）
+・一時停止ボタンを作成
+・ユニットのステータスを公開したページの作成
+・城崩壊時、画面を揺らす
+・ユニット再配置可能までの秒数を表示
 ・相性を表示
 ・JSDOC編集
 ・UI再考
 ・クリア演出
-・リセットボタン
 ・ステータス表示
 ・ユニットの性能設定
 ・効果音設定
@@ -66,7 +70,7 @@ var GAME,
 	GROUP = {
 		USER: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
 		ENEMY: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
-		MAP_OPTION:  { CASTLE_BASE: new Group() }, 
+		MAP_OPTION:  { CASTLE_BASE: new Group(), THUMB_BASE: new Group() }, 
 		EFFECT:  { UNIT: new Group() }
 	},
 	USER_RACE = '',
@@ -177,29 +181,32 @@ var CONST = function(){
 		},
 		THUMB: function(){
 			return {
-				IMAGE: 'thumb.gif',
-				CHIP_SIZE: 32,
+				IMAGE: 'thumb.png',
+				CHIP_SIZE: 48,
 				FRAME: {
 					HUMAN: { LANCER: 0, WARRIOR: 1, KNIGHT: 2, ARCHER: 3, CLELIC: 4, FIRE_MAGE: 5, FROST_MAGE: 6, WIZARD: 7 },
-					UNDEAD: { SKELTON_DOG: 8, SKELTON_WARRIER: 9, SKELTON_ARCHER: 10, SPECTOR: 11, SKELTON_SNAKE: 12, GOLEM: 13, SHADE: 14, UNDEAD_SPIDER: 15 }
+					UNDEAD: { SKELTON_DOG: 8, SKELTON_SNAKE: 9, SKELTON_WARRIER: 10, SKELTON_ARCHER: 11, GOLEM: 12, UNDEAD_SPIDER: 13, SHADE: 14, SPECTOR: 15 }
 				},
-				USER: { POSITION: [ [0, 352], [50, 352], [100, 352], [150, 352], [0, 392], [50, 392], [100, 392], [150, 392] ] },
+				USER: { POSITION: [ [0, 384], [48, 384], [96, 384], [144, 384], [0, 432], [48, 432], [96, 432], [144, 432] ] },
 				ENEMY: { }, PROP: { }
 			};
 		},
 		SCORE: function(){
 			return {
-				POSITION: [5, 430]
+				POSITION: [20, 7]
 			};
 		},
 		COUNTDOWN: function() {
 			return {
-				POSITION: [150, 430]
+				POSITION: [200, 7]
 			};
 		}, 
 		STATUS_VIEWER: function() {
 			return {
-				POSITION: [200, 352]
+				IMAGE: 'window_status.png',
+				POSITION: [237, 395], 
+				BG_SIZE: [128, 96], 
+				BG_POSITION: [192, 384]
 			};
 		}, 
 		MAP: function(){
@@ -234,7 +241,7 @@ var CONST = function(){
 			return {
 				USER: { UNIT: GROUP.USER.UNIT, CASTLE: GROUP.USER.CASTLE, THUMB: GROUP.USER.THUMB },
 				ENEMY: { UNIT: GROUP.ENEMY.UNIT, CASTLE: GROUP.ENEMY.CASTLE, THUMB: GROUP.ENEMY.THUMB },
-				MAP_OPTION:  { CASTLE_BASE: GROUP.MAP_OPTION.CASTLE_BASE }, 
+				MAP_OPTION:  { CASTLE_BASE: GROUP.MAP_OPTION.CASTLE_BASE, THUMB_BASE: GROUP.MAP_OPTION.THUMB_BASE }, 
 				EFFECT:  { UNIT: GROUP.EFFECT.UNIT }
 			};
 		},
@@ -285,7 +292,8 @@ PUBLIC.init = function(config){
 			UNIT: CONST_CASH.UNIT.IMAGE,
 			THUMB: CONST_CASH.THUMB.IMAGE,
 			MAP: CONST_CASH.MAP.IMAGE, 
-			EFFECT: CONST_CASH.EFFECT.IMAGE
+			EFFECT: CONST_CASH.EFFECT.IMAGE, 
+			STATUS_VIEWER: CONST_CASH.STATUS_VIEWER.IMAGE
 		},
 		sound =  {
 			BGM: CONST_CASH.SOUND.BGM, 
@@ -299,7 +307,7 @@ PUBLIC.init = function(config){
 		},
 		castle_point = MAP.CASTLE,
 		collision = MAP.COLLISION,
-		chipset, order = config.order, i;
+		chipset, order = config.order, i, len;
 
 	//set user race
 	USER_RACE = config.race;
@@ -319,9 +327,9 @@ PUBLIC.init = function(config){
 	(function(){
 		var datamap = {
 				//don't move
-				'0': 0, '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '24': 0,
-				//castle (25:enemy 26:user)
-				'25': [0,0,1,0], '26': [1,0,0,0],
+				'0': 0, '1': 0, '2': 0, '3': 0, '4': 0, '5': 0, '6': 0, '7': 0, '24': 0, '26': 0, '27': 0, '28': 0, '29': 0, '30': 0, '31': 0, '32': 0, '33': 0, '34': 0, '35': 0, '36': 0, '37': 0, '38': 0, '39': 0, '40': 0, '41': 0, '42': 0, '43': 0, '44': 0, '45': 0, '46': 0, '47': 0, '48': 0, '49': 0, '50': 0, '51': 0, '52': 0, 
+				//castle (25:enemy 99:user)
+				'25': [0,0,1,0], '99': [1,0,0,0],
 				//can move
 				'16': [1,0,1,0],
 				'17': [0,1,0,1],
@@ -332,8 +340,16 @@ PUBLIC.init = function(config){
 				'22': [1,1,0,0],
 				'23': [1,0,0,1]
 			},
-			map_start_line = '0111111112',
-			map_end_line = '5666666667',
+			map_start_line = [
+				[26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 
+				[ 0,  1,  1,  1,  1,  1,  1,  1,  1,  2]
+			],
+			map_end_line = [
+				[ 5,  6,  6,  6,  6,  6,  6,  6,  6,  7], 
+				[36, 37, 38, 39, 40, 41, 42, 43, 44, 45], 
+				[46, 47, 48, 49, 50, 51, 52, 46, 47, 48], 
+				[49, 50, 51, 52, 51, 52, 46, 47, 48, 49]
+			],
 			i,j,ilen,jlen,calc1,calc2,res=[],
 			txt2num = function(txt){
 				if(txt === '│'){
@@ -367,7 +383,7 @@ PUBLIC.init = function(config){
 					txt = 25;
 				}
 				else if(txt === '□') {
-					txt = 26;
+					txt = 99;
 				}
 				return txt;
 			};
@@ -377,10 +393,11 @@ PUBLIC.init = function(config){
 		for(i = 0, ilen = chipset.length; i < ilen; i++){
 			calc1 = res[i] = [];
 			calc2 = chipset[i];
-			if(calc2 !== map_start_line && calc2 !== map_end_line){
-				calc2 = '3'+calc2+'4';
+			if(calc2.length === 8){
+				chipset[i] = calc2 = ['3'].concat(calc2,'4');
+				var a = 1;
 			}
-			calc2 = chipset[i] = calc2.split('');
+			/* calc2 = chipset[i] = calc2.split(''); */
 			for(j = 0, jlen = calc2.length; j < jlen; j++){
 				calc2[j] = txt2num(calc2[j]);
 				calc1[j] = datamap[calc2[j]];
@@ -388,7 +405,7 @@ PUBLIC.init = function(config){
 				if(calc2[j] === 25){
 					castle_point.ENEMY.push([j,i]);
 				}
-				else if(calc2[j] === 26){
+				else if(calc2[j] === 99){
 					castle_point.USER.push([j,i]);
 					calc2[j] = 25;
 				}
@@ -402,7 +419,7 @@ PUBLIC.init = function(config){
 	GAME = new Game(size.W,size.H);
 	//preload set
 	/* GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.BGM); */
-	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.EFFECT.EXPLOSION);
+	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT,img.STATUS_VIEWER, sound.EFFECT.EXPLOSION);
 	//Game onloadSet
 	GAME.onload = PUBLIC.Amida;
 	//Game Start
@@ -437,6 +454,7 @@ PUBLIC.Amida = function(){
 		user_mode = CONST_CASH.HAVE.USER,
 		castle_point = MAP.CASTLE,
 		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
+		thumb_bases = CONST_CASH.LAYER.MAP_OPTION.THUMB_BASE, 
 		effect_unit = GROUP.EFFECT.UNIT,
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
@@ -455,7 +473,6 @@ PUBLIC.Amida = function(){
 		x: statusviewer_position[0], 
 		y: statusviewer_position[1]
 	});
-	statusViewer.update();
 
 	//score label set
 	score = LABEL.SCORE = new Score({
@@ -471,22 +488,10 @@ PUBLIC.Amida = function(){
 	});
 	countdown.update();
 
-	// //copy right set
-	// copy_mizoue = new Label();
-	// copy_mizoue.text = '(c) Atsushi Mizoue: <a href="http://www.facebook.com/atsushi.mizoue" target="_blank">www.facebook.com/atsushi.mizoue</a>';
-	// copy_mizoue.x = 10;
-	// copy_mizoue.y = 450;
-	// copy_mizoue.font = '10px cursive';
-
-	// copy_denzi = new Label();
-	// copy_denzi.text = 'Graphic: (c) Denzi日記: <a href="http://d.hatena.ne.jp/Denzi/" target="_blank">d.hatena.ne.jp/Denzi/</a>';
-	// copy_denzi.x = 10;
-	// copy_denzi.y = 463;
-	// copy_denzi.font = '10px cursive';
-
 	//depth set
 	root.addChild(map);
 	root.addChild(castle_bases);
+	root.addChild(thumb_bases);
 	root.addChild(group_enemy.CASTLE);
 	root.addChild(group_enemy.UNIT);
 	root.addChild(group_user.UNIT);
@@ -497,8 +502,6 @@ PUBLIC.Amida = function(){
 	root.addChild(score.label);
 	root.addChild(countdown);
 	root.addChild(statusViewer);
-	// root.addChild(copy_mizoue);
-	// root.addChild(copy_denzi);
 	
 	//castle set
 	for(i in castle_point){
@@ -509,7 +512,7 @@ PUBLIC.Amida = function(){
 					mode: i,
 					frame: castle_frames[j].NORMAL,
 					brake: castle_frames[j].BRAKE,
-					x: ary[j][0] * chip_size,
+					x: ary[j][0] * chip_size, 
 					y: ary[j][1] * chip_size
 				});
 				castle.unitX = castle.x + unit_chip_size / 2;
@@ -768,6 +771,7 @@ PUBLIC.Thumb = function(config){
 		unitData = CONST_CASH.UNIT.STATUS[USER_RACE][config.name],
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
+		bg = new Sprite(size, size), 
 		originX,originY,defaultX,defaultY,
 		eEv = enchant.Event,
 		statusViwer = LABEL.STATUS_VIEWER,
@@ -790,6 +794,16 @@ PUBLIC.Thumb = function(config){
 			}
 			return hit;
 		};
+
+	bg.image = image;
+	bg.frame = 16;
+	bg.x = config.x;
+	bg.y = config.y;
+
+	addLayer({
+		layer: GROUP.MAP_OPTION.THUMB_BASE, 
+		sprite: bg
+	});
 
 	//default override
 	prop = propOverride(prop,config);
@@ -1107,6 +1121,7 @@ Score = function(config){
 
 	//set label font
 	label.font = '12px cursive';
+	label.color = '#ccc';
 
 	//set label position
 	label.x = x;
@@ -1174,13 +1189,14 @@ Countdown = function(config){
 
 	//set label font
 	label.font = '12px cursive';
+	label.color = '#ccc';
 
 	//set label position
 	label.x = config.x;
 	label.y = config.y;
 
 	label.update = function() {
-		label.text = timelimit - sec;
+		label.text = 'TIME-LIMIT : ' + (timelimit - sec);
 	};
 
 	label.init = function() {
@@ -1409,33 +1425,42 @@ var Surveillant = {
 };
 StatusViwer = function(config){
 	var label = new Label(), 
+		cons = CONST_CASH.STATUS_VIEWER, 
+		pos = cons.POSITION, 
+		bg_image = GAME.assets[cons.IMAGE], 
+		bg_size = cons.BG_SIZE, 
+		bg_position = cons.BG_POSITION, 
+		bg = new Sprite(bg_size[0], bg_size[1]), 
 		statuslist = CONST_CASH.UNIT.STATUS[USER_RACE];
 
+	bg.image = bg_image;
+	bg.frame = 0;
+	bg.x = bg_position[0];
+	bg.y = bg_position[1];
+	addLayer({
+		layer: GROUP.MAP_OPTION.THUMB_BASE, 
+		sprite: bg
+	});
 	//set label font
 	label.font = '9px cursive';
+	label.color = '#fff';
+	label.text = '';
 
 	//set label position
-	label.x = config.x;
-	label.y = config.y;
+	label.x = pos[0];
+	label.y = pos[1];
 
 	label.update = function(unit) {
-		var i, sta, txt = '', br = '<br />';
-		sta = statuslist.WIZARD;
 		if(unit) {
-			sta = statuslist[unit.name];
+			//TODO: CASH
+			var i, sta = statuslist[unit.name], txt = '', br = '<br />';
+			txt = sta.name + br +
+				  'HP: ' + sta.hp + br +
+				  'Armor: ' + sta.armor + br +
+				  'Damage: ' + sta.damage + br +
+				  'Speed: ' + sta.speed;
+			label.text = txt;
 		}
-		txt = 'name: ' + sta.name + br +
-			  'hp: ' + sta.hp + br +
-			  'armor: ' + sta.armor + br +
-			  'damage: ' + sta.damage + br +
-			  'speed: ' + sta.speed;
-		// for(i in sta) {
-		// 	if(sta.hasOwnProperty(i)) {
-		// 		txt += i + ':' + sta[i] + '<br />';
-		// 	}
-		// }
-		console.log(txt);
-		label.text = txt;
 	};
 
 	return label;
@@ -1459,14 +1484,16 @@ AW.init({
 	□:castle(user) !only last line
 	×:no way
 	*/
-	map: [  '■×■×■×■×',
-			'├─┤×│×│×',
-			'│×│×├─┤×',
-			'│×└┐│×│×',
-			'└┐×├┤×└┐',
-			'×│×│└┐×│',
-			'×├─┤×│×│',
-			'×│×│×├─┤',
-			'×□×□×□×□' ]
+	map: [
+['■','×','■','×','■','×','■','×'],
+['├','─','┤','×','│','×','│','×'],
+['│','×','│','×','├','─','┤','×'],
+['│','×','└','┐','│','×','│','×'],
+['└','┐','×','├','┤','×','└','┐'],
+['×','│','×','│','└','┐','×','│'],
+['×','├','─','┤','×','│','×','│'],
+['×','│','×','│','×','├','─','┤'],
+['×','□','×','□','×','□','×','□']
+]
 });
 
