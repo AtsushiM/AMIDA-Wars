@@ -61,7 +61,7 @@ PUBLIC.Unit = function(config){
 		SOUND.EFFECT.EXPLOSION.play();
 
 		delete UNITS[mode][sprite.myNo];
-		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
+		GROUP[mode].UNIT.removeChild(sprite);
 
 		//after action
 		if(typeof sprite.after_death === 'function') {
@@ -202,7 +202,7 @@ PUBLIC.Unit = function(config){
 
 	//add Layer
 	return addLayer({
-		layer: CONST_CASH.LAYER[mode].UNIT,
+		layer: GROUP[mode].UNIT,
 		sprite: sprite
 	});
 };

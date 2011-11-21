@@ -15,7 +15,6 @@ window.onorientationchange = function(){
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
 ・MAPの仕様にそってレイヤーを再構築
-・CONST.CASH.LAYERを削除
 ・CONSTの内容の見直し
 ・リザルト画面作成
 ・初期表示時にステータス画面にD&Dの説明を表示

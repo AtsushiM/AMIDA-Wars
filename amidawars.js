@@ -15,12 +15,10 @@ window.onorientationchange = function(){
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
 ・MAPの仕様にそってレイヤーを再構築
-・CONST.CASH.LAYERを削除
 ・CONSTの内容の見直し
 ・リザルト画面作成
 ・初期表示時にステータス画面にD&Dの説明を表示
 ・種族選択画面を作成
-・タップでステータスを必ず表示（現在設置中ユニットはタップできない）
 ・自分のAIを投稿するフォーム？（UIを書いてもらうor自動）
 ・一時停止ボタンを作成
 ・ユニットのステータスを公開したページの作成
@@ -243,14 +241,6 @@ var CONST = function(){
 				}
 			};
 		}, 
-		LAYER: function(){
-			return {
-				USER: { UNIT: GROUP.USER.UNIT, CASTLE: GROUP.USER.CASTLE, THUMB: GROUP.USER.THUMB },
-				ENEMY: { UNIT: GROUP.ENEMY.UNIT, CASTLE: GROUP.ENEMY.CASTLE, THUMB: GROUP.ENEMY.THUMB },
-				MAP_OPTION:  { CASTLE_BASE: GROUP.MAP_OPTION.CASTLE_BASE, THUMB_BASE: GROUP.MAP_OPTION.THUMB_BASE }, 
-				EFFECT:  { UNIT: GROUP.EFFECT.UNIT }
-			};
-		},
 		TYPE: function(){
 			return {
 				CASTLE: 'CASTLE',
@@ -283,7 +273,6 @@ CONST_CASH = {
 	CASTLE: CONST_CASH.CASTLE(),
 	EFFECT: CONST_CASH.EFFECT(),
 	SOUND: CONST_CASH.SOUND(), 
-	LAYER: CONST_CASH.LAYER(),
 	TYPE: CONST_CASH.TYPE(),
 	HAVE: CONST_CASH.HAVE(),
 	POINT: CONST_CASH.POINT() 
@@ -459,8 +448,8 @@ PUBLIC.Amida = function(){
 		thumb_position = CONST_CASH.THUMB.USER.POSITION,
 		user_mode = CONST_CASH.HAVE.USER,
 		castle_point = MAP.CASTLE,
-		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
-		thumb_bases = CONST_CASH.LAYER.MAP_OPTION.THUMB_BASE, 
+		castle_bases = GROUP.MAP_OPTION.CASTLE_BASE, 
+		thumb_bases = GROUP.MAP_OPTION.THUMB_BASE, 
 		effect_unit = GROUP.EFFECT.UNIT,
 		root = GAME.rootScene,
 		unit_chip_size = CONST_CASH.UNIT.CHIP_SIZE,
@@ -696,7 +685,7 @@ PUBLIC.Castle = function(config){
 		prop = CONST().CASTLE().PROP,
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
-		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
+		castle_bases = GROUP.MAP_OPTION.CASTLE_BASE, 
 		castle_base;
 
 	//castle base set
@@ -759,7 +748,7 @@ PUBLIC.Castle = function(config){
 
 	//add Layer
 	return addLayer({
-		layer: CONST_CASH.LAYER[mode].CASTLE,
+		layer: GROUP[mode].CASTLE,
 		sprite: sprite
 	});
 };
@@ -891,7 +880,7 @@ PUBLIC.Thumb = function(config){
 
 	//add Layer
 	return addLayer({
-		layer: CONST_CASH.LAYER[mode].THUMB,
+		layer: GROUP[mode].THUMB,
 		sprite: sprite
 	});
 };
@@ -958,7 +947,7 @@ PUBLIC.Unit = function(config){
 		SOUND.EFFECT.EXPLOSION.play();
 
 		delete UNITS[mode][sprite.myNo];
-		CONST_CASH.LAYER[mode].UNIT.removeChild(sprite);
+		GROUP[mode].UNIT.removeChild(sprite);
 
 		//after action
 		if(typeof sprite.after_death === 'function') {
@@ -1099,7 +1088,7 @@ PUBLIC.Unit = function(config){
 
 	//add Layer
 	return addLayer({
-		layer: CONST_CASH.LAYER[mode].UNIT,
+		layer: GROUP[mode].UNIT,
 		sprite: sprite
 	});
 };
@@ -1239,7 +1228,7 @@ PUBLIC.Effect = function(config){
 		frame_start = config.frames[0], 
 		frame_end = config.frames[1], 
 		type = config.type.toUpperCase(), 
-		layer = CONST_CASH.LAYER.EFFECT[type], 
+		layer = GROUP.EFFECT[type], 
 		sprite = new Sprite(size, size),
 		effect = function(e) {
 			if(GAME.frame % 3 === 0) {

@@ -11,7 +11,7 @@ PUBLIC.Castle = function(config){
 		prop = CONST().CASTLE().PROP,
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
-		castle_bases = CONST_CASH.LAYER.MAP_OPTION.CASTLE_BASE, 
+		castle_bases = GROUP.MAP_OPTION.CASTLE_BASE, 
 		castle_base;
 
 	//castle base set
@@ -74,7 +74,7 @@ PUBLIC.Castle = function(config){
 
 	//add Layer
 	return addLayer({
-		layer: CONST_CASH.LAYER[mode].CASTLE,
+		layer: GROUP[mode].CASTLE,
 		sprite: sprite
 	});
 };

@@ -10,7 +10,7 @@ PUBLIC.Effect = function(config){
 		frame_start = config.frames[0], 
 		frame_end = config.frames[1], 
 		type = config.type.toUpperCase(), 
-		layer = CONST_CASH.LAYER.EFFECT[type], 
+		layer = GROUP.EFFECT[type], 
 		sprite = new Sprite(size, size),
 		effect = function(e) {
 			if(GAME.frame % 3 === 0) {

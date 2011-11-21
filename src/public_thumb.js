@@ -126,7 +126,7 @@ PUBLIC.Thumb = function(config){
 
 	//add Layer
 	return addLayer({
-		layer: CONST_CASH.LAYER[mode].THUMB,
+		layer: GROUP[mode].THUMB,
 		sprite: sprite
 	});
 };
