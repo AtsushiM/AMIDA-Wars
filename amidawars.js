@@ -14,6 +14,13 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・MAPの仕様にそってレイヤーを再構築
+・CONST.CASH.LAYERを削除
+・CONSTの内容の見直し
+・リザルト画面作成
+・初期表示時にステータス画面にD&Dの説明を表示
+・種族選択画面を作成
+・タップでステータスを必ず表示（現在設置中ユニットはタップできない）
 ・自分のAIを投稿するフォーム？（UIを書いてもらうor自動）
 ・一時停止ボタンを作成
 ・ユニットのステータスを公開したページの作成
@@ -21,7 +28,6 @@ window.onorientationchange = function(){
 ・ユニット再配置可能までの秒数を表示
 ・相性を表示
 ・JSDOC編集
-・UI再考
 ・クリア演出
 ・ステータス表示
 ・ユニットの性能設定
@@ -830,8 +836,8 @@ PUBLIC.Thumb = function(config){
 		if(this.canDrag === true){
 			originX = e.x - this.x;
 			originY = e.y - this.y;
-			statusViwer.update(sprite.unit);
 		}
+		statusViwer.update(sprite.unit);
 	});
 	sprite.addEventListener(eEv.TOUCH_MOVE, function(e){
 		if(this.canDrag === true){

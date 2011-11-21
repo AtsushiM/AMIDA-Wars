@@ -71,8 +71,8 @@ PUBLIC.Thumb = function(config){
 		if(this.canDrag === true){
 			originX = e.x - this.x;
 			originY = e.y - this.y;
-			statusViwer.update(sprite.unit);
 		}
+		statusViwer.update(sprite.unit);
 	});
 	sprite.addEventListener(eEv.TOUCH_MOVE, function(e){
 		if(this.canDrag === true){
