@@ -14,6 +14,7 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・城を破壊された場合、ユニットが設置できない様にする
 ・MAPの仕様にそってレイヤーを再構築
 ・CONSTの内容の見直し
 ・リザルト画面作成
@@ -256,7 +257,7 @@ var CONST = function(){
 		},
 		POINT: function(){ 
 			return {
-				UNIT: 100, CASTLE: 1000, WIN: 5000, LOSE: -5000, TIME: 10
+				UNIT: 10, CASTLE: 1000, WIN: 5000, LOSE: -5000, TIME: 100
 			};
 		}
 	};
@@ -780,10 +781,12 @@ PUBLIC.Thumb = function(config){
 		hitMyCastle = function(obj){
 			var hit = false,
 				castles = CASTLE.USER,
+				castle, 
 				i,len;
 			for(i = 0, len = castles.length; i<len; i++){
-				if(obj.intersect(castles[i])){
-					hit = castles[i];
+				castle = castles[i];
+				if(obj.intersect(castle)){
+					hit = castle;
 					break;
 				}
 			}

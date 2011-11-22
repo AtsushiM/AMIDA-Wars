@@ -14,6 +14,7 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・城を破壊された場合、ユニットが設置できない様にする
 ・MAPの仕様にそってレイヤーを再構築
 ・CONSTの内容の見直し
 ・リザルト画面作成

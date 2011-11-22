@@ -26,10 +26,12 @@ PUBLIC.Thumb = function(config){
 		hitMyCastle = function(obj){
 			var hit = false,
 				castles = CASTLE.USER,
+				castle, 
 				i,len;
 			for(i = 0, len = castles.length; i<len; i++){
-				if(obj.intersect(castles[i])){
-					hit = castles[i];
+				castle = castles[i];
+				if(obj.intersect(castle)){
+					hit = castle;
 					break;
 				}
 			}

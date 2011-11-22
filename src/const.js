@@ -125,7 +125,7 @@ var CONST = function(){
 		},
 		POINT: function(){ 
 			return {
-				UNIT: 100, CASTLE: 1000, WIN: 5000, LOSE: -5000, TIME: 10
+				UNIT: 10, CASTLE: 1000, WIN: 5000, LOSE: -5000, TIME: 100
 			};
 		}
 	};
