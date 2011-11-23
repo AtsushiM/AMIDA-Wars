@@ -1,19 +1,20 @@
 enchant();
-var AW = (function(){
+var AW = (function(W){
 //set scroll
 var doScroll = function() {
-	if (window.pageYOffset === 0) {
-		window.scrollTo(0,1);
+	if (W.pageYOffset === 0) {
+		W.scrollTo(0,1);
 	}
 };
-window.addEventListener('load', function() {
+W.addEventListener('load', function() {
 	setTimeout(doScroll, 100);
 }, false);
-window.onorientationchange = function(){
+W.onorientationchange = function(){
 	setTimeout(doScroll, 100);
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・待機中のカウントをバーで表示
 ・MAPの仕様にそってレイヤーを再構築
 ・CONSTの内容の見直し
 ・リザルト画面作成

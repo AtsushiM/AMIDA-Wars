@@ -77,9 +77,8 @@ var CONST = function(){
 		STATUS_VIEWER: function() {
 			return {
 				IMAGE: 'window_status.png',
-				POSITION: [237, 395], 
-				BG_SIZE: [128, 96], 
-				BG_POSITION: [192, 384]
+				POSITION: [192, 384], 
+				BG_SIZE: [128, 96]
 			};
 		}, 
 		MAP: function(){

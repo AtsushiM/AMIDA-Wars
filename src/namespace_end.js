@@ -1,2 +1,2 @@
 	return PUBLIC;
-}());
+}(window));

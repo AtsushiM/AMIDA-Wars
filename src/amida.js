@@ -55,6 +55,7 @@ Amida = function(){
 	//depth set
 	root.addChild(map);
 	root.addChild(castle_bases);
+	root.addChild(statusViewer);
 	root.addChild(thumb_bases);
 	root.addChild(group_enemy.CASTLE);
 	root.addChild(group_enemy.UNIT);
@@ -65,7 +66,6 @@ Amida = function(){
 	root.addChild(effect_unit);
 	root.addChild(score.label);
 	root.addChild(countdown);
-	root.addChild(statusViewer);
 	
 	//castle set
 	for(i in castle_point){
