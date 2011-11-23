@@ -137,7 +137,7 @@ PUBLIC.init = function(config){
 	/* GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.BGM); */
 	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT,img.STATUS_VIEWER, sound.EFFECT.EXPLOSION);
 	//Game onloadSet
-	GAME.onload = PUBLIC.Amida;
+	GAME.onload = Amida;
 	//Game Start
 	GAME.start();
 };

@@ -34,7 +34,7 @@ Score = function(config){
 		total: total,
 		rate: rate,
 		mode: mode, 
-		point: PUBLIC.CONST().POINT, 
+		point: CONST().POINT, 
 		/**
 		 * add score
 		 * @name add

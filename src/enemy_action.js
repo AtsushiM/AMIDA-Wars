@@ -42,7 +42,7 @@ var EnemyAction = {
 
 				r = propOverride(r, unit);
 
-				unit = new PUBLIC.Unit(r);
+				unit = new Unit(r);
 			}
 		}, 3000);
 	}, 

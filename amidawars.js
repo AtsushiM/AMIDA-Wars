@@ -14,7 +14,6 @@ window.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
-・城を破壊された場合、ユニットが設置できない様にする
 ・MAPの仕様にそってレイヤーを再構築
 ・CONSTの内容の見直し
 ・リザルト画面作成
@@ -417,25 +416,16 @@ PUBLIC.init = function(config){
 	/* GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.BGM); */
 	GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT,img.STATUS_VIEWER, sound.EFFECT.EXPLOSION);
 	//Game onloadSet
-	GAME.onload = PUBLIC.Amida;
+	GAME.onload = Amida;
 	//Game Start
 	GAME.start();
-};
-/**
-  * Constant Valiables
-  * @name CONST
-  * @function
-  * @returns {Object}
-  */
-PUBLIC.CONST = function(){
-	return CONST();
 };
 /**
  * Create Amida Map
  * @name Amida
  * @function
  */
-PUBLIC.Amida = function(){
+Amida = function(){
 	var	chip_size = CONST_CASH.MAP.CHIP_SIZE,
 		chipset = MAP.BASE,
 		map = new Map(chip_size,chip_size),
@@ -504,7 +494,7 @@ PUBLIC.Amida = function(){
 		if(castle_point.hasOwnProperty(i)){
 			ary = castle_point[i];
 			for(j = 0,len = ary.length; j < len; j++){
-				castle = new PUBLIC.Castle({
+				castle = new Castle({
 					mode: i,
 					frame: castle_frames[j].NORMAL,
 					brake: castle_frames[j].BRAKE,
@@ -520,7 +510,7 @@ PUBLIC.Amida = function(){
 	//user unit-thumbnail set
 	for(i = 0, len = USER_ORDER.length; i < len; i++){
 		name = USER_ORDER[i].name;
-		thumb = new PUBLIC.Thumb({
+		thumb = new Thumb({
 			mode: user_mode,
 			name: name,
 			frame: CONST_CASH.THUMB.FRAME[USER_RACE][name],
@@ -680,7 +670,7 @@ PUBLIC.Amida = function(){
  * @param {Object} config / mode:'USER' || 'ENEMY' /
  * @returns {Object}
  */
-PUBLIC.Castle = function(config){
+Castle = function(config){
 	var size = CONST_CASH.MAP.CHIP_SIZE,
 		image = GAME.assets[CONST_CASH.MAP.IMAGE],
 		prop = CONST().CASTLE().PROP,
@@ -760,7 +750,7 @@ PUBLIC.Castle = function(config){
  * @param {Object} config / mode:'USER' || 'ENEMY' /
  * @returns {Object}
  */
-PUBLIC.Thumb = function(config){
+Thumb = function(config){
 	var size = CONST_CASH.THUMB.CHIP_SIZE,
 		image = GAME.assets[CONST_CASH.THUMB.IMAGE],
 		prop = CONST().THUMB().PROP,
@@ -849,7 +839,7 @@ PUBLIC.Thumb = function(config){
 				this.unit.y = hit.unitY;
 				
 				//create unit
-				this.lastUnit = new PUBLIC.Unit(this.unit);
+				this.lastUnit = new Unit(this.unit);
 				this.lastUnit.thumb = this;
 			}
 			this.x = defaultX;
@@ -894,7 +884,7 @@ PUBLIC.Thumb = function(config){
  * @param {Object} config 
  * @returns {Object}
  */
-PUBLIC.Unit = function(config){
+Unit = function(config){
 	var size = CONST_CASH.UNIT.CHIP_SIZE,
 		map_chip_size = CONST_CASH.MAP.CHIP_SIZE,
 		unit_size_diff_x = size / 2,
@@ -940,7 +930,7 @@ PUBLIC.Unit = function(config){
 	sprite.kill = function(){
 		var x = sprite.x, 
 			y = sprite.y, 
-			effect = new PUBLIC.Effect({
+			effect = new Effect({
 				type: sprite.type.toUpperCase(), 
 				x: x, 
 				y: y, 
@@ -1131,7 +1121,7 @@ Score = function(config){
 		total: total,
 		rate: rate,
 		mode: mode, 
-		point: PUBLIC.CONST().POINT, 
+		point: CONST().POINT, 
 		/**
 		 * add score
 		 * @name add
@@ -1226,7 +1216,7 @@ Countdown = function(config){
  * @param {Object}
  * @returns {Object}
  */
-PUBLIC.Effect = function(config){
+Effect = function(config){
 	var size = CONST_CASH.UNIT.CHIP_SIZE, 
 		frame_start = config.frames[0], 
 		frame_end = config.frames[1], 
@@ -1301,7 +1291,7 @@ var EnemyAction = {
 
 				r = propOverride(r, unit);
 
-				unit = new PUBLIC.Unit(r);
+				unit = new Unit(r);
 			}
 		}, 3000);
 	}, 
