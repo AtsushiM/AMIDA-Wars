@@ -14,7 +14,6 @@ W.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
-・待機中のカウントをバーで表示
 ・MAPの仕様にそってレイヤーを再構築
 ・CONSTの内容の見直し
 ・リザルト画面作成
@@ -453,72 +452,6 @@ Amida = function(){
 	map.image = map_image;
 	map.loadData(chipset);
 
-	//status viewer set
-	statusViewer = LABEL.STATUS_VIEWER = new StatusViwer({
-		mode: user_mode, 
-		x: statusviewer_position[0], 
-		y: statusviewer_position[1]
-	});
-
-	//score label set
-	score = LABEL.SCORE = new Score({
-		mode: user_mode, 
-		x: score_position[0], 
-		y: score_position[1]
-	});
-
-	//countdown label set
-	countdown = LABEL.COUNTDOWN = new Countdown({
-		x: countdown_position[0], 
-		y: countdown_position[1]
-	});
-	countdown.update();
-
-	//depth set
-	root.addChild(map);
-	root.addChild(castle_bases);
-	root.addChild(statusViewer);
-	root.addChild(thumb_bases);
-	root.addChild(group_enemy.CASTLE);
-	root.addChild(group_enemy.UNIT);
-	root.addChild(group_user.UNIT);
-	root.addChild(group_user.CASTLE);
-	root.addChild(group_user.THUMB);
-	root.addChild(group_enemy.THUMB);
-	root.addChild(effect_unit);
-	root.addChild(score.label);
-	root.addChild(countdown);
-	
-	//castle set
-	for(i in castle_point){
-		if(castle_point.hasOwnProperty(i)){
-			ary = castle_point[i];
-			for(j = 0,len = ary.length; j < len; j++){
-				castle = new Castle({
-					mode: i,
-					frame: castle_frames[j].NORMAL,
-					brake: castle_frames[j].BRAKE,
-					x: ary[j][0] * chip_size, 
-					y: ary[j][1] * chip_size
-				});
-				castle.unitX = castle.x + unit_chip_size / 2;
-				castle.unitY = castle.y + unit_chip_size / 2;
-			}
-		}
-	}
-
-	//user unit-thumbnail set
-	for(i = 0, len = USER_ORDER.length; i < len; i++){
-		name = USER_ORDER[i].name;
-		thumb = new Thumb({
-			mode: user_mode,
-			name: name,
-			frame: CONST_CASH.THUMB.FRAME[USER_RACE][name],
-			x: thumb_position[i][0],
-			y: thumb_position[i][1]
-		});
-	}
-
 	//map methods
 	/**
 	* Gets the point on the map.
@@ -574,6 +507,72 @@ Amida = function(){
 	};
 	//set global
 	MAP.PATH = map;
+
+	//status viewer set
+	statusViewer = LABEL.STATUS_VIEWER = new StatusViwer({
+		mode: user_mode, 
+		x: statusviewer_position[0], 
+		y: statusviewer_position[1]
+	});
+
+	//score label set
+	score = LABEL.SCORE = new Score({
+		mode: user_mode, 
+		x: score_position[0], 
+		y: score_position[1]
+	});
+
+	//countdown label set
+	countdown = LABEL.COUNTDOWN = new Countdown({
+		x: countdown_position[0], 
+		y: countdown_position[1]
+	});
+	countdown.update();
+	
+	//castle set
+	for(i in castle_point){
+		if(castle_point.hasOwnProperty(i)){
+			ary = castle_point[i];
+			for(j = 0,len = ary.length; j < len; j++){
+				castle = new Castle({
+					mode: i,
+					frame: castle_frames[j].NORMAL,
+					brake: castle_frames[j].BRAKE,
+					x: ary[j][0] * chip_size, 
+					y: ary[j][1] * chip_size
+				});
+				castle.unitX = castle.x + unit_chip_size / 2;
+				castle.unitY = castle.y + unit_chip_size / 2;
+			}
+		}
+	}
+
+	//user unit-thumbnail set
+	for(i = 0, len = USER_ORDER.length; i < len; i++){
+		name = USER_ORDER[i].name;
+		thumb = new Thumb({
+			mode: user_mode,
+			name: name,
+			frame: CONST_CASH.THUMB.FRAME[USER_RACE][name],
+			x: thumb_position[i][0],
+			y: thumb_position[i][1]
+		});
+	}
+
+	//depth set
+	root.addChild(map);
+	root.addChild(castle_bases);
+	root.addChild(statusViewer);
+	root.addChild(thumb_bases);
+	root.addChild(group_enemy.CASTLE);
+	root.addChild(group_enemy.UNIT);
+	root.addChild(group_user.UNIT);
+	root.addChild(group_user.CASTLE);
+	root.addChild(group_user.THUMB);
+	root.addChild(group_enemy.THUMB);
+	root.addChild(effect_unit);
+	root.addChild(score.label);
+	root.addChild(countdown);
 
 	//set sound
 	SOUND.EFFECT.EXPLOSION = GAME.assets[CONST_CASH.SOUND.EFFECT.EXPLOSION];
@@ -1009,17 +1008,7 @@ Unit = function(config){
 		return MAP.PATH.getCollision(sprite);
 	};
 
-	/**
-	 * unit move
-	 * @name move
-	 * @function
-	 */
-	move = function(){
-		var d = sprite.direction,
-			s = sprite.speed,
-			sprite_type = CONST_CASH.TYPE,
-			i,len = ai.length,aii,colision;
-
+	walk = function() {
 		// animation
 		if(GAME.frame % 5 === 0){
 			walk_count++;
@@ -1034,7 +1023,20 @@ Unit = function(config){
 			walk_true++;
 		}
 		sprite.frame = default_frame + walk_true * line_num + sprite.direction;
+	};
 
+	/**
+	 * unit move
+	 * @name move
+	 * @function
+	 */
+	move = function(){
+		var d = sprite.direction,
+			s = sprite.speed,
+			sprite_type = CONST_CASH.TYPE,
+			i,len = ai.length,aii,colision;
+
+		walk();
 		// unit move
 		for(i = 0; i < len; i++) {
 			aii = ai[i];
@@ -1070,9 +1072,12 @@ Unit = function(config){
 	};
 
 	//unit action
-	sprite.addEventListener(enchant.Event.ENTER_FRAME,function(e){
-		move();
-	});
+	sprite.addEventListener(enchant.Event.ENTER_FRAME,move);
+
+	sprite.stay = function() {
+		sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
+		sprite.addEventListener(enchant.Event.ENTER_FRAME, walk);
+	};
 
 	//add array
 	sprite.myNo = UNITS.no;
@@ -1414,16 +1419,14 @@ var Surveillant = {
 StatusViwer = function(config){
 	var label = new Label(), 
 		group = new Group(), 
-		unit_cons = CONST_CASH.UNIT, 
-		unit_image = GAME.assets[unit_cons.IMAGE], 
-		unit_size = unit_cons.CHIP_SIZE, 
-		unit = new Sprite(unit_size, unit_size), 
+		unit, 
 		cons = CONST_CASH.STATUS_VIEWER, 
 		pos = cons.POSITION, 
 		bg_image = GAME.assets[cons.IMAGE], 
 		bg_size = cons.BG_SIZE, 
 		bg = new Sprite(bg_size[0], bg_size[1]), 
 		statuslist = CONST_CASH.UNIT.STATUS[USER_RACE], 
+		user_have = CONST_CASH.HAVE.USER, 
 		viewcash =  {}, 
 		i, sta, br = '<br />';
 
@@ -1453,8 +1456,14 @@ StatusViwer = function(config){
 	label.y = 11;
 
 	//unit view
-	unit.image = unit_image;
+	unit = new Unit({
+		mode: user_have,
+		x: 0, 
+		y: 0
+	});
 	unit.frame = 0;
+	unit.direction = 2;
+	unit.stay();
 
 	group.update = function(unit) {
 		if(unit) {

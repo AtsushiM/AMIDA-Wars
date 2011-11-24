@@ -130,17 +130,7 @@ Unit = function(config){
 		return MAP.PATH.getCollision(sprite);
 	};
 
-	/**
-	 * unit move
-	 * @name move
-	 * @function
-	 */
-	move = function(){
-		var d = sprite.direction,
-			s = sprite.speed,
-			sprite_type = CONST_CASH.TYPE,
-			i,len = ai.length,aii,colision;
-
+	walk = function() {
 		// animation
 		if(GAME.frame % 5 === 0){
 			walk_count++;
@@ -155,7 +145,20 @@ Unit = function(config){
 			walk_true++;
 		}
 		sprite.frame = default_frame + walk_true * line_num + sprite.direction;
+	};
 
+	/**
+	 * unit move
+	 * @name move
+	 * @function
+	 */
+	move = function(){
+		var d = sprite.direction,
+			s = sprite.speed,
+			sprite_type = CONST_CASH.TYPE,
+			i,len = ai.length,aii,colision;
+
+		walk();
 		// unit move
 		for(i = 0; i < len; i++) {
 			aii = ai[i];
@@ -191,9 +194,12 @@ Unit = function(config){
 	};
 
 	//unit action
-	sprite.addEventListener(enchant.Event.ENTER_FRAME,function(e){
-		move();
-	});
+	sprite.addEventListener(enchant.Event.ENTER_FRAME,move);
+
+	sprite.stay = function() {
+		sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
+		sprite.addEventListener(enchant.Event.ENTER_FRAME, walk);
+	};
 
 	//add array
 	sprite.myNo = UNITS.no;

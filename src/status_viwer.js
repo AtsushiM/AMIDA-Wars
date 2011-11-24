@@ -1,16 +1,14 @@
 StatusViwer = function(config){
 	var label = new Label(), 
 		group = new Group(), 
-		unit_cons = CONST_CASH.UNIT, 
-		unit_image = GAME.assets[unit_cons.IMAGE], 
-		unit_size = unit_cons.CHIP_SIZE, 
-		unit = new Sprite(unit_size, unit_size), 
+		unit, 
 		cons = CONST_CASH.STATUS_VIEWER, 
 		pos = cons.POSITION, 
 		bg_image = GAME.assets[cons.IMAGE], 
 		bg_size = cons.BG_SIZE, 
 		bg = new Sprite(bg_size[0], bg_size[1]), 
 		statuslist = CONST_CASH.UNIT.STATUS[USER_RACE], 
+		user_have = CONST_CASH.HAVE.USER, 
 		viewcash =  {}, 
 		i, sta, br = '<br />';
 
@@ -40,8 +38,14 @@ StatusViwer = function(config){
 	label.y = 11;
 
 	//unit view
-	unit.image = unit_image;
+	unit = new Unit({
+		mode: user_have,
+		x: 0, 
+		y: 0
+	});
 	unit.frame = 0;
+	unit.direction = 2;
+	unit.stay();
 
 	group.update = function(unit) {
 		if(unit) {
