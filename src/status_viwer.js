@@ -16,10 +16,11 @@ StatusViwer = function(config){
 		if(statuslist.hasOwnProperty(i)) {
 			sta = statuslist[i];
 			viewcash[i] = '<b>' + sta.name + '</b>' + br +
-				  'HP: ' + sta.hp + br +
-				  'Armor: ' + sta.armor + br +
-				  'Damage: ' + sta.damage + br +
-				  'Speed: ' + sta.speed;
+			'HP: ' + sta.hp + br +
+			'Armor: ' + sta.armor + br +
+			'Damage: ' + sta.damage + br +
+			'Speed: ' + sta.speed + br +
+			'DownTime: ' + sta.reverse / 1000 + 'sec';
 		}
 	}
 	group.x = pos[0];
@@ -35,7 +36,7 @@ StatusViwer = function(config){
 
 	//set label position
 	label.x = 45;
-	label.y = 11;
+	label.y = 5;
 
 	//unit view
 	unit = new Unit({

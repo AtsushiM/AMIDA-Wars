@@ -10,15 +10,20 @@ Unit = function(config){
 		map_chip_size = CONST_CASH.MAP.CHIP_SIZE,
 		unit_size_diff_x = size / 2,
 		unit_size_diff_y = size / 8,
+		moveVal = unit_size_diff_x, 
 		image = GAME.assets[CONST_CASH.UNIT.IMAGE],
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
 		have = CONST_CASH.HAVE,
 		line_num = CONST_CASH.UNIT.FRAME_LINE,
-		walk_count = 0, walk_true = 0,
+		walk_count = 0, walk_true = 0,  
 		ai = CONST_CASH.UNIT.AI[mode],
 		chip_direction, default_frame,
 		mapPoint,checkMoveSquere,getCollision,walk,move;
+
+	if(mode === have.USER) {
+		moveVal = -moveVal;
+	}
 
 
 	//can user override prop
@@ -110,9 +115,32 @@ Unit = function(config){
 	checkMoveSquere = function(){
 		var ret = false;
 
-		if(Math.floor(sprite.x - unit_size_diff_x) % map_chip_size === 0 && Math.floor(sprite.y - unit_size_diff_y) % map_chip_size === 0){
-			var now = mapPoint(),
+		if(moveVal >= map_chip_size){
+			var now,
 				before = sprite.beforePoint;
+
+			moveVal = moveVal - map_chip_size;
+			console.log(moveVal);
+			if(moveVal > 0) {
+				if(sprite.direction  === 0) {
+					sprite.y += moveVal;
+				}
+				else if(sprite.direction  === 1) {
+					sprite.x -= moveVal;
+				}
+				else if(sprite.direction  === 2) {
+					sprite.y -= moveVal;
+				}
+				else {
+					sprite.x += moveVal;
+				}
+				sprite.y = Math.round(sprite.y);
+				sprite.x = Math.round(sprite.x);
+			}
+			moveVal = 0;
+
+			now = mapPoint();
+
 			if(now.x !== before.x || now.y !== before.y){
 				before = now;
 				ret = true;
@@ -158,39 +186,43 @@ Unit = function(config){
 			sprite_type = CONST_CASH.TYPE,
 			i,len = ai.length,aii,colision;
 
-		walk();
-		// unit move
-		for(i = 0; i < len; i++) {
-			aii = ai[i];
-			if(d === aii.direction){
-				sprite[aii.prop] += (s * aii.sign);
-				if(checkMoveSquere()){
-					colision = getCollision();
-					var a= 1;
-					if(colision !== false){
-						if(colision.type !== sprite_type.CASTLE){
-							if(colision[aii.order[0]] === 1){
-								sprite.direction = aii.order[0];
-							}
-							else if(colision[aii.order[1]] === 1){
-								sprite.direction = aii.order[1];
-							}
-							else if(colision[aii.order[2]] === 1){
-								sprite.direction = aii.order[2];
+		move = function() {
+			walk();
+			moveVal += s;
+			// unit move
+			for(i = 0; i < len; i++) {
+				aii = ai[i];
+				if(d === aii.direction){
+					sprite[aii.prop] += (s * aii.sign);
+					if(checkMoveSquere()){
+						colision = getCollision();
+						var a= 1;
+						if(colision !== false){
+							if(colision.type !== sprite_type.CASTLE){
+								if(colision[aii.order[0]] === 1){
+									sprite.direction = aii.order[0];
+								}
+								else if(colision[aii.order[1]] === 1){
+									sprite.direction = aii.order[1];
+								}
+								else if(colision[aii.order[2]] === 1){
+									sprite.direction = aii.order[2];
+								}
+								else {
+									sprite.direction = aii.order[3];
+								}
 							}
 							else {
-								sprite.direction = aii.order[3];
+								Battle.siege(sprite,colision);
 							}
 						}
-						else {
-							Battle.siege(sprite,colision);
-						}
 					}
-				}
 
-				break;
+					break;
+				}
 			}
-		}
+		};
+		move();
 	};
 
 	//unit action
