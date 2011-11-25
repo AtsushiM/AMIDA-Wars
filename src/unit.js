@@ -95,6 +95,10 @@ Unit = function(config){
 
 	default_frame = sprite.frame;
 
+	sprite.changeUnit = function(unit) {
+		default_frame = unit.frame;
+	};
+
 	/**
 	 * Get the sprite's position on the map
 	 * @name mapPoint
@@ -120,7 +124,6 @@ Unit = function(config){
 				before = sprite.beforePoint;
 
 			moveVal = moveVal - map_chip_size;
-			console.log(moveVal);
 			if(moveVal > 0) {
 				if(sprite.direction  === 0) {
 					sprite.y += moveVal;

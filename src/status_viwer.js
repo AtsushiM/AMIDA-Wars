@@ -41,17 +41,23 @@ StatusViwer = function(config){
 	//unit view
 	unit = new Unit({
 		mode: user_have,
-		x: 0, 
-		y: 0
+		x: 15, 
+		y: 15, 
+		opacity: 0
 	});
 	unit.frame = 0;
 	unit.direction = 2;
 	unit.stay();
 
-	group.update = function(unit) {
-		if(unit) {
-			label.text = viewcash[unit.name];
-		}
+	group.update = function(obj) {
+		unit.opacity = 1;
+
+		group.update = function(obj) {
+			label.text = viewcash[obj.name];
+			unit.changeUnit(obj);
+		};
+
+		group.update(obj);
 	};
 
 	group.addChild(bg);
