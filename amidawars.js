@@ -25,7 +25,6 @@ W.onorientationchange = function(){
 ・ユニット再配置可能までの秒数を表示
 ・JSDOC編集
 ・クリア演出
-・ステータス表示
 ・ユニットの性能設定
 ・効果音設定
 ・城破壊エフェクト
@@ -48,7 +47,7 @@ W.onorientationchange = function(){
 性能は基本を抑えた使いやすい種族という設定を保つ。
 他のユニットとの組み合わせで敵を掃討する特性をもたせる。
 
-・WIZARDは一度だけ敵との戦闘を回避する
+・WIZARDはランダム効果（時間を増減させる、敵を強制移動させるなど？）
 ・FROST-MAGEは敵を戦闘場所に一定時間停止させ、攻撃できなくする。
 ・FIRE-MAGEは敵の防御力を0にする。
 ・CLELICはマップに出ていない場合、自軍の復活速度を早くする
@@ -68,6 +67,7 @@ W.onorientationchange = function(){
 
 //private valiables
 var GAME,
+	DOM, 
 	GROUP = {
 		USER: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
 		ENEMY: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
@@ -94,14 +94,6 @@ var GAME,
 		HEAVY:'NOARMOR',
 		NOARMOR:'LIGHT'
 	},
-	/**
-	 * Override object property
-	 * @name propOverride
-	 * @function
-	 * @param {Object} prop overrided object
-	 * @param {Object} config add
-	 * @returns {Object}
-	 */
 	propOverride = function(prop,config){
 		if(prop === undefined){
 			prop = {};
@@ -113,25 +105,12 @@ var GAME,
 		}
 		return prop;
 	},
-	/**
-	 * Add a layer Sprite
-	 * @name addLayer
-	 * @function
-	 * @param {Object} config / layer:target Group / sprite:add Sprite /
-	 * @returns sprite 
-	 */
 	addLayer = function(config){
 		config.layer.addChild(config.sprite);
 		return config.sprite;
 	},
 	//return Public
 	PUBLIC = {};
-/**
- * Constant Valiables
- * @name CONST
- * @function
- * @returns {Object}
- */
 var CONST = function(){
 	return {
 		TIMELIMIT: function() {
@@ -279,11 +258,6 @@ CONST_CASH = {
 	HAVE: CONST_CASH.HAVE(),
 	POINT: CONST_CASH.POINT() 
 };
- /**
-  * Game Init
-  * @name init
-  * @function
-  */
 PUBLIC.init = function(config){
 	var img = {
 			UNIT: CONST_CASH.UNIT.IMAGE,
@@ -422,11 +396,6 @@ PUBLIC.init = function(config){
 	//Game Start
 	GAME.start();
 };
-/**
- * Create Amida Map
- * @name Amida
- * @function
- */
 Amida = function(){
 	var	chip_size = CONST_CASH.MAP.CHIP_SIZE,
 		chipset = MAP.BASE,
@@ -451,34 +420,28 @@ Amida = function(){
 		statusviewer, statusviewer_position = CONST_CASH.STATUS_VIEWER.POSITION, 
 		i, j, len, ary, name, castle, thumb, score;
 
+	DOM  = document.getElementById('enchant-stage');
+	
 	//map set
 	map.image = map_image;
 	map.loadData(chipset);
 
 	//map methods
-	/**
-	* Gets the point on the map.
-	* @name getSquere
-	* @function
-	* @param obj 
-	*/
 	map.getSquere = function(obj){
-		var x = Math.floor(obj.x/chip_size),
-			y = Math.floor(obj.y/chip_size);
+		var x, y, f = Math.floor;
 
-		return {
-			x: x,
-			y: y
+		map.getSquere = function(obj) {
+			x = f(obj.x/chip_size);
+			y = f(obj.y/chip_size);
+			return {
+				x: x,
+				y: y
+			};
 		};
+
+		return map.getSquere(obj);
 	};
 
-	/**
-	 * Gets the obj point Collision
-	 * @name getCollision
-	 * @function
-	 * @param obj 
-	 * @return 
-	 */
 	map.getCollision = function(obj){
 		var unitPoint = map.getSquere(obj),
 			mc = MAP.COLLISION,
@@ -487,8 +450,7 @@ Amida = function(){
 			i,j,len,castles,castle;
 
 		if((mc = mc[unitPoint.y]) && (mc = mc[unitPoint.x])){
-			calc = mc[0] + mc[1] + mc[2] + mc[3];
-			if(calc === 1){
+			if(mc[0] + mc[1] + mc[2] + mc[3] === 1){
 				for(i in CASTLE) {
 					if(CASTLE.hasOwnProperty(i)){
 						castles = CASTLE[i];
@@ -665,13 +627,6 @@ Amida = function(){
 		Surveillant.init();
 	}());
 };
-/**
- * Create Castle Object
- * @name Castle
- * @function
- * @param {Object} config / mode:'USER' || 'ENEMY' /
- * @returns {Object}
- */
 Castle = function(config){
 	var size = CONST_CASH.MAP.CHIP_SIZE,
 		image = GAME.assets[CONST_CASH.MAP.IMAGE],
@@ -679,7 +634,8 @@ Castle = function(config){
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
 		castle_bases = GROUP.MAP_OPTION.CASTLE_BASE, 
-		castle_base;
+		castle_base, 
+		animeID;
 
 	//castle base set
 	castle_base = new Sprite(size, size);
@@ -709,29 +665,44 @@ Castle = function(config){
 	//add array
 	CASTLE[mode].push(sprite);
 
-	/**
-	 * castle damage
-	 * @name damage
-	 * @function
-	 * @param unit 
-	 */
+	sprite.focusOn = function() {
+		sprite.opacity = 0.5;
+	};
+	sprite.focusOff = function() {
+		sprite.opacity = 1;
+	};
+
 	sprite.damage = function(unit) {
 		sprite.hp -= unit.damage;
 		if(sprite.hp <= 0) {
-			sprite.hp = 0;
-			sprite.opacity = 0;
-			sprite.base.opacity = 0;
+			sprite.broke();
 		}
 		else if(sprite.mhp / 2 >= sprite.hp) {
 			sprite.frame = sprite.brake;
 		}
+		clearInterval(animeID);
+		animeID = setTimeout(function() {
+			DOM.style.top = 0;
+			DOM.style.left = '5px';
+			animeID = setTimeout(function() {
+				DOM.style.top = '5px';
+				DOM.style.left = 0;
+				animeID = setTimeout(function() {
+					DOM.style.top = 0;
+					DOM.style.left = '-5px';
+					animeID = setTimeout(function() {
+						DOM.style.top = 0;
+						DOM.style.left = 0;
+					});
+				});
+			});
+		}, 50);
 	};
-	/**
-	 * 
-	 * @name checkBreak
-	 * @function
-	 * @return boolean
-	 */
+	sprite.broke = function() {
+		sprite.hp = 0;
+		sprite.opacity = 0;
+		sprite.base.opacity = 0;
+	};
 	sprite.checkBreak = function(){
 		if(sprite.hp === 0) {
 			return true;
@@ -745,13 +716,6 @@ Castle = function(config){
 		sprite: sprite
 	});
 };
-/**
- * Create Thumbnail Class
- * @name Thumb
- * @function
- * @param {Object} config / mode:'USER' || 'ENEMY' /
- * @returns {Object}
- */
 Thumb = function(config){
 	var size = CONST_CASH.THUMB.CHIP_SIZE,
 		image = GAME.assets[CONST_CASH.THUMB.IMAGE],
@@ -763,27 +727,40 @@ Thumb = function(config){
 		originX,originY,defaultX,defaultY,
 		eEv = enchant.Event,
 		statusViwer = LABEL.STATUS_VIEWER,
-		/**
-		 * Check if hit in the castle
-		 * @name hitMyCastle
-		 * @function
-		 * @param obj 
-		 * @return 
-		 */
 		hitMyCastle = function(obj){
 			var hit = false,
 				castles = CASTLE.USER,
 				castle, 
 				i,len;
+
 			for(i = 0, len = castles.length; i<len; i++){
 				castle = castles[i];
-				castle.zoom = 2;
 				if(obj.intersect(castle)){
 					hit = castle;
 					break;
 				}
 			}
 			return hit;
+		}, 
+		focusOnCastle = function() {
+			var castles = CASTLE.USER, 
+				castle, 
+				i, len;
+
+			for(i = 0, len = castles.length; i<len; i++){
+				castle = castles[i];
+				castle.focusOn();
+			}
+		}, 
+		focusOffCastle = function() {
+			var castles = CASTLE.USER, 
+				castle, 
+				i, len;
+
+			for(i = 0, len = castles.length; i<len; i++){
+				castle = castles[i];
+				castle.focusOff();
+			}
 		};
 
 	bg.image = image;
@@ -821,6 +798,7 @@ Thumb = function(config){
 		if(this.canDrag === true){
 			originX = e.x - this.x;
 			originY = e.y - this.y;
+			focusOnCastle();
 		}
 		statusViwer.update(sprite.unit);
 	});
@@ -847,6 +825,7 @@ Thumb = function(config){
 			}
 			this.x = defaultX;
 			this.y = defaultY;
+			focusOffCastle();
 		}
 	});
 
@@ -880,13 +859,6 @@ Thumb = function(config){
 		sprite: sprite
 	});
 };
-/**
- * Create Unit Class
- * @name Unit 
- * @function
- * @param {Object} config 
- * @returns {Object}
- */
 Unit = function(config){
 	var size = CONST_CASH.UNIT.CHIP_SIZE,
 		map_chip_size = CONST_CASH.MAP.CHIP_SIZE,
@@ -916,13 +888,6 @@ Unit = function(config){
 	//set Class
 	sprite.type = CONST_CASH.TYPE.UNIT;
 
-	/**
-	 * attack Processing
-	 * @name attack
-	 * @function
-	 * @param vsUnit 
-	 * @return 
-	 */
 	sprite.attack = function(vsUnit) {
 		vsUnit.hp -= sprite.damage;
 		if(vsUnit.hp <= 0) {
@@ -930,11 +895,6 @@ Unit = function(config){
 		}
 		return vsUnit.hp;
 	};
-	/**
-	 * unit kill
-	 * @name kill
-	 * @function
-	 */
 	sprite.kill = function(){
 		var x = sprite.x, 
 			y = sprite.y, 
@@ -962,12 +922,6 @@ Unit = function(config){
 		}
 	};
 
-	/**
-	 * check unit death
-	 * @name checkDeath
-	 * @function
-	 * @return 
-	 */
 	sprite.checkDeath = function() {
 		if(sprite.hp === 0) {
 			return true;
@@ -981,23 +935,12 @@ Unit = function(config){
 		default_frame = unit.frame;
 	};
 
-	/**
-	 * Get the sprite's position on the map
-	 * @name mapPoint
-	 * @function
-	 */
 	mapPoint = function(){
 		return MAP.PATH.getSquere(sprite);
 	};
 	//set before map squere point
 	sprite.beforePoint = mapPoint();
 
-	/**
-	 * unit move check
-	 * @name checkMoveSquere
-	 * @function
-	 * @return 
-	 */
 	checkMoveSquere = function(){
 		var ret = false;
 
@@ -1033,12 +976,6 @@ Unit = function(config){
 		}
 		return ret;
 	};
-	/**
-	 * Gets an array for collision detection
-	 * @name getCollision
-	 * @function
-	 * @return 
-	 */
 	getCollision = function(){
 		return MAP.PATH.getCollision(sprite);
 	};
@@ -1060,11 +997,6 @@ Unit = function(config){
 		sprite.frame = default_frame + walk_true * line_num + sprite.direction;
 	};
 
-	/**
-	 * unit move
-	 * @name move
-	 * @function
-	 */
 	move = function(){
 		var d = sprite.direction,
 			s = sprite.speed,
@@ -1129,13 +1061,6 @@ Unit = function(config){
 		sprite: sprite
 	});
 };
-/**
- * Score display obj
- * @name Score
- * @function
- * @param {Object} config 
- * @returns {Object}
- */
 Score = function(config){
 	var total = 0,
 		//enemy point rate
@@ -1166,19 +1091,7 @@ Score = function(config){
 		rate: rate,
 		mode: mode, 
 		point: CONST().POINT, 
-		/**
-		 * add score
-		 * @name add
-		 * @function
-		 * @param score 
-		 * @return total score
-		 */
 		add: add, 
-		/**
-		 * update score label
-		 * @name update
-		 * @function
-		 */
 		update: function(){}
 	};
 	//override user
@@ -1198,13 +1111,6 @@ Score = function(config){
 
 	return ret;
 };
-/**
- * Countdown display obj
- * @name Countdown
- * @function
- * @param {Object} 
- * @returns {Object}
- */
 Countdown = function(config){
 	var label = new Label(), 
 		timelimit = CONST_CASH.TIMELIMIT, 
@@ -1253,13 +1159,6 @@ Countdown = function(config){
 	
 	return label;
 };
-/**
- * Create Effect Object
- * @name Effect
- * @function
- * @param {Object}
- * @returns {Object}
- */
 Effect = function(config){
 	var size = CONST_CASH.UNIT.CHIP_SIZE, 
 		frame_start = config.frames[0], 
@@ -1382,13 +1281,6 @@ var Battle = {
 			score.add(-point[obj_type]);
 		}
 	}, 
-	/**
-	 * battle for unit and unit
-	 * @name unitAndUnit
-	 * @function
-	 * @param unit1 
-	 * @param unit2 
-	 */
 	unitAndUnit: function(unit1, unit2) {
 		var unit1_hp = unit1.hp, 
 			unit2_hp = unit2.hp;
@@ -1406,13 +1298,6 @@ var Battle = {
 			Battle.score(unit2);
 		}
 	}, 
-	/**
-	 * 
-	 * @name siege
-	 * @function
-	 * @param unit 
-	 * @param castle 
-	 */
 	siege: function(unit, castle) {
 		var m = unit.mode,
 			have = CONST_CASH.HAVE;
@@ -1436,21 +1321,9 @@ var Surveillant = {
 			}
 		}
 	}, 
-	/**
-	 * 
-	 * @name add
-	 * @function
-	 * @param func 
-	 * @param key 
-	 */
 	add: function(func, key) {
 		Surveillant.functions[key] = func;
 	}, 
-	/**
-	 * initialise surveillant
-	 * @name init
-	 * @function
-	 */
 	init: function() {
 		GAME.addEventListener(enchant.Event.ENTER_FRAME, Surveillant.exefunc, false);
 	}

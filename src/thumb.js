@@ -14,6 +14,7 @@ Thumb = function(config){
 				castles = CASTLE.USER,
 				castle, 
 				i,len;
+
 			for(i = 0, len = castles.length; i<len; i++){
 				castle = castles[i];
 				if(obj.intersect(castle)){
@@ -22,6 +23,26 @@ Thumb = function(config){
 				}
 			}
 			return hit;
+		}, 
+		focusOnCastle = function() {
+			var castles = CASTLE.USER, 
+				castle, 
+				i, len;
+
+			for(i = 0, len = castles.length; i<len; i++){
+				castle = castles[i];
+				castle.focusOn();
+			}
+		}, 
+		focusOffCastle = function() {
+			var castles = CASTLE.USER, 
+				castle, 
+				i, len;
+
+			for(i = 0, len = castles.length; i<len; i++){
+				castle = castles[i];
+				castle.focusOff();
+			}
 		};
 
 	bg.image = image;
@@ -59,6 +80,7 @@ Thumb = function(config){
 		if(this.canDrag === true){
 			originX = e.x - this.x;
 			originY = e.y - this.y;
+			focusOnCastle();
 		}
 		statusViwer.update(sprite.unit);
 	});
@@ -85,6 +107,7 @@ Thumb = function(config){
 			}
 			this.x = defaultX;
 			this.y = defaultY;
+			focusOffCastle();
 		}
 	});
 

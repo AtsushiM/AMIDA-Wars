@@ -1,5 +1,6 @@
 //private valiables
 var GAME,
+	DOM, 
 	GROUP = {
 		USER: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },
 		ENEMY: { UNIT: new Group(), CASTLE: new Group(), THUMB: new Group() },

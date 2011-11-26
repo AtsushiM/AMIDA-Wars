@@ -5,7 +5,8 @@ Castle = function(config){
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
 		castle_bases = GROUP.MAP_OPTION.CASTLE_BASE, 
-		castle_base;
+		castle_base, 
+		animeID;
 
 	//castle base set
 	castle_base = new Sprite(size, size);
@@ -35,16 +36,43 @@ Castle = function(config){
 	//add array
 	CASTLE[mode].push(sprite);
 
+	sprite.focusOn = function() {
+		sprite.opacity = 0.5;
+	};
+	sprite.focusOff = function() {
+		sprite.opacity = 1;
+	};
+
 	sprite.damage = function(unit) {
 		sprite.hp -= unit.damage;
 		if(sprite.hp <= 0) {
-			sprite.hp = 0;
-			sprite.opacity = 0;
-			sprite.base.opacity = 0;
+			sprite.broke();
 		}
 		else if(sprite.mhp / 2 >= sprite.hp) {
 			sprite.frame = sprite.brake;
 		}
+		clearInterval(animeID);
+		animeID = setTimeout(function() {
+			DOM.style.top = 0;
+			DOM.style.left = '5px';
+			animeID = setTimeout(function() {
+				DOM.style.top = '5px';
+				DOM.style.left = 0;
+				animeID = setTimeout(function() {
+					DOM.style.top = 0;
+					DOM.style.left = '-5px';
+					animeID = setTimeout(function() {
+						DOM.style.top = 0;
+						DOM.style.left = 0;
+					});
+				});
+			});
+		}, 50);
+	};
+	sprite.broke = function() {
+		sprite.hp = 0;
+		sprite.opacity = 0;
+		sprite.base.opacity = 0;
 	};
 	sprite.checkBreak = function(){
 		if(sprite.hp === 0) {

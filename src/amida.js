@@ -22,19 +22,26 @@ Amida = function(){
 		statusviewer, statusviewer_position = CONST_CASH.STATUS_VIEWER.POSITION, 
 		i, j, len, ary, name, castle, thumb, score;
 
+	DOM  = document.getElementById('enchant-stage');
+	
 	//map set
 	map.image = map_image;
 	map.loadData(chipset);
 
 	//map methods
 	map.getSquere = function(obj){
-		var x = Math.floor(obj.x/chip_size),
-			y = Math.floor(obj.y/chip_size);
+		var x, y, f = Math.floor;
 
-		return {
-			x: x,
-			y: y
+		map.getSquere = function(obj) {
+			x = f(obj.x/chip_size);
+			y = f(obj.y/chip_size);
+			return {
+				x: x,
+				y: y
+			};
 		};
+
+		return map.getSquere(obj);
 	};
 
 	map.getCollision = function(obj){
@@ -45,8 +52,7 @@ Amida = function(){
 			i,j,len,castles,castle;
 
 		if((mc = mc[unitPoint.y]) && (mc = mc[unitPoint.x])){
-			calc = mc[0] + mc[1] + mc[2] + mc[3];
-			if(calc === 1){
+			if(mc[0] + mc[1] + mc[2] + mc[3] === 1){
 				for(i in CASTLE) {
 					if(CASTLE.hasOwnProperty(i)){
 						castles = CASTLE[i];
