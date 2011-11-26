@@ -1,10 +1,3 @@
-/**
- * Create Unit Class
- * @name Unit 
- * @function
- * @param {Object} config 
- * @returns {Object}
- */
 Unit = function(config){
 	var size = CONST_CASH.UNIT.CHIP_SIZE,
 		map_chip_size = CONST_CASH.MAP.CHIP_SIZE,
@@ -34,13 +27,6 @@ Unit = function(config){
 	//set Class
 	sprite.type = CONST_CASH.TYPE.UNIT;
 
-	/**
-	 * attack Processing
-	 * @name attack
-	 * @function
-	 * @param vsUnit 
-	 * @return 
-	 */
 	sprite.attack = function(vsUnit) {
 		vsUnit.hp -= sprite.damage;
 		if(vsUnit.hp <= 0) {
@@ -48,11 +34,6 @@ Unit = function(config){
 		}
 		return vsUnit.hp;
 	};
-	/**
-	 * unit kill
-	 * @name kill
-	 * @function
-	 */
 	sprite.kill = function(){
 		var x = sprite.x, 
 			y = sprite.y, 
@@ -80,12 +61,6 @@ Unit = function(config){
 		}
 	};
 
-	/**
-	 * check unit death
-	 * @name checkDeath
-	 * @function
-	 * @return 
-	 */
 	sprite.checkDeath = function() {
 		if(sprite.hp === 0) {
 			return true;
@@ -99,23 +74,12 @@ Unit = function(config){
 		default_frame = unit.frame;
 	};
 
-	/**
-	 * Get the sprite's position on the map
-	 * @name mapPoint
-	 * @function
-	 */
 	mapPoint = function(){
 		return MAP.PATH.getSquere(sprite);
 	};
 	//set before map squere point
 	sprite.beforePoint = mapPoint();
 
-	/**
-	 * unit move check
-	 * @name checkMoveSquere
-	 * @function
-	 * @return 
-	 */
 	checkMoveSquere = function(){
 		var ret = false;
 
@@ -151,12 +115,6 @@ Unit = function(config){
 		}
 		return ret;
 	};
-	/**
-	 * Gets an array for collision detection
-	 * @name getCollision
-	 * @function
-	 * @return 
-	 */
 	getCollision = function(){
 		return MAP.PATH.getCollision(sprite);
 	};
@@ -178,11 +136,6 @@ Unit = function(config){
 		sprite.frame = default_frame + walk_true * line_num + sprite.direction;
 	};
 
-	/**
-	 * unit move
-	 * @name move
-	 * @function
-	 */
 	move = function(){
 		var d = sprite.direction,
 			s = sprite.speed,

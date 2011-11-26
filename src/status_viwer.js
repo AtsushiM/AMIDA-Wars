@@ -30,7 +30,7 @@ StatusViwer = function(config){
 	bg.frame = 0;
 
 	//set label font
-	label.font = '9px cursive';
+	label.font = '9px ' + CONST_CASH.FONT;
 	label.color = '#fff';
 	label.text = '';
 

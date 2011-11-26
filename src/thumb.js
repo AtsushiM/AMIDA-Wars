@@ -1,10 +1,3 @@
-/**
- * Create Thumbnail Class
- * @name Thumb
- * @function
- * @param {Object} config / mode:'USER' || 'ENEMY' /
- * @returns {Object}
- */
 Thumb = function(config){
 	var size = CONST_CASH.THUMB.CHIP_SIZE,
 		image = GAME.assets[CONST_CASH.THUMB.IMAGE],
@@ -16,13 +9,6 @@ Thumb = function(config){
 		originX,originY,defaultX,defaultY,
 		eEv = enchant.Event,
 		statusViwer = LABEL.STATUS_VIEWER,
-		/**
-		 * Check if hit in the castle
-		 * @name hitMyCastle
-		 * @function
-		 * @param obj 
-		 * @return 
-		 */
 		hitMyCastle = function(obj){
 			var hit = false,
 				castles = CASTLE.USER,

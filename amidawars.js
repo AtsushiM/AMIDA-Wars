@@ -17,14 +17,12 @@ W.onorientationchange = function(){
 ・MAPの仕様にそってレイヤーを再構築
 ・CONSTの内容の見直し
 ・リザルト画面作成
-・初期表示時にステータス画面にD&Dの説明を表示
 ・種族選択画面を作成
 ・自分のAIを投稿するフォーム？（UIを書いてもらうor自動）
 ・一時停止ボタンを作成
 ・ユニットのステータスを公開したページの作成
 ・城崩壊時、画面を揺らす
 ・ユニット再配置可能までの秒数を表示
-・相性を表示
 ・JSDOC編集
 ・クリア演出
 ・ステータス表示
@@ -34,7 +32,6 @@ W.onorientationchange = function(){
 ・サムネイルドラッグ中に城にドロップできる事を明確に表示する
 ・ユーザーの行動を保存する（AI作成のため）
 ・ランキング作成
-・得点の調整（自城破壊時のマイナス含む）
 ・ヒーロー実装（自ユニットが死んだ回数や、敵城の状態等を見て使えるかどうか判断するなど）
 ・イラストを独自に
 
@@ -137,7 +134,12 @@ var GAME,
  */
 var CONST = function(){
 	return {
-		TIMELIMIT: 3*60, 
+		TIMELIMIT: function() {
+			return 3 * 60;
+		}, 
+		FONT: function() {
+			return 'tahoma,verdana,arial,sans-serif';
+		}, 
 		UNIT: function(){
 			return {
 				IMAGE: 'char.gif',
@@ -262,7 +264,8 @@ var CONST = function(){
 },
 CONST_CASH = CONST();
 CONST_CASH = {
-	TIMELIMIT: CONST_CASH.TIMELIMIT, 
+	TIMELIMIT: CONST_CASH.TIMELIMIT(), 
+	FONT: CONST_CASH.FONT(), 
 	UNIT: CONST_CASH.UNIT(),
 	THUMB: CONST_CASH.THUMB(),
 	SCORE: CONST_CASH.SCORE(),
@@ -774,6 +777,7 @@ Thumb = function(config){
 				i,len;
 			for(i = 0, len = castles.length; i<len; i++){
 				castle = castles[i];
+				castle.zoom = 2;
 				if(obj.intersect(castle)){
 					hit = castle;
 					break;
@@ -1148,7 +1152,7 @@ Score = function(config){
 		};
 
 	//set label font
-	label.font = '12px cursive';
+	label.font = '12px ' + CONST_CASH.FONT;
 	label.color = '#ccc';
 
 	//set label position
@@ -1216,7 +1220,7 @@ Countdown = function(config){
 		};
 
 	//set label font
-	label.font = '12px cursive';
+	label.font = '12px ' + CONST_CASH.FONT;
 	label.color = '#ccc';
 
 	//set label position
@@ -1483,7 +1487,7 @@ StatusViwer = function(config){
 	bg.frame = 0;
 
 	//set label font
-	label.font = '9px cursive';
+	label.font = '9px ' + CONST_CASH.FONT;
 	label.color = '#fff';
 	label.text = '';
 

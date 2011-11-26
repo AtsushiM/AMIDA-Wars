@@ -26,14 +26,6 @@ var GAME,
 		HEAVY:'NOARMOR',
 		NOARMOR:'LIGHT'
 	},
-	/**
-	 * Override object property
-	 * @name propOverride
-	 * @function
-	 * @param {Object} prop overrided object
-	 * @param {Object} config add
-	 * @returns {Object}
-	 */
 	propOverride = function(prop,config){
 		if(prop === undefined){
 			prop = {};
@@ -45,13 +37,6 @@ var GAME,
 		}
 		return prop;
 	},
-	/**
-	 * Add a layer Sprite
-	 * @name addLayer
-	 * @function
-	 * @param {Object} config / layer:target Group / sprite:add Sprite /
-	 * @returns sprite 
-	 */
 	addLayer = function(config){
 		config.layer.addChild(config.sprite);
 		return config.sprite;

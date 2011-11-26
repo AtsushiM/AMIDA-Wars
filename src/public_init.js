@@ -1,8 +1,3 @@
- /**
-  * Game Init
-  * @name init
-  * @function
-  */
 PUBLIC.init = function(config){
 	var img = {
 			UNIT: CONST_CASH.UNIT.IMAGE,

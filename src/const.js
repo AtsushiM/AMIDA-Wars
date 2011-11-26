@@ -1,12 +1,11 @@
-/**
- * Constant Valiables
- * @name CONST
- * @function
- * @returns {Object}
- */
 var CONST = function(){
 	return {
-		TIMELIMIT: 3*60, 
+		TIMELIMIT: function() {
+			return 3 * 60;
+		}, 
+		FONT: function() {
+			return 'tahoma,verdana,arial,sans-serif';
+		}, 
 		UNIT: function(){
 			return {
 				IMAGE: 'char.gif',
@@ -131,7 +130,8 @@ var CONST = function(){
 },
 CONST_CASH = CONST();
 CONST_CASH = {
-	TIMELIMIT: CONST_CASH.TIMELIMIT, 
+	TIMELIMIT: CONST_CASH.TIMELIMIT(), 
+	FONT: CONST_CASH.FONT(), 
 	UNIT: CONST_CASH.UNIT(),
 	THUMB: CONST_CASH.THUMB(),
 	SCORE: CONST_CASH.SCORE(),

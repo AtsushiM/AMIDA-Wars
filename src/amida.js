@@ -1,8 +1,3 @@
-/**
- * Create Amida Map
- * @name Amida
- * @function
- */
 Amida = function(){
 	var	chip_size = CONST_CASH.MAP.CHIP_SIZE,
 		chipset = MAP.BASE,
@@ -32,12 +27,6 @@ Amida = function(){
 	map.loadData(chipset);
 
 	//map methods
-	/**
-	* Gets the point on the map.
-	* @name getSquere
-	* @function
-	* @param obj 
-	*/
 	map.getSquere = function(obj){
 		var x = Math.floor(obj.x/chip_size),
 			y = Math.floor(obj.y/chip_size);
@@ -48,13 +37,6 @@ Amida = function(){
 		};
 	};
 
-	/**
-	 * Gets the obj point Collision
-	 * @name getCollision
-	 * @function
-	 * @param obj 
-	 * @return 
-	 */
 	map.getCollision = function(obj){
 		var unitPoint = map.getSquere(obj),
 			mc = MAP.COLLISION,

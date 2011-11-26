@@ -1,10 +1,3 @@
-/**
- * Score display obj
- * @name Score
- * @function
- * @param {Object} config 
- * @returns {Object}
- */
 Score = function(config){
 	var total = 0,
 		//enemy point rate
@@ -21,7 +14,7 @@ Score = function(config){
 		};
 
 	//set label font
-	label.font = '12px cursive';
+	label.font = '12px ' + CONST_CASH.FONT;
 	label.color = '#ccc';
 
 	//set label position
@@ -35,19 +28,7 @@ Score = function(config){
 		rate: rate,
 		mode: mode, 
 		point: CONST().POINT, 
-		/**
-		 * add score
-		 * @name add
-		 * @function
-		 * @param score 
-		 * @return total score
-		 */
 		add: add, 
-		/**
-		 * update score label
-		 * @name update
-		 * @function
-		 */
 		update: function(){}
 	};
 	//override user

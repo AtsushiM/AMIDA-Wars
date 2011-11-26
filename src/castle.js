@@ -1,10 +1,3 @@
-/**
- * Create Castle Object
- * @name Castle
- * @function
- * @param {Object} config / mode:'USER' || 'ENEMY' /
- * @returns {Object}
- */
 Castle = function(config){
 	var size = CONST_CASH.MAP.CHIP_SIZE,
 		image = GAME.assets[CONST_CASH.MAP.IMAGE],
@@ -42,12 +35,6 @@ Castle = function(config){
 	//add array
 	CASTLE[mode].push(sprite);
 
-	/**
-	 * castle damage
-	 * @name damage
-	 * @function
-	 * @param unit 
-	 */
 	sprite.damage = function(unit) {
 		sprite.hp -= unit.damage;
 		if(sprite.hp <= 0) {
@@ -59,12 +46,6 @@ Castle = function(config){
 			sprite.frame = sprite.brake;
 		}
 	};
-	/**
-	 * 
-	 * @name checkBreak
-	 * @function
-	 * @return boolean
-	 */
 	sprite.checkBreak = function(){
 		if(sprite.hp === 0) {
 			return true;

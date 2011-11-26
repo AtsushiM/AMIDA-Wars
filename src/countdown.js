@@ -1,10 +1,3 @@
-/**
- * Countdown display obj
- * @name Countdown
- * @function
- * @param {Object} 
- * @returns {Object}
- */
 Countdown = function(config){
 	var label = new Label(), 
 		timelimit = CONST_CASH.TIMELIMIT, 
@@ -20,7 +13,7 @@ Countdown = function(config){
 		};
 
 	//set label font
-	label.font = '12px cursive';
+	label.font = '12px ' + CONST_CASH.FONT;
 	label.color = '#ccc';
 
 	//set label position
