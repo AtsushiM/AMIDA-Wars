@@ -31,7 +31,9 @@ Thumb = function(config){
 
 			for(i = 0, len = castles.length; i<len; i++){
 				castle = castles[i];
-				castle.focusOn();
+				if(castle.checkBreak()  === false) {
+					castle.focusOn();
+				}
 			}
 		}, 
 		focusOffCastle = function() {
@@ -41,7 +43,9 @@ Thumb = function(config){
 
 			for(i = 0, len = castles.length; i<len; i++){
 				castle = castles[i];
-				castle.focusOff();
+				if(castle.checkBreak()  === false) {
+					castle.focusOff();
+				}
 			}
 		};
 
