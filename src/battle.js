@@ -60,7 +60,7 @@ var Battle = {
 		castle.damage(unit);
 		unit.kill();
 
-		MAP.PATH.vibrate(5);
+		MAP.PATH.vibrate(3);
 
 		if(castle.checkBreak()) {
 			Battle.score(castle);

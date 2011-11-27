@@ -47,10 +47,10 @@ Amida = function(){
 					animeID = setTimeout(function() {
 						style.top = 0;
 						style.left = 0;
-					});
-				});
-			});
-		}, 50);
+					}, 30);
+				}, 30);
+			}, 30);
+		}, 30);
 	};
 
 	//map methods

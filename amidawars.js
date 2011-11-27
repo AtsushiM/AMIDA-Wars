@@ -441,10 +441,10 @@ Amida = function(){
 					animeID = setTimeout(function() {
 						style.top = 0;
 						style.left = 0;
-					});
-				});
-			});
-		}, 50);
+					}, 30);
+				}, 30);
+			}, 30);
+		}, 30);
 	};
 
 	//map methods
@@ -1338,7 +1338,7 @@ var Battle = {
 		castle.damage(unit);
 		unit.kill();
 
-		MAP.PATH.vibrate(5);
+		MAP.PATH.vibrate(3);
 
 		if(castle.checkBreak()) {
 			Battle.score(castle);
