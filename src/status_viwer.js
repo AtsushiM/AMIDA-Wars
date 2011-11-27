@@ -20,7 +20,7 @@ StatusViwer = function(config){
 			'Armor: ' + sta.armor + br +
 			'Damage: ' + sta.damage + br +
 			'Speed: ' + sta.speed + br +
-			'DownTime: ' + sta.reverse / 1000 + 'sec';
+			'DownTime: ' + sta.reverse + 'sec';
 		}
 	}
 	group.x = pos[0];
