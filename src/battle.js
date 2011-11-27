@@ -53,13 +53,14 @@ var Battle = {
 		if(unit2.checkDeath()) {
 			Battle.score(unit2);
 		}
+
+		MAP.PATH.vibrate(1);
 	}, 
 	siege: function(unit, castle) {
-		var m = unit.mode,
-			have = CONST_CASH.HAVE;
-
 		castle.damage(unit);
 		unit.kill();
+
+		MAP.PATH.vibrate(5);
 
 		if(castle.checkBreak()) {
 			Battle.score(castle);

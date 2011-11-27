@@ -20,13 +20,38 @@ Amida = function(){
 		score_position = CONST_CASH.SCORE.POSITION,
 		countdown, countdown_position = CONST_CASH.COUNTDOWN.POSITION, 
 		statusviewer, statusviewer_position = CONST_CASH.STATUS_VIEWER.POSITION, 
-		i, j, len, ary, name, castle, thumb, score;
+		i, j, len, ary, name, castle, thumb, score, animeID;
 
 	DOM  = document.getElementById('enchant-stage');
 	
 	//map set
 	map.image = map_image;
 	map.loadData(chipset);
+
+	//map vibration
+	map.vibrate = function(num) {
+		var style = DOM.style;
+
+		num += 'px';
+
+		clearInterval(animeID);
+		animeID = setTimeout(function() {
+			style.top = 0;
+			style.left = num;
+			animeID = setTimeout(function() {
+				style.top = num;
+				style.left = 0;
+				animeID = setTimeout(function() {
+					style.top = 0;
+					style.left = '-'+num;
+					animeID = setTimeout(function() {
+						style.top = 0;
+						style.left = 0;
+					});
+				});
+			});
+		}, 50);
+	};
 
 	//map methods
 	map.getSquere = function(obj){

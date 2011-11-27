@@ -9,6 +9,7 @@ Thumb = function(config){
 		originX,originY,defaultX,defaultY,
 		eEv = enchant.Event,
 		statusViwer = LABEL.STATUS_VIEWER,
+		countdown = new Label(),
 		hitMyCastle = function(obj){
 			var hit = false,
 				castles = CASTLE.USER,
@@ -23,7 +24,7 @@ Thumb = function(config){
 				}
 			}
 			return hit;
-		}, 
+		},
 		focusOnCastle = function() {
 			var castles = CASTLE.USER, 
 				castle, 
@@ -49,6 +50,7 @@ Thumb = function(config){
 			}
 		};
 
+	//thumb bg set
 	bg.image = image;
 	bg.frame = 16;
 	bg.x = config.x;
@@ -57,6 +59,18 @@ Thumb = function(config){
 	addLayer({
 		layer: GROUP.MAP_OPTION.THUMB_BASE, 
 		sprite: bg
+	});
+
+	//countdown set
+	countdown.text = Math.ceil(unitData.reverse);
+	countdown.font = '24px ' + CONST_CASH.FONT;
+	countdown.color = '#ccc';
+	countdown.x = config.x+17;
+	countdown.y = config.y+7;
+
+	addLayer({
+		layer: GROUP.MAP_OPTION.THUMB_BASE, 
+		sprite: countdown
 	});
 
 	//default override
@@ -122,12 +136,24 @@ Thumb = function(config){
 	};
 	sprite.dragStop = function() {
 		sprite.canDrag = false;
-		sprite.opacity = 0.5;
+		sprite.opacity = 0;
 	};
 
 	//reverse
 	sprite.reverse = function(unit) {
-		return setTimeout(sprite.dragStart, unit.reverse);
+		var count = Math.ceil(unit.reverse), 
+			id = setInterval(function() {
+				count--;
+				countdown.text = count;
+				if(count === 0) {
+					countdown.text = '';
+					sprite.dragStart();
+					clearInterval(id);
+				}
+			}, 1000);
+
+		countdown.text = count;
+		sprite.opacity = 0.3;
 	};
 
 	//add array
@@ -135,6 +161,7 @@ Thumb = function(config){
 
 	//set dragmode
 	sprite.dragStop();
+	sprite.opacity = 0.3;
 	sprite.init = function() {
 		sprite.reverse(sprite.unit);
 	};
