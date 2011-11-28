@@ -60,6 +60,6 @@ var EnemyAction = {
 		}, 3000);
 	}, 
 	end: function() {
-		clearInterval(ea.aiid);
+		clearInterval(EnemyAction.aiid);
 	}
 };

@@ -19,7 +19,6 @@ W.onorientationchange = function(){
 ・敵種族をランダム選択（最終的にはAI選択）
 ・自分のAIを投稿するフォーム？（AIを書いてもらうor自動）
 ・ユニットのステータスを公開したページの作成
-・ユニット再配置可能までの秒数を表示
 ・JSDOC編集
 ・クリア演出
 ・ユニットの性能設定
@@ -289,6 +288,9 @@ PUBLIC.init = function(config){
 
 	//set map
 	MAP.BASE = chipset = config.map;
+	for(i = 0, len = chipset.length; i < len; i++ ) {
+		chipset[i] = chipset[i].split('');
+	}
 
 	//mapdata init
 	(function(){
@@ -1291,7 +1293,7 @@ var EnemyAction = {
 		}, 3000);
 	}, 
 	end: function() {
-		clearInterval(ea.aiid);
+		clearInterval(EnemyAction.aiid);
 	}
 };
 var Battle = {
@@ -1471,15 +1473,15 @@ AW.init({
 	×:no way
 	*/
 	map: [
-'■×■×■×■×'.split(''), 
-'├─┤×│×│×'.split(''),
-'│×│×├─┤×'.split(''),
-'│×└┐│×│×'.split(''),
-'└┐×├┤×└┐'.split(''),
-'×│×│└┐×│'.split(''),
-'×├─┤×│×│'.split(''),
-'×│×│×├─┤'.split(''),
-'×□×□×□×□'.split('')
+'■×■×■×■×', 
+'├─┤×│×│×',
+'│×│×├─┤×',
+'│×└┐│×│×',
+'└┐×├┤×└┐',
+'×│×│└┐×│',
+'×├─┤×│×│',
+'×│×│×├─┤',
+'×□×□×□×□'
 ]
 });
 
