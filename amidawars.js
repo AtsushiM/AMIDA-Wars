@@ -693,7 +693,10 @@ Castle = function(config){
 	};
 
 	sprite.damage = function(unit) {
-		sprite.hp -= unit.damage;
+		//TODO: ユニットごとに城に与えるダメージを決定
+		/* sprite.hp -= unit.damage; */
+		sprite.hp -= 1;
+
 		if(sprite.hp <= 0) {
 			sprite.broke();
 		}
@@ -1228,21 +1231,33 @@ Effect = function(config){
 };
 var EnemyAction = {
 	aiid: 0, 
-	race: 'UNDEAD', 
-	/* race: 'HUMAN',  */
-	onMap: [], 
+	/* race: 'UNDEAD', */
+	/* race: 'HUMAN', */ 
+	race: '', 
 	/* order: ['LANCER','WARRIOR','KNIGHT','ARCHER', 'CLELIC','FIRE_MAGE','FROST_MAGE','WIZARD'], */
-	order: ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE', 'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'],
+	/* order: ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE', 'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'], */
+	order: [],
 	init: function() {
-		var mode = CONST_CASH.HAVE.ENEMY, 
+		var ea = EnemyAction, 
+			mode = CONST_CASH.HAVE.ENEMY, 
 			castle, unit, r, 
 			castles = CASTLE.ENEMY,
 			castles_len = castles.length,
-			unit_status = CONST_CASH.UNIT.STATUS.UNDEAD,
-			order = EnemyAction.order, 
-			order_len, unit_name;
+			unit_status = CONST_CASH.UNIT.STATUS,
+			order, order_len, unit_name;
 
-		EnemyAction.aiid = setInterval(function() {
+		if(USER_RACE === 'HUMAN') {
+			ea.race = 'UNDEAD';
+			ea.order = ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE', 'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'];
+		}
+		else {
+			ea.race = 'HUMAN';
+			ea.order = ['LANCER','WARRIOR','KNIGHT','ARCHER', 'CLELIC','FIRE_MAGE','FROST_MAGE','WIZARD'];
+		}
+		unit_status = unit_status[ea.race];
+		order = ea.order;
+
+		ea.aiid = setInterval(function() {
 			order_len = order.length;
 			if(order_len > 0) {
 				r = Math.floor(Math.random() * castles_len);
@@ -1276,7 +1291,7 @@ var EnemyAction = {
 		}, 3000);
 	}, 
 	end: function() {
-		clearInterval(EnemyAction.aiid);
+		clearInterval(ea.aiid);
 	}
 };
 var Battle = {
@@ -1439,14 +1454,14 @@ StatusViwer = function(config){
 //AMIDA Wars init
 AW.init({
 	//select race
-	//race: 'HUMAN',
-	race: 'UNDEAD',
+	race: 'HUMAN',
+	//race: 'UNDEAD',
 
 	//unit order
-	// order: ['lancer','warrior','knight','archer',
-	// 		'clelic','fire_mage','frost_mage','wizard'],
-	order: ['skelton_dog','skelton_snake','skelton_warrier','skelton_archer',
-			'golem','undead_spider','spector','shade'],
+	order: ['lancer','warrior','knight','archer',
+			'clelic','fire_mage','frost_mage','wizard'],
+	// order: ['skelton_dog','skelton_snake','skelton_warrier','skelton_archer',
+	// 		'golem','undead_spider','spector','shade'],
 
 	// easy map creater
 	/*
@@ -1456,15 +1471,15 @@ AW.init({
 	×:no way
 	*/
 	map: [
-['■','×','■','×','■','×','■','×'],
-['├','─','┤','×','│','×','│','×'],
-['│','×','│','×','├','─','┤','×'],
-['│','×','└','┐','│','×','│','×'],
-['└','┐','×','├','┤','×','└','┐'],
-['×','│','×','│','└','┐','×','│'],
-['×','├','─','┤','×','│','×','│'],
-['×','│','×','│','×','├','─','┤'],
-['×','□','×','□','×','□','×','□']
+'■×■×■×■×'.split(''), 
+'├─┤×│×│×'.split(''),
+'│×│×├─┤×'.split(''),
+'│×└┐│×│×'.split(''),
+'└┐×├┤×└┐'.split(''),
+'×│×│└┐×│'.split(''),
+'×├─┤×│×│'.split(''),
+'×│×│×├─┤'.split(''),
+'×□×□×□×□'.split('')
 ]
 });
 

@@ -43,7 +43,10 @@ Castle = function(config){
 	};
 
 	sprite.damage = function(unit) {
-		sprite.hp -= unit.damage;
+		//TODO: ユニットごとに城に与えるダメージを決定
+		/* sprite.hp -= unit.damage; */
+		sprite.hp -= 1;
+
 		if(sprite.hp <= 0) {
 			sprite.broke();
 		}
