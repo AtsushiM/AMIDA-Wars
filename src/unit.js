@@ -18,6 +18,7 @@ Unit = function(config){
 		moveVal = -moveVal;
 	}
 
+
 	//can user override prop
 	sprite.direction = 0;
 	sprite.image = image;
