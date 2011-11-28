@@ -1,9 +1,10 @@
 var EnemyAction = {
 	aiid: 0, 
 	race: 'UNDEAD', 
+	/* race: 'HUMAN',  */
 	onMap: [], 
-	order: ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE',
-			'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'],
+	/* order: ['LANCER','WARRIOR','KNIGHT','ARCHER', 'CLELIC','FIRE_MAGE','FROST_MAGE','WIZARD'], */
+	order: ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE', 'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'],
 	init: function() {
 		var mode = CONST_CASH.HAVE.ENEMY, 
 			castle, unit, r, 
@@ -49,4 +50,4 @@ var EnemyAction = {
 	end: function() {
 		clearInterval(EnemyAction.aiid);
 	}
-}
+};

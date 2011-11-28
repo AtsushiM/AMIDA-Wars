@@ -19,24 +19,24 @@ var CONST = function(){
 				},
 				STATUS: {
 					HUMAN: {
-						WARRIOR:         { name:'WARRIOR',         frame:  0, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:2 },
-						LANCER:          { name:'LANCER',          frame:  4, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:2 },
-						KNIGHT:          { name:'KNIGHT',          frame:  8, hp:1, armor:TYPE.MIDIUM, speed:0.9, damage:1, reverse:2 },
-						ARCHER:          { name:'ARCHER',          frame: 12, hp:1, armor:TYPE.MIDIUM, speed:1.1, damage:1, reverse:2 },
-						CLELIC:          { name:'CLELIC',          frame: 48, hp:1, armor:TYPE.MIDIUM, speed:0.5, damage:1, reverse:2 },
-						FIRE_MAGE:       { name:'FIRE_MAGE',       frame: 52, hp:1, armor:TYPE.MIDIUM, speed:0.8, damage:1, reverse:2 },
-						FROST_MAGE:      { name:'FROST_MAGE',      frame: 56, hp:1, armor:TYPE.MIDIUM, speed:0.8, damage:1, reverse:2 },
-						WIZARD:          { name:'WIZARD',          frame: 60, hp:1, armor:TYPE.MIDIUM, speed:0.8, damage:1, reverse:2 }
+						WARRIOR:         { name:'WARRIOR',         frame:  0, hp:2, armor:TYPE.MIDIUM, speed:1, damage:3, reverse:4 },
+						LANCER:          { name:'LANCER',          frame:  4, hp:3, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:2 },
+						KNIGHT:          { name:'KNIGHT',          frame:  8, hp:4, armor:TYPE.HEAVY, speed:0.9, damage:2, reverse:7 },
+						ARCHER:          { name:'ARCHER',          frame: 12, hp:1, armor:TYPE.LIGHT, speed:1.1, damage:3, reverse:3 },
+						CLELIC:          { name:'CLELIC',          frame: 48, hp:1, armor:TYPE.NOARMOR, speed:0.5, damage:1, reverse:2 },
+						FIRE_MAGE:       { name:'FIRE_MAGE',       frame: 52, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, reverse:3 },
+						FROST_MAGE:      { name:'FROST_MAGE',      frame: 56, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, reverse:3 },
+						WIZARD:          { name:'WIZARD',          frame: 60, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:3, reverse:4 }
 					},
 					UNDEAD: {
-						SKELTON_DOG:     { name:'SKELTON_DOG',     frame: 96, hp:1, armor:TYPE.MIDIUM, speed:1.4, damage:1, reverse:2 },
-						SKELTON_WARRIER: { name:'SKELTON_WARRIER', frame:100, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:2 },
-						SKELTON_ARCHER:  { name:'SKELTON_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:2 },
-						SHADE:           { name:'SHADE',           frame:108, hp:1, armor:TYPE.MIDIUM, speed:0.7, damage:1, reverse:2 },
-						SKELTON_SNAKE:   { name:'SKELTON_SNAKE',   frame:144, hp:1, armor:TYPE.MIDIUM, speed:1.3, damage:1, reverse:2 },
-						GOLEM:           { name:'GOLEM',           frame:148, hp:1, armor:TYPE.MIDIUM, speed:0.5, damage:1, reverse:2 },
-						SPECTOR:         { name:'SPECTOR',         frame:152, hp:1, armor:TYPE.MIDIUM, speed:0.7, damage:1, reverse:2 },
-						UNDEAD_SPIDER:   { name:'UNDEAD_SPIDER',   frame:156, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:2 }
+						SKELTON_DOG:     { name:'SKELTON_DOG',     frame: 96, hp:1, armor:TYPE.LIGHT, speed:1.4, damage:2, reverse:1 },
+						SKELTON_WARRIER: { name:'SKELTON_WARRIER', frame:100, hp:2, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:1 },
+						SKELTON_ARCHER:  { name:'SKELTON_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM, speed:1, damage:3, reverse:1 },
+						SHADE:           { name:'SHADE',           frame:108, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, reverse:3 },
+						SKELTON_SNAKE:   { name:'SKELTON_SNAKE',   frame:144, hp:2, armor:TYPE.LIGHT, speed:1.3, damage:1, reverse:1 },
+						GOLEM:           { name:'GOLEM',           frame:148, hp:5, armor:TYPE.HEAVY, speed:0.5, damage:2, reverse:6 },
+						SPECTOR:         { name:'SPECTOR',         frame:152, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, reverse:3 },
+						UNDEAD_SPIDER:   { name:'UNDEAD_SPIDER',   frame:156, hp:3, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:4 }
 					}
 				},
 				AI: {

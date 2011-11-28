@@ -186,7 +186,9 @@ Unit = function(config){
 
 	sprite.stay = function() {
 		sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
-		sprite.addEventListener(enchant.Event.ENTER_FRAME, walk);
+		sprite.addEventListener(enchant.Event.ENTER_FRAME, function() {
+			walk();
+		});
 	};
 
 	//add array

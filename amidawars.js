@@ -16,14 +16,14 @@ W.onorientationchange = function(){
 ☆各クラスの最適＆効率化（常時タスク）
 ・リザルト画面作成
 ・種族選択画面を作成
-・自分のAIを投稿するフォーム？（UIを書いてもらうor自動）
+・敵種族をランダム選択（最終的にはAI選択）
+・自分のAIを投稿するフォーム？（AIを書いてもらうor自動）
 ・ユニットのステータスを公開したページの作成
 ・ユニット再配置可能までの秒数を表示
 ・JSDOC編集
 ・クリア演出
 ・ユニットの性能設定
 ・効果音設定
-・城破壊エフェクト
 ・サムネイルドラッグ中に城にドロップできる事を明確に表示する
 ・ユーザーの行動を保存する（AI作成のため）
 ・ランキング作成
@@ -128,24 +128,24 @@ var CONST = function(){
 				},
 				STATUS: {
 					HUMAN: {
-						WARRIOR:         { name:'WARRIOR',         frame:  0, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:2 },
-						LANCER:          { name:'LANCER',          frame:  4, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:2 },
-						KNIGHT:          { name:'KNIGHT',          frame:  8, hp:1, armor:TYPE.MIDIUM, speed:0.9, damage:1, reverse:2 },
-						ARCHER:          { name:'ARCHER',          frame: 12, hp:1, armor:TYPE.MIDIUM, speed:1.1, damage:1, reverse:2 },
-						CLELIC:          { name:'CLELIC',          frame: 48, hp:1, armor:TYPE.MIDIUM, speed:0.5, damage:1, reverse:2 },
-						FIRE_MAGE:       { name:'FIRE_MAGE',       frame: 52, hp:1, armor:TYPE.MIDIUM, speed:0.8, damage:1, reverse:2 },
-						FROST_MAGE:      { name:'FROST_MAGE',      frame: 56, hp:1, armor:TYPE.MIDIUM, speed:0.8, damage:1, reverse:2 },
-						WIZARD:          { name:'WIZARD',          frame: 60, hp:1, armor:TYPE.MIDIUM, speed:0.8, damage:1, reverse:2 }
+						WARRIOR:         { name:'WARRIOR',         frame:  0, hp:2, armor:TYPE.MIDIUM, speed:1, damage:3, reverse:4 },
+						LANCER:          { name:'LANCER',          frame:  4, hp:3, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:2 },
+						KNIGHT:          { name:'KNIGHT',          frame:  8, hp:4, armor:TYPE.HEAVY, speed:0.9, damage:2, reverse:7 },
+						ARCHER:          { name:'ARCHER',          frame: 12, hp:1, armor:TYPE.LIGHT, speed:1.1, damage:3, reverse:3 },
+						CLELIC:          { name:'CLELIC',          frame: 48, hp:1, armor:TYPE.NOARMOR, speed:0.5, damage:1, reverse:2 },
+						FIRE_MAGE:       { name:'FIRE_MAGE',       frame: 52, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, reverse:3 },
+						FROST_MAGE:      { name:'FROST_MAGE',      frame: 56, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, reverse:3 },
+						WIZARD:          { name:'WIZARD',          frame: 60, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:3, reverse:4 }
 					},
 					UNDEAD: {
-						SKELTON_DOG:     { name:'SKELTON_DOG',     frame: 96, hp:1, armor:TYPE.MIDIUM, speed:1.4, damage:1, reverse:2 },
-						SKELTON_WARRIER: { name:'SKELTON_WARRIER', frame:100, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:2 },
-						SKELTON_ARCHER:  { name:'SKELTON_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:2 },
-						SHADE:           { name:'SHADE',           frame:108, hp:1, armor:TYPE.MIDIUM, speed:0.7, damage:1, reverse:2 },
-						SKELTON_SNAKE:   { name:'SKELTON_SNAKE',   frame:144, hp:1, armor:TYPE.MIDIUM, speed:1.3, damage:1, reverse:2 },
-						GOLEM:           { name:'GOLEM',           frame:148, hp:1, armor:TYPE.MIDIUM, speed:0.5, damage:1, reverse:2 },
-						SPECTOR:         { name:'SPECTOR',         frame:152, hp:1, armor:TYPE.MIDIUM, speed:0.7, damage:1, reverse:2 },
-						UNDEAD_SPIDER:   { name:'UNDEAD_SPIDER',   frame:156, hp:1, armor:TYPE.MIDIUM, speed:1, damage:1, reverse:2 }
+						SKELTON_DOG:     { name:'SKELTON_DOG',     frame: 96, hp:1, armor:TYPE.LIGHT, speed:1.4, damage:2, reverse:1 },
+						SKELTON_WARRIER: { name:'SKELTON_WARRIER', frame:100, hp:2, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:1 },
+						SKELTON_ARCHER:  { name:'SKELTON_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM, speed:1, damage:3, reverse:1 },
+						SHADE:           { name:'SHADE',           frame:108, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, reverse:3 },
+						SKELTON_SNAKE:   { name:'SKELTON_SNAKE',   frame:144, hp:2, armor:TYPE.LIGHT, speed:1.3, damage:1, reverse:1 },
+						GOLEM:           { name:'GOLEM',           frame:148, hp:5, armor:TYPE.HEAVY, speed:0.5, damage:2, reverse:6 },
+						SPECTOR:         { name:'SPECTOR',         frame:152, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, reverse:3 },
+						UNDEAD_SPIDER:   { name:'UNDEAD_SPIDER',   frame:156, hp:3, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:4 }
 					}
 				},
 				AI: {
@@ -1081,7 +1081,9 @@ Unit = function(config){
 
 	sprite.stay = function() {
 		sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
-		sprite.addEventListener(enchant.Event.ENTER_FRAME, walk);
+		sprite.addEventListener(enchant.Event.ENTER_FRAME, function() {
+			walk();
+		});
 	};
 
 	//add array
@@ -1227,9 +1229,10 @@ Effect = function(config){
 var EnemyAction = {
 	aiid: 0, 
 	race: 'UNDEAD', 
+	/* race: 'HUMAN',  */
 	onMap: [], 
-	order: ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE',
-			'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'],
+	/* order: ['LANCER','WARRIOR','KNIGHT','ARCHER', 'CLELIC','FIRE_MAGE','FROST_MAGE','WIZARD'], */
+	order: ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE', 'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'],
 	init: function() {
 		var mode = CONST_CASH.HAVE.ENEMY, 
 			castle, unit, r, 
@@ -1275,7 +1278,7 @@ var EnemyAction = {
 	end: function() {
 		clearInterval(EnemyAction.aiid);
 	}
-}
+};
 var Battle = {
 	init: function() {
 		var func = function() {
@@ -1436,12 +1439,14 @@ StatusViwer = function(config){
 //AMIDA Wars init
 AW.init({
 	//select race
-	race: 'HUMAN',
-	//race: 'UNDEAD',
+	//race: 'HUMAN',
+	race: 'UNDEAD',
 
 	//unit order
-	order: ['lancer','warrior','knight','archer',
-			'clelic','fire_mage','frost_mage','wizard'],
+	// order: ['lancer','warrior','knight','archer',
+	// 		'clelic','fire_mage','frost_mage','wizard'],
+	order: ['skelton_dog','skelton_snake','skelton_warrier','skelton_archer',
+			'golem','undead_spider','spector','shade'],
 
 	// easy map creater
 	/*
