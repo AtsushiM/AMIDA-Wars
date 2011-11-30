@@ -686,10 +686,10 @@ Castle = function(config){
 	CASTLE[mode].push(sprite);
 
 	sprite.focusOn = function() {
-		sprite.opacity = 0.5;
+		sprite.scale(1.5, 1.5);
 	};
 	sprite.focusOff = function() {
-		sprite.opacity = 1;
+		sprite.scale(0.67, 0.67);
 	};
 
 	sprite.damage = function(unit) {
