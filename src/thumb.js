@@ -10,6 +10,24 @@ Thumb = function(config){
 		eEv = enchant.Event,
 		statusViwer = LABEL.STATUS_VIEWER,
 		countdown = new Label(),
+		focusMyCastle = function(obj) {
+			var hit = false,
+				castles = CASTLE.USER,
+				castle, 
+				i,len,flg = true;
+
+			for(i = 0, len = castles.length; i<len; i++){
+				castle = castles[i];
+				if(flg === true && obj.intersect(castle)){
+					castle.focusOn();
+					flg = false;
+				}
+				else {
+					castle.focusOff();
+				}
+			}
+			return hit;
+		}, 
 		hitMyCastle = function(obj){
 			var hit = false,
 				castles = CASTLE.USER,
@@ -25,7 +43,7 @@ Thumb = function(config){
 			}
 			return hit;
 		},
-		focusOnCastle = function() {
+		dragOnCastle = function() {
 			var castles = CASTLE.USER, 
 				castle, 
 				i, len;
@@ -33,11 +51,11 @@ Thumb = function(config){
 			for(i = 0, len = castles.length; i<len; i++){
 				castle = castles[i];
 				if(castle.checkBreak()  === false) {
-					castle.focusOn();
+					castle.blinkOn();
 				}
 			}
 		}, 
-		focusOffCastle = function() {
+		dragOffCastle = function() {
 			var castles = CASTLE.USER, 
 				castle, 
 				i, len;
@@ -45,7 +63,7 @@ Thumb = function(config){
 			for(i = 0, len = castles.length; i<len; i++){
 				castle = castles[i];
 				if(castle.checkBreak()  === false) {
-					castle.focusOff();
+					castle.blinkOff();
 				}
 			}
 		};
@@ -98,7 +116,7 @@ Thumb = function(config){
 		if(this.canDrag === true){
 			originX = e.x - this.x;
 			originY = e.y - this.y;
-			focusOnCastle();
+			dragOnCastle();
 		}
 		statusViwer.update(sprite.unit);
 	});
@@ -106,6 +124,7 @@ Thumb = function(config){
 		if(this.canDrag === true){
 			this.x = e.x - originX;
 			this.y = e.y - originY;
+			focusMyCastle(this);
 		}
 	});
 	sprite.addEventListener(eEv.TOUCH_END, function(e){
@@ -122,10 +141,12 @@ Thumb = function(config){
 				//create unit
 				this.lastUnit = new Unit(this.unit);
 				this.lastUnit.thumb = this;
+
+				hit.focusOff();
 			}
 			this.x = defaultX;
 			this.y = defaultY;
-			focusOffCastle();
+			dragOffCastle();
 		}
 	});
 

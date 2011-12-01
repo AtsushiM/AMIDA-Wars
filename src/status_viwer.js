@@ -30,13 +30,13 @@ StatusViwer = function(config){
 	bg.frame = 0;
 
 	//set label font
-	label.font = '9px ' + CONST_CASH.FONT;
+	label.font = '9px/1.5 ' + CONST_CASH.FONT;
 	label.color = '#fff';
 	label.text = '';
 
 	//set label position
 	label.x = 45;
-	label.y = 5;
+	label.y = 8;
 
 	//unit view
 	unit = new Unit({

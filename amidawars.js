@@ -24,7 +24,6 @@ W.onorientationchange = function(){
 ・クリア演出
 ・ユニットの性能設定
 ・効果音設定
-・サムネイルドラッグ中に城にドロップできる事を明確に表示する
 ・ユーザーの行動を保存する（AI作成のため）
 ・ランキング作成
 ・ヒーロー実装（自ユニットが死んだ回数や、敵城の状態等を見て使えるかどうか判断するなど）
@@ -113,7 +112,7 @@ var CONST = function(){
 			return 3 * 60;
 		}, 
 		FONT: function() {
-			return 'tahoma,verdana,arial,sans-serif';
+			return 'monospace';
 		}, 
 		UNIT: function(){
 			return {
@@ -655,7 +654,7 @@ Castle = function(config){
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
 		castle_bases = GROUP.MAP_OPTION.CASTLE_BASE, 
-		castle_base;
+		castle_base, opacity_sign = -1, opacityControll;
 
 	//castle base set
 	castle_base = new Sprite(size, size);
@@ -685,11 +684,34 @@ Castle = function(config){
 	//add array
 	CASTLE[mode].push(sprite);
 
+	//unit drop 
 	sprite.focusOn = function() {
-		sprite.scale(1.5, 1.5);
+		sprite.scaleX = sprite.scaleY = 1.5;
+		sprite.focus = true;
 	};
 	sprite.focusOff = function() {
-		sprite.scale(0.67, 0.67);
+		sprite.scaleX = sprite.scaleY = 1;
+		sprite.focus = false;
+	};
+
+	//thumb Drag
+	opacityControll = function() {
+		if(GAME.frame % 4 === 0) {
+			sprite.opacity += 0.1*opacity_sign;
+			if(sprite.opacity <= 0.5) {
+				opacity_sign = 1;
+			}
+			else if(sprite.opacity >= 1) {
+				opacity_sign = -1;
+			}
+		}
+	};
+	sprite.blinkOn = function() {
+		sprite.addEventListener(enchant.Event.ENTER_FRAME, opacityControll);
+	};
+	sprite.blinkOff = function() {
+		sprite.removeEventListener(enchant.Event.ENTER_FRAME, opacityControll);
+		sprite.opacity = 1;
 	};
 
 	sprite.damage = function(unit) {
@@ -734,6 +756,24 @@ Thumb = function(config){
 		eEv = enchant.Event,
 		statusViwer = LABEL.STATUS_VIEWER,
 		countdown = new Label(),
+		focusMyCastle = function(obj) {
+			var hit = false,
+				castles = CASTLE.USER,
+				castle, 
+				i,len,flg = true;
+
+			for(i = 0, len = castles.length; i<len; i++){
+				castle = castles[i];
+				if(flg === true && obj.intersect(castle)){
+					castle.focusOn();
+					flg = false;
+				}
+				else {
+					castle.focusOff();
+				}
+			}
+			return hit;
+		}, 
 		hitMyCastle = function(obj){
 			var hit = false,
 				castles = CASTLE.USER,
@@ -749,7 +789,7 @@ Thumb = function(config){
 			}
 			return hit;
 		},
-		focusOnCastle = function() {
+		dragOnCastle = function() {
 			var castles = CASTLE.USER, 
 				castle, 
 				i, len;
@@ -757,11 +797,11 @@ Thumb = function(config){
 			for(i = 0, len = castles.length; i<len; i++){
 				castle = castles[i];
 				if(castle.checkBreak()  === false) {
-					castle.focusOn();
+					castle.blinkOn();
 				}
 			}
 		}, 
-		focusOffCastle = function() {
+		dragOffCastle = function() {
 			var castles = CASTLE.USER, 
 				castle, 
 				i, len;
@@ -769,7 +809,7 @@ Thumb = function(config){
 			for(i = 0, len = castles.length; i<len; i++){
 				castle = castles[i];
 				if(castle.checkBreak()  === false) {
-					castle.focusOff();
+					castle.blinkOff();
 				}
 			}
 		};
@@ -822,7 +862,7 @@ Thumb = function(config){
 		if(this.canDrag === true){
 			originX = e.x - this.x;
 			originY = e.y - this.y;
-			focusOnCastle();
+			dragOnCastle();
 		}
 		statusViwer.update(sprite.unit);
 	});
@@ -830,6 +870,7 @@ Thumb = function(config){
 		if(this.canDrag === true){
 			this.x = e.x - originX;
 			this.y = e.y - originY;
+			focusMyCastle(this);
 		}
 	});
 	sprite.addEventListener(eEv.TOUCH_END, function(e){
@@ -846,10 +887,12 @@ Thumb = function(config){
 				//create unit
 				this.lastUnit = new Unit(this.unit);
 				this.lastUnit.thumb = this;
+
+				hit.focusOff();
 			}
 			this.x = defaultX;
 			this.y = defaultY;
-			focusOffCastle();
+			dragOffCastle();
 		}
 	});
 
@@ -1291,7 +1334,7 @@ var EnemyAction = {
 		}, 3000);
 	}, 
 	end: function() {
-		clearInterval(ea.aiid);
+		clearInterval(EnemyAction.aiid);
 	}
 };
 var Battle = {
@@ -1413,13 +1456,13 @@ StatusViwer = function(config){
 	bg.frame = 0;
 
 	//set label font
-	label.font = '9px ' + CONST_CASH.FONT;
+	label.font = '9px/1.5 ' + CONST_CASH.FONT;
 	label.color = '#fff';
 	label.text = '';
 
 	//set label position
 	label.x = 45;
-	label.y = 5;
+	label.y = 8;
 
 	//unit view
 	unit = new Unit({

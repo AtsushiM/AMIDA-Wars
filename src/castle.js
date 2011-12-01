@@ -5,7 +5,7 @@ Castle = function(config){
 		mode = config.mode.toUpperCase(),
 		sprite = new Sprite(size,size),
 		castle_bases = GROUP.MAP_OPTION.CASTLE_BASE, 
-		castle_base;
+		castle_base, opacity_sign = -1, opacityControll;
 
 	//castle base set
 	castle_base = new Sprite(size, size);
@@ -35,11 +35,34 @@ Castle = function(config){
 	//add array
 	CASTLE[mode].push(sprite);
 
+	//unit drop 
 	sprite.focusOn = function() {
-		sprite.scale(1.5, 1.5);
+		sprite.scaleX = sprite.scaleY = 1.5;
+		sprite.focus = true;
 	};
 	sprite.focusOff = function() {
-		sprite.scale(0.67, 0.67);
+		sprite.scaleX = sprite.scaleY = 1;
+		sprite.focus = false;
+	};
+
+	//thumb Drag
+	opacityControll = function() {
+		if(GAME.frame % 4 === 0) {
+			sprite.opacity += 0.1*opacity_sign;
+			if(sprite.opacity <= 0.5) {
+				opacity_sign = 1;
+			}
+			else if(sprite.opacity >= 1) {
+				opacity_sign = -1;
+			}
+		}
+	};
+	sprite.blinkOn = function() {
+		sprite.addEventListener(enchant.Event.ENTER_FRAME, opacityControll);
+	};
+	sprite.blinkOff = function() {
+		sprite.removeEventListener(enchant.Event.ENTER_FRAME, opacityControll);
+		sprite.opacity = 1;
 	};
 
 	sprite.damage = function(unit) {

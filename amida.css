@@ -1,0 +1,22 @@
+@charset "UTF-8";
+
+body, div, dl, dt, dd, ul, ol, li,
+h1, h2, h3, h4, h5, h6,
+object, iframe, pre, code, p, blockquote,
+form, fieldset, legend,
+table, th, td, caption, tbody, tfoot, thead,
+article, aside, figure, footer, header,
+hgroup, menu, nav, section, audio, video, canvas {
+	margin: 0;
+	padding: 0;
+}
+article, aside, figure, figcaption,footer,
+h1, h2, h3, h4, h5, h6, header, hgroup, menu, nav, section {
+	display: block;
+}
+body {
+	color: #000;
+	font-family: sans-serif;
+	font-size: 13px;
+	line-height: 1.5;
+}

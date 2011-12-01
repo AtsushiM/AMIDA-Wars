@@ -4,7 +4,7 @@ var CONST = function(){
 			return 3 * 60;
 		}, 
 		FONT: function() {
-			return 'tahoma,verdana,arial,sans-serif';
+			return 'monospace';
 		}, 
 		UNIT: function(){
 			return {
