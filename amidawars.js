@@ -686,7 +686,7 @@ Castle = function(config){
 
 	//unit drop 
 	sprite.focusOn = function() {
-		sprite.scaleX = sprite.scaleY = 1.5;
+		sprite.scaleX = sprite.scaleY = 1.4;
 		sprite.focus = true;
 	};
 	sprite.focusOff = function() {
