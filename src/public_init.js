@@ -33,6 +33,9 @@ PUBLIC.init = function(config){
 
 	//set map
 	MAP.BASE = chipset = config.map;
+	for(i = 0, len = chipset.length; i < len; i++) {
+		chipset[i] = chipset[i].split('');
+	}
 
 	//mapdata init
 	(function(){

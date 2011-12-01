@@ -123,7 +123,7 @@ var CONST = function(){
 				FRAME_BLOCK: 48,
 				FRAME: {
 					HUMAN: { LANCER: 0, WARRIOR: 4, KNIGHT: 8, ARCHER: 12, CLELIC: 16, FIRE_MAGE: 20, FROST_MAGE: 24, WIZARD: 28 },
-					UNDEAD: { SKELTON_DOG: 32, SKELTON_WARRIER: 36, SKELTON_ARCHER: 40, SPECTOR: 44, SKELTON_SNAKE: 48, GOLEM: 52, SHADE: 56, UNDEAD_SPIDER: 60 }
+					UNDEAD: { BONE_DOG: 32, BONE_WARRIER: 36, BONE_ARCHER: 40, SPECTOR: 44, BONE_SNAKE: 48, GOLEM: 52, SHADE: 56, ARACHNE: 60 }
 				},
 				STATUS: {
 					HUMAN: {
@@ -137,14 +137,14 @@ var CONST = function(){
 						WIZARD:          { name:'WIZARD',          frame: 60, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:3, reverse:4 }
 					},
 					UNDEAD: {
-						SKELTON_DOG:     { name:'SKELTON_DOG',     frame: 96, hp:1, armor:TYPE.LIGHT, speed:1.4, damage:2, reverse:1 },
-						SKELTON_WARRIER: { name:'SKELTON_WARRIER', frame:100, hp:2, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:1 },
-						SKELTON_ARCHER:  { name:'SKELTON_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM, speed:1, damage:3, reverse:1 },
+						BONE_DOG:     { name:'BONE_DOG',     frame: 96, hp:1, armor:TYPE.LIGHT, speed:1.4, damage:2, reverse:1 },
+						BONE_WARRIER: { name:'BONE_WARRIER', frame:100, hp:2, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:1 },
+						BONE_ARCHER:  { name:'BONE_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM, speed:1, damage:3, reverse:1 },
 						SHADE:           { name:'SHADE',           frame:108, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, reverse:3 },
-						SKELTON_SNAKE:   { name:'SKELTON_SNAKE',   frame:144, hp:2, armor:TYPE.LIGHT, speed:1.3, damage:1, reverse:1 },
+						BONE_SNAKE:   { name:'BONE_SNAKE',   frame:144, hp:2, armor:TYPE.LIGHT, speed:1.3, damage:1, reverse:1 },
 						GOLEM:           { name:'GOLEM',           frame:148, hp:5, armor:TYPE.HEAVY, speed:0.5, damage:2, reverse:6 },
 						SPECTOR:         { name:'SPECTOR',         frame:152, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, reverse:3 },
-						UNDEAD_SPIDER:   { name:'UNDEAD_SPIDER',   frame:156, hp:3, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:4 }
+						ARACHNE:   { name:'ARACHNE',   frame:156, hp:3, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:4 }
 					}
 				},
 				AI: {
@@ -165,7 +165,7 @@ var CONST = function(){
 				CHIP_SIZE: 48,
 				FRAME: {
 					HUMAN: { LANCER: 0, WARRIOR: 1, KNIGHT: 2, ARCHER: 3, CLELIC: 4, FIRE_MAGE: 5, FROST_MAGE: 6, WIZARD: 7 },
-					UNDEAD: { SKELTON_DOG: 8, SKELTON_SNAKE: 9, SKELTON_WARRIER: 10, SKELTON_ARCHER: 11, GOLEM: 12, UNDEAD_SPIDER: 13, SHADE: 14, SPECTOR: 15 }
+					UNDEAD: { BONE_DOG: 8, BONE_SNAKE: 9, BONE_WARRIER: 10, BONE_ARCHER: 11, GOLEM: 12, ARACHNE: 13, SHADE: 14, SPECTOR: 15 }
 				},
 				USER: { POSITION: [ [0, 384], [48, 384], [96, 384], [144, 384], [0, 432], [48, 432], [96, 432], [144, 432] ] },
 				ENEMY: { }, PROP: { }
@@ -288,6 +288,9 @@ PUBLIC.init = function(config){
 
 	//set map
 	MAP.BASE = chipset = config.map;
+	for(i = 0, len = chipset.length; i < len; i++) {
+		chipset[i] = chipset[i].split('');
+	}
 
 	//mapdata init
 	(function(){
@@ -1278,7 +1281,7 @@ var EnemyAction = {
 	/* race: 'HUMAN', */ 
 	race: '', 
 	/* order: ['LANCER','WARRIOR','KNIGHT','ARCHER', 'CLELIC','FIRE_MAGE','FROST_MAGE','WIZARD'], */
-	/* order: ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE', 'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'], */
+	/* order: ['BONE_DOG', 'BONE_WARRIER', 'BONE_ARCHER', 'SHADE', 'BONE_SNAKE', 'GOLEM', 'SPECTOR', 'ARACHNE'], */
 	order: [],
 	init: function() {
 		var ea = EnemyAction, 
@@ -1291,7 +1294,7 @@ var EnemyAction = {
 
 		if(USER_RACE === 'HUMAN') {
 			ea.race = 'UNDEAD';
-			ea.order = ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE', 'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'];
+			ea.order = ['BONE_DOG', 'BONE_WARRIER', 'BONE_ARCHER', 'SHADE', 'BONE_SNAKE', 'GOLEM', 'SPECTOR', 'ARACHNE'];
 		}
 		else {
 			ea.race = 'HUMAN';
@@ -1497,14 +1500,14 @@ StatusViwer = function(config){
 //AMIDA Wars init
 AW.init({
 	//select race
-	race: 'HUMAN',
-	//race: 'UNDEAD',
+	/* race: 'HUMAN', */
+	race: 'UNDEAD',
 
 	//unit order
-	order: ['lancer','warrior','knight','archer',
-			'clelic','fire_mage','frost_mage','wizard'],
-	// order: ['skelton_dog','skelton_snake','skelton_warrier','skelton_archer',
-	// 		'golem','undead_spider','spector','shade'],
+	// order: ['lancer','warrior','knight','archer',
+	// 		'clelic','fire_mage','frost_mage','wizard'],
+	order: ['bone_dog','bone_snake','bone_warrier','bone_archer',
+			'golem','arachne','spector','shade'],
 
 	// easy map creater
 	/*
@@ -1514,15 +1517,15 @@ AW.init({
 	×:no way
 	*/
 	map: [
-'■×■×■×■×'.split(''), 
-'├─┤×│×│×'.split(''),
-'│×│×├─┤×'.split(''),
-'│×└┐│×│×'.split(''),
-'└┐×├┤×└┐'.split(''),
-'×│×│└┐×│'.split(''),
-'×├─┤×│×│'.split(''),
-'×│×│×├─┤'.split(''),
-'×□×□×□×□'.split('')
+'■×■×■×■×', 
+'├─┤×│×│×',
+'│×│×├─┤×',
+'│×└┐│×│×',
+'└┐×├┤×└┐',
+'×│×│└┐×│',
+'×├─┤×│×│',
+'×│×│×├─┤',
+'×□×□×□×□'
 ]
 });
 

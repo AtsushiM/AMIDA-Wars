@@ -4,7 +4,7 @@ var EnemyAction = {
 	/* race: 'HUMAN', */ 
 	race: '', 
 	/* order: ['LANCER','WARRIOR','KNIGHT','ARCHER', 'CLELIC','FIRE_MAGE','FROST_MAGE','WIZARD'], */
-	/* order: ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE', 'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'], */
+	/* order: ['BONE_DOG', 'BONE_WARRIER', 'BONE_ARCHER', 'SHADE', 'BONE_SNAKE', 'GOLEM', 'SPECTOR', 'ARACHNE'], */
 	order: [],
 	init: function() {
 		var ea = EnemyAction, 
@@ -17,7 +17,7 @@ var EnemyAction = {
 
 		if(USER_RACE === 'HUMAN') {
 			ea.race = 'UNDEAD';
-			ea.order = ['SKELTON_DOG', 'SKELTON_WARRIER', 'SKELTON_ARCHER', 'SHADE', 'SKELTON_SNAKE', 'GOLEM', 'SPECTOR', 'UNDEAD_SPIDER'];
+			ea.order = ['BONE_DOG', 'BONE_WARRIER', 'BONE_ARCHER', 'SHADE', 'BONE_SNAKE', 'GOLEM', 'SPECTOR', 'ARACHNE'];
 		}
 		else {
 			ea.race = 'HUMAN';
