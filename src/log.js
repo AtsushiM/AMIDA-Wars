@@ -33,6 +33,8 @@ var Log = {
 	},
 	send: function() {
 		Log.data.time = LABEL.COUNTDOWN.getDiff();
+
+		//TODO: DBにデータ保存
 		console.log(JSON.stringify(Log.data));
 	},
 	reset: function() {
