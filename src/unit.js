@@ -14,11 +14,6 @@ Unit = function(config){
 		chip_direction, default_frame,
 		mapPoint,checkMoveSquere,getCollision,walk,move;
 
-	if(mode === have.USER) {
-		moveVal = -moveVal;
-	}
-
-
 	//can user override prop
 	sprite.direction = 0;
 	sprite.image = image;
@@ -195,6 +190,12 @@ Unit = function(config){
 	sprite.myNo = UNITS.no;
 	UNITS[mode][UNITS.no] = sprite;
 	UNITS.no++;
+
+	if(mode === have.USER) {
+		moveVal = -moveVal;
+	}
+
+	Log.unit(sprite);
 
 	//add Layer
 	return addLayer({

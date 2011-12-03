@@ -66,11 +66,10 @@ Castle = function(config){
 	};
 
 	sprite.damage = function(unit) {
-		//TODO: ユニットごとに城に与えるダメージを決定
-		/* sprite.hp -= unit.damage; */
-		sprite.hp -= 1;
+		sprite.hp -= unit.siege;
 
 		if(sprite.hp <= 0) {
+			sprite.hp = 0;
 			sprite.broke();
 		}
 		else if(sprite.mhp / 2 >= sprite.hp) {
@@ -78,9 +77,7 @@ Castle = function(config){
 		}
 	};
 	sprite.broke = function() {
-		sprite.hp = 0;
-		sprite.opacity = 0;
-		sprite.base.opacity = 0;
+		sprite.hp = sprite.opacity = sprite.base.opacity = 0;
 	};
 	sprite.checkBreak = function(){
 		if(sprite.hp === 0) {

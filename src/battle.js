@@ -48,21 +48,25 @@ var Battle = {
 
 		//check death
 		if(unit1.checkDeath()) {
+			Log.death(unit1);
 			Battle.score(unit1);
 		}
 		if(unit2.checkDeath()) {
+			Log.death(unit2);
 			Battle.score(unit2);
 		}
 
 		MAP.PATH.vibrate(1);
 	}, 
 	siege: function(unit, castle) {
+		Log.siege(castle);
 		castle.damage(unit);
 		unit.kill();
 
 		MAP.PATH.vibrate(3);
 
 		if(castle.checkBreak()) {
+			Log.castle(castle);
 			Battle.score(castle);
 		}
 	}

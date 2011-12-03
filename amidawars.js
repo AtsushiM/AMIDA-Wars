@@ -14,6 +14,7 @@ W.onorientationchange = function(){
 };
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・音量調節、off
 ・リザルト画面作成
 ・種族選択画面を作成
 ・敵種族をランダム選択（最終的にはAI選択）
@@ -29,13 +30,11 @@ W.onorientationchange = function(){
 ・ヒーロー実装（自ユニットが死んだ回数や、敵城の状態等を見て使えるかどうか判断するなど）
 ・イラストを独自に
 
-
 //ユニット性能原案
 ・見た目の印象と実際の操作の乖離を少なくする。
 ・ユーザーは説明をみない、という前提でゴリ押しでもなんとかなる調整を行う。
 ・RTSらしさ、を少しでもいいから残す。
 
-■遠距離ユニットをどうするか
 
 ▼Human
 バランス型
@@ -127,24 +126,24 @@ var CONST = function(){
 				},
 				STATUS: {
 					HUMAN: {
-						WARRIOR:         { name:'WARRIOR',         frame:  0, hp:2, armor:TYPE.MIDIUM, speed:1, damage:3, reverse:4 },
-						LANCER:          { name:'LANCER',          frame:  4, hp:3, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:2 },
-						KNIGHT:          { name:'KNIGHT',          frame:  8, hp:4, armor:TYPE.HEAVY, speed:0.9, damage:2, reverse:7 },
-						ARCHER:          { name:'ARCHER',          frame: 12, hp:1, armor:TYPE.LIGHT, speed:1.1, damage:3, reverse:3 },
-						CLELIC:          { name:'CLELIC',          frame: 48, hp:1, armor:TYPE.NOARMOR, speed:0.5, damage:1, reverse:2 },
-						FIRE_MAGE:       { name:'FIRE_MAGE',       frame: 52, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, reverse:3 },
-						FROST_MAGE:      { name:'FROST_MAGE',      frame: 56, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, reverse:3 },
-						WIZARD:          { name:'WIZARD',          frame: 60, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:3, reverse:4 }
+						WARRIOR:      { name:'WARRIOR',      frame:  0, hp:2, armor:TYPE.MIDIUM,  speed:1,   damage:3, siege:1, reverse:4 },
+						LANCER:       { name:'LANCER',       frame:  4, hp:3, armor:TYPE.MIDIUM,  speed:1,   damage:2, siege:1, reverse:2 },
+						KNIGHT:       { name:'KNIGHT',       frame:  8, hp:4, armor:TYPE.HEAVY,   speed:0.9, damage:2, siege:1, reverse:7 },
+						ARCHER:       { name:'ARCHER',       frame: 12, hp:1, armor:TYPE.LIGHT,   speed:1.1, damage:3, siege:1, reverse:3 },
+						CLELIC:       { name:'CLELIC',       frame: 48, hp:1, armor:TYPE.NOARMOR, speed:0.5, damage:1, siege:1, reverse:2 },
+						FIRE_MAGE:    { name:'FIRE_MAGE',    frame: 52, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, siege:1, reverse:3 },
+						FROST_MAGE:   { name:'FROST_MAGE',   frame: 56, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, siege:1, reverse:3 },
+						WIZARD:       { name:'WIZARD',       frame: 60, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:3, siege:1, reverse:4 }
 					},
 					UNDEAD: {
-						BONE_DOG:     { name:'BONE_DOG',     frame: 96, hp:1, armor:TYPE.LIGHT, speed:1.4, damage:2, reverse:1 },
-						BONE_WARRIER: { name:'BONE_WARRIER', frame:100, hp:2, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:1 },
-						BONE_ARCHER:  { name:'BONE_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM, speed:1, damage:3, reverse:1 },
-						SHADE:           { name:'SHADE',           frame:108, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, reverse:3 },
-						BONE_SNAKE:   { name:'BONE_SNAKE',   frame:144, hp:2, armor:TYPE.LIGHT, speed:1.3, damage:1, reverse:1 },
-						GOLEM:           { name:'GOLEM',           frame:148, hp:5, armor:TYPE.HEAVY, speed:0.5, damage:2, reverse:6 },
-						SPECTOR:         { name:'SPECTOR',         frame:152, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, reverse:3 },
-						ARACHNE:   { name:'ARACHNE',   frame:156, hp:3, armor:TYPE.MIDIUM, speed:1, damage:2, reverse:4 }
+						BONE_DOG:     { name:'BONE_DOG',     frame: 96, hp:1, armor:TYPE.LIGHT,   speed:1.4, damage:2, siege:1, reverse:1 },
+						BONE_WARRIER: { name:'BONE_WARRIER', frame:100, hp:2, armor:TYPE.MIDIUM,  speed:1,   damage:2, siege:1, reverse:1 },
+						BONE_ARCHER:  { name:'BONE_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM,  speed:1,   damage:3, siege:1, reverse:1 },
+						SHADE:        { name:'SHADE',        frame:108, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, siege:1, reverse:3 },
+						BONE_SNAKE:   { name:'BONE_SNAKE',   frame:144, hp:2, armor:TYPE.LIGHT,   speed:1.3, damage:1, siege:1, reverse:1 },
+						GOLEM:        { name:'GOLEM',        frame:148, hp:5, armor:TYPE.HEAVY,   speed:0.5, damage:2, siege:10, reverse:6 },
+						SPECTOR:      { name:'SPECTOR',      frame:152, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, siege:1, reverse:3 },
+						ARACHNE:      { name:'ARACHNE',      frame:156, hp:3, armor:TYPE.MIDIUM,  speed:1,   damage:2, siege:1, reverse:4 }
 					}
 				},
 				AI: {
@@ -589,7 +588,7 @@ Amida = function(){
 					score = 0;
 				}
 
-				//get time score
+				Log.end();
 
 				score = LABEL.SCORE.add(score);
 				GAME.end(score, end+':'+score);
@@ -600,6 +599,7 @@ Amida = function(){
 		Surveillant.add(function() {
 			if(gameStart) {
 				var i, thumbs;
+				Log.init();
 				thumbs = THUMBS.USER;
 				EnemyAction.init();
 				countdown.setAfter(function() {
@@ -718,11 +718,10 @@ Castle = function(config){
 	};
 
 	sprite.damage = function(unit) {
-		//TODO: ユニットごとに城に与えるダメージを決定
-		/* sprite.hp -= unit.damage; */
-		sprite.hp -= 1;
+		sprite.hp -= unit.siege;
 
 		if(sprite.hp <= 0) {
+			sprite.hp = 0;
 			sprite.broke();
 		}
 		else if(sprite.mhp / 2 >= sprite.hp) {
@@ -730,9 +729,7 @@ Castle = function(config){
 		}
 	};
 	sprite.broke = function() {
-		sprite.hp = 0;
-		sprite.opacity = 0;
-		sprite.base.opacity = 0;
+		sprite.hp = sprite.opacity = sprite.base.opacity = 0;
 	};
 	sprite.checkBreak = function(){
 		if(sprite.hp === 0) {
@@ -958,11 +955,6 @@ Unit = function(config){
 		chip_direction, default_frame,
 		mapPoint,checkMoveSquere,getCollision,walk,move;
 
-	if(mode === have.USER) {
-		moveVal = -moveVal;
-	}
-
-
 	//can user override prop
 	sprite.direction = 0;
 	sprite.image = image;
@@ -1139,6 +1131,12 @@ Unit = function(config){
 	sprite.myNo = UNITS.no;
 	UNITS[mode][UNITS.no] = sprite;
 	UNITS.no++;
+
+	if(mode === have.USER) {
+		moveVal = -moveVal;
+	}
+
+	Log.unit(sprite);
 
 	//add Layer
 	return addLayer({
@@ -1390,21 +1388,25 @@ var Battle = {
 
 		//check death
 		if(unit1.checkDeath()) {
+			Log.death(unit1);
 			Battle.score(unit1);
 		}
 		if(unit2.checkDeath()) {
+			Log.death(unit2);
 			Battle.score(unit2);
 		}
 
 		MAP.PATH.vibrate(1);
 	}, 
 	siege: function(unit, castle) {
+		Log.siege(castle);
 		castle.damage(unit);
 		unit.kill();
 
 		MAP.PATH.vibrate(3);
 
 		if(castle.checkBreak()) {
+			Log.castle(castle);
 			Battle.score(castle);
 		}
 	}
@@ -1494,6 +1496,74 @@ StatusViwer = function(config){
 	group.addChild(unit);
 
 	return group;
+};
+var Log = {
+	logid: 0, 
+	data: {
+		time: 0, 
+		unit: {
+			USER: 0, 
+			ENEMY: 0
+		}, 
+		death: {
+			USER: 0, 
+			ENEMY: 0
+		}, 
+		siege: {
+			USER: 0, 
+			ENEMY: 0
+		}, 
+		castle: {
+			USER: 0, 
+			ENEMY: 0
+		}
+	}, 
+	unit: function(unit) {
+		Log.data.unit[unit.mode]++;
+	},
+	death: function(unit) {
+		Log.data.death[unit.mode]++;
+	},
+	siege: function(castle) {
+		Log.data.siege[castle.mode]++;
+	},
+	castle: function(castle) {
+		Log.data.castle[castle.mode]++;
+	},
+	send: function() {
+		Log.data.time = LABEL.COUNTDOWN.getDiff();
+		console.log(JSON.stringify(Log.data));
+	},
+	reset: function() {
+		Log.data = {
+			time: 0, 
+			unit: {
+				USER: 0, 
+				ENEMY: 0
+			}, 
+			death: {
+				USER: 0, 
+				ENEMY: 0
+			}, 
+			siege: {
+				USER: 0, 
+				ENEMY: 0
+			}, 
+			castle: {
+				USER: 0, 
+				ENEMY: 0
+			}
+		};
+	}, 
+	init: function() {
+		Log.reset();
+		Log.end();
+		Log.logid = setInterval(Log.send, 30000);
+	},
+	end: function() {
+		Log.send();
+		clearInterval(Log.logid);
+	}
 };
 	return PUBLIC;
 }(window));

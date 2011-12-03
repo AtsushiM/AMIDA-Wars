@@ -193,7 +193,7 @@ Amida = function(){
 					score = 0;
 				}
 
-				//get time score
+				Log.end();
 
 				score = LABEL.SCORE.add(score);
 				GAME.end(score, end+':'+score);
@@ -204,6 +204,7 @@ Amida = function(){
 		Surveillant.add(function() {
 			if(gameStart) {
 				var i, thumbs;
+				Log.init();
 				thumbs = THUMBS.USER;
 				EnemyAction.init();
 				countdown.setAfter(function() {
