@@ -202,29 +202,12 @@ Amida = function(){
 			 * @function
 			 */
 			endAction = function() {
-				/* GAME.removeEventListener(enchant.Event.ENTER_FRAME, Surveillant.exefunc); */
+				var result = new Result(end);
+
 				Surveillant.end();
 				EnemyAction.end();
-
-				if(end === have.ENEMY) {
-					end = 'WIN';
-					score = CONST_CASH.POINT.WIN +  countdown.getDiff() * CONST_CASH.POINT.TIME;
-				}
-				else if(end === have.USER) {
-					end = 'LOSE';
-					score = CONST_CASH.POINT.LOSE;
-				}
-				else {
-					end = 'DRAW';
-					score = 0;
-				}
-
 				Log.end();
-
-				score = LABEL.SCORE.add(score);
-				GAME.end(score, end+':'+score);
 				countdown.stop();
-				alert(end+':'+score);
 			};
 
 		Surveillant.add(function() {
@@ -245,6 +228,7 @@ Amida = function(){
 					}
 				}
 				Surveillant.remove('playStart');
+				GAME.popScene();
 				return true;
 			}
 			return false;
@@ -280,4 +264,7 @@ Amida = function(){
 		}, 'playEnd');
 		Surveillant.init();
 	}());
+
+	var scene = new Scene();
+	GAME.pushScene(scene);
 };

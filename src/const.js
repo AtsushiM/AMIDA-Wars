@@ -87,7 +87,7 @@ var CONST = function(){
 		}, 
 		MAP: function(){
 			return {
-				IMAGE: 'map.gif',
+				IMAGE: 'map.png',
 				W: 320, H: 480, CHIP_SIZE: 32
 			};
 		},

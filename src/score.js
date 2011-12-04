@@ -36,6 +36,9 @@ Score = function(config){
 		ret.update = function() {
 			label.text = 'SCORE : ' + ret.total;
 		};
+		ret.get = function() {
+			return ret.total;
+		};
 		ret.add = function(score) {
 			add(score);
 			ret.update();
