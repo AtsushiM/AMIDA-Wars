@@ -1,3 +1,9 @@
+/**
+ * Create Effect Object
+ * @name Effect
+ * @function
+ * @param config 
+ */
 Effect = function(config){
 	var size = CONST_CASH.UNIT.CHIP_SIZE, 
 		frame_start = config.frames[0], 

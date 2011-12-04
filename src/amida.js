@@ -29,6 +29,12 @@ Amida = function(){
 	map.loadData(chipset);
 
 	//map vibration
+	/**
+	 * vibration map
+	 * @name vibrate
+	 * @function
+	 * @param num 
+	 */
 	map.vibrate = function(num) {
 		var style = DOM.style;
 
@@ -54,6 +60,13 @@ Amida = function(){
 	};
 
 	//map methods
+    /**
+     * get naw squere
+     * @name getSquere
+     * @function
+     * @param obj 
+     * @return 
+     */
 	map.getSquere = function(obj){
 		var x, y, f = Math.floor;
 
@@ -69,6 +82,13 @@ Amida = function(){
 		return map.getSquere(obj);
 	};
 
+	/**
+	 * get map colision
+	 * @name getCollision
+	 * @function
+	 * @param obj 
+	 * @return 
+	 */
 	map.getCollision = function(obj){
 		var unitPoint = map.getSquere(obj),
 			mc = MAP.COLLISION,
@@ -176,8 +196,14 @@ Amida = function(){
 	(function() {
 		var end = false, 
 			have = CONST_CASH.HAVE, 
+			/**
+			 * game end action
+			 * @name endAction
+			 * @function
+			 */
 			endAction = function() {
-				GAME.removeEventListener(enchant.Event.ENTER_FRAME, Surveillant.exefunc);
+				/* GAME.removeEventListener(enchant.Event.ENTER_FRAME, Surveillant.exefunc); */
+				Surveillant.end();
 				EnemyAction.end();
 
 				if(end === have.ENEMY) {
@@ -218,7 +244,7 @@ Amida = function(){
 						thumbs[i].init();
 					}
 				}
-				delete Surveillant.functions.playStart;
+				Surveillant.remove('playStart');
 				return true;
 			}
 			return false;

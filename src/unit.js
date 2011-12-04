@@ -1,3 +1,9 @@
+/**
+ * Create unit object
+ * @name Unit
+ * @function
+ * @param config 
+ */
 Unit = function(config){
 	var size = CONST_CASH.UNIT.CHIP_SIZE,
 		map_chip_size = CONST_CASH.MAP.CHIP_SIZE,
@@ -22,6 +28,13 @@ Unit = function(config){
 	//set Class
 	sprite.type = CONST_CASH.TYPE.UNIT;
 
+	/**
+	 * unit attack process
+	 * @name attack
+	 * @function
+	 * @param vsUnit 
+	 * @return 
+	 */
 	sprite.attack = function(vsUnit) {
 		vsUnit.hp -= sprite.damage;
 		if(vsUnit.hp <= 0) {
@@ -29,6 +42,11 @@ Unit = function(config){
 		}
 		return vsUnit.hp;
 	};
+	/**
+	 * unit kill process
+	 * @name kill
+	 * @function
+	 */
 	sprite.kill = function(){
 		var x = sprite.x, 
 			y = sprite.y, 
@@ -56,6 +74,12 @@ Unit = function(config){
 		}
 	};
 
+	/**
+	 * check unit death
+	 * @name checkDeath
+	 * @function
+	 * @return 
+	 */
 	sprite.checkDeath = function() {
 		if(sprite.hp === 0) {
 			return true;
@@ -65,16 +89,34 @@ Unit = function(config){
 
 	default_frame = sprite.frame;
 
+	/**
+	 * change sprite view
+	 * @name changeUnit
+	 * @function
+	 * @param unit 
+	 */
 	sprite.changeUnit = function(unit) {
 		default_frame = unit.frame;
 	};
 
+	/**
+	 * get sprite map-point
+	 * @name mapPoint
+	 * @function
+	 * @return 
+	 */
 	mapPoint = function(){
 		return MAP.PATH.getSquere(sprite);
 	};
 	//set before map squere point
 	sprite.beforePoint = mapPoint();
 
+	/**
+	 * check unit moved squere
+	 * @name checkMoveSquere
+	 * @function
+	 * @return 
+	 */
 	checkMoveSquere = function(){
 		var ret = false;
 
@@ -110,10 +152,21 @@ Unit = function(config){
 		}
 		return ret;
 	};
+	/**
+	 * get map collision
+	 * @name getCollision
+	 * @function
+	 * @return 
+	 */
 	getCollision = function(){
 		return MAP.PATH.getCollision(sprite);
 	};
 
+	/**
+	 * effect unit walk
+	 * @name walk
+	 * @function
+	 */
 	walk = function() {
 		// animation
 		if(GAME.frame % 5 === 0){
@@ -131,6 +184,11 @@ Unit = function(config){
 		sprite.frame = default_frame + walk_true * line_num + sprite.direction;
 	};
 
+	/**
+	 * unit move action
+	 * @name move
+	 * @function
+	 */
 	move = function(){
 		var d = sprite.direction,
 			s = sprite.speed,
@@ -179,6 +237,11 @@ Unit = function(config){
 	//unit action
 	sprite.addEventListener(enchant.Event.ENTER_FRAME,move);
 
+	/**
+	 * unit stop and walk effect
+	 * @name stay
+	 * @function
+	 */
 	sprite.stay = function() {
 		sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
 		sprite.addEventListener(enchant.Event.ENTER_FRAME, function() {

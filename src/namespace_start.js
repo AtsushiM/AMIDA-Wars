@@ -1,3 +1,4 @@
+//init enchant.js
 enchant();
 var AW = (function(W){
 //set scroll

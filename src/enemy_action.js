@@ -1,3 +1,4 @@
+//Enemy AI
 var EnemyAction = {
 	aiid: 0, 
 	/* race: 'UNDEAD', */
@@ -6,6 +7,11 @@ var EnemyAction = {
 	/* order: ['LANCER','WARRIOR','KNIGHT','ARCHER', 'CLELIC','FIRE_MAGE','FROST_MAGE','WIZARD'], */
 	/* order: ['BONE_DOG', 'BONE_WARRIER', 'BONE_ARCHER', 'SHADE', 'BONE_SNAKE', 'GOLEM', 'SPECTOR', 'ARACHNE'], */
 	order: [],
+	/**
+	 * start enemy action
+	 * @name init
+	 * @function
+	 */
 	init: function() {
 		var ea = EnemyAction, 
 			mode = CONST_CASH.HAVE.ENEMY, 
@@ -59,6 +65,11 @@ var EnemyAction = {
 			}
 		}, 3000);
 	}, 
+	/**
+	 * stop enemy action
+	 * @name end
+	 * @function
+	 */
 	end: function() {
 		clearInterval(EnemyAction.aiid);
 	}

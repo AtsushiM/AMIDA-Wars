@@ -1,3 +1,10 @@
+/**
+ * Create StatusViewer Object
+ * @name StatusViwer
+ * @function
+ * @param config 
+ * @return 
+ */
 StatusViwer = function(config){
 	var label = new Label(), 
 		group = new Group(), 

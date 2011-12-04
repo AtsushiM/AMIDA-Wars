@@ -1,3 +1,4 @@
+//loged user action
 var Log = {
 	logid: 0, 
 	data: {

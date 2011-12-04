@@ -1,3 +1,9 @@
+/**
+ * Create thumbnail object
+ * @name Thumb
+ * @function
+ * @param config 
+ */
 Thumb = function(config){
 	var size = CONST_CASH.THUMB.CHIP_SIZE,
 		image = GAME.assets[CONST_CASH.THUMB.IMAGE],
@@ -10,6 +16,13 @@ Thumb = function(config){
 		eEv = enchant.Event,
 		statusViwer = LABEL.STATUS_VIEWER,
 		countdown = new Label(),
+		/**
+		 * effect focus castle
+		 * @name focusMyCastle
+		 * @function
+		 * @param obj 
+		 * @return 
+		 */
 		focusMyCastle = function(obj) {
 			var hit = false,
 				castles = CASTLE.USER,
@@ -28,6 +41,13 @@ Thumb = function(config){
 			}
 			return hit;
 		}, 
+		/**
+		 * hit thumbnail to castle
+		 * @name hitMyCastle
+		 * @function
+		 * @param obj 
+		 * @return 
+		 */
 		hitMyCastle = function(obj){
 			var hit = false,
 				castles = CASTLE.USER,
@@ -43,6 +63,11 @@ Thumb = function(config){
 			}
 			return hit;
 		},
+		/**
+		 * effect drag process
+		 * @name dragOnCastle
+		 * @function
+		 */
 		dragOnCastle = function() {
 			var castles = CASTLE.USER, 
 				castle, 
@@ -55,6 +80,11 @@ Thumb = function(config){
 				}
 			}
 		}, 
+		/**
+		 * stop effect drag process
+		 * @name dragOffCastle
+		 * @function
+		 */
 		dragOffCastle = function() {
 			var castles = CASTLE.USER, 
 				castle, 
@@ -151,16 +181,32 @@ Thumb = function(config){
 	});
 
 	//sprite drag
+	/**
+	 * can sprite drag
+	 * @name dragStart
+	 * @function
+	 */
 	sprite.dragStart = function(){
 		sprite.canDrag = true;
 		sprite.opacity = 1;
 	};
+	/**
+	 * can't sprite drag
+	 * @name dragStop
+	 * @function
+	 */
 	sprite.dragStop = function() {
 		sprite.canDrag = false;
 		sprite.opacity = 0;
 	};
 
 	//reverse
+	/**
+	 * reverse process
+	 * @name reverse
+	 * @function
+	 * @param unit 
+	 */
 	sprite.reverse = function(unit) {
 		var count = Math.ceil(unit.reverse), 
 			id = setInterval(function() {
@@ -183,6 +229,12 @@ Thumb = function(config){
 	//set dragmode
 	sprite.dragStop();
 	sprite.opacity = 0.3;
+
+	/**
+	 * init unit object
+	 * @name init
+	 * @function
+	 */
 	sprite.init = function() {
 		sprite.reverse(sprite.unit);
 	};

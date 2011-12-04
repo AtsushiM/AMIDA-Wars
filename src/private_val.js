@@ -27,6 +27,14 @@ var GAME,
 		HEAVY:'NOARMOR',
 		NOARMOR:'LIGHT'
 	},
+	/**
+	 * override object property
+	 * @name propOverride
+	 * @function
+	 * @param prop 
+	 * @param config 
+	 * @return 
+	 */
 	propOverride = function(prop,config){
 		if(prop === undefined){
 			prop = {};
@@ -38,6 +46,13 @@ var GAME,
 		}
 		return prop;
 	},
+	/**
+	 * add object to layer
+	 * @name addLayer
+	 * @function
+	 * @param config 
+	 * @return 
+	 */
 	addLayer = function(config){
 		config.layer.addChild(config.sprite);
 		return config.sprite;

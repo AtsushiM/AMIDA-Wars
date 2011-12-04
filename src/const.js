@@ -1,3 +1,8 @@
+/**
+* CONSTANT Valiables
+* @name CONST
+* @function
+*/
 var CONST = function(){
 	return {
 		TIMELIMIT: function() {

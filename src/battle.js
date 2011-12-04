@@ -1,4 +1,9 @@
 var Battle = {
+	/**
+	 * Battle init
+	 * @name init
+	 * @function
+	 */
 	init: function() {
 		var func = function() {
 			var units_user = UNITS.USER, 
@@ -22,6 +27,12 @@ var Battle = {
 		};
 		Surveillant.add(func, 'battle');
 	}, 
+	/**
+	 * 
+	 * @name score
+	 * @function
+	 * @param obj 
+	 */
 	score: function(obj) {
 		var have = CONST_CASH.HAVE, 
 			obj_mode = obj.mode, 
@@ -37,6 +48,13 @@ var Battle = {
 			score.add(-point[obj_type]);
 		}
 	}, 
+	/**
+	 * battole unit and unit
+	 * @name unitAndUnit
+	 * @function
+	 * @param unit1 
+	 * @param unit2 
+	 */
 	unitAndUnit: function(unit1, unit2) {
 		var unit1_hp = unit1.hp, 
 			unit2_hp = unit2.hp;
@@ -58,6 +76,13 @@ var Battle = {
 
 		MAP.PATH.vibrate(1);
 	}, 
+	/**
+	 * battle unit and castle
+	 * @name siege
+	 * @function
+	 * @param unit 
+	 * @param castle 
+	 */
 	siege: function(unit, castle) {
 		Log.siege(castle);
 		castle.damage(unit);
