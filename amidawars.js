@@ -551,7 +551,7 @@ Amida = function(){
         score_position = CONST_CASH.SCORE.POSITION,
         countdown, countdown_position = CONST_CASH.COUNTDOWN.POSITION, 
         statusviewer, statusviewer_position = CONST_CASH.STATUS_VIEWER.POSITION, 
-        i, j, len, ary, name, castle, thumb, score, animeID;
+        i, j, len, ary, castle, score, animeID;
 
     DOM  = document.getElementById('enchant-stage');
     
