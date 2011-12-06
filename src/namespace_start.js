@@ -3,16 +3,14 @@ enchant();
 var AW = (function(W){
 //set scroll
 var doScroll = function() {
-	if (W.pageYOffset === 0) {
-		W.scrollTo(0,1);
-	}
+    if (W.pageYOffset === 0) {
+        W.scrollTo(0,1);
+    }
 };
-W.addEventListener('load', function() {
-	setTimeout(doScroll, 100);
-}, false);
 W.onorientationchange = function(){
-	setTimeout(doScroll, 100);
+    setTimeout(doScroll, 100);
 };
+W.addEventListener('load', W.onorientationchange, false);
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
 ・音量調節、off
