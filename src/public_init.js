@@ -12,12 +12,12 @@ PUBLIC.init = function(config){
             EFFECT: CONST_CASH.EFFECT.IMAGE, 
             STATUS_VIEWER: CONST_CASH.STATUS_VIEWER.IMAGE
         },
-        sound =  {
-            BGM: CONST_CASH.SOUND.BGM, 
-            EFFECT: {
-                EXPLOSION: CONST_CASH.SOUND.EFFECT.EXPLOSION
-            }
-        },
+        // sound =  {
+        //     BGM: CONST_CASH.SOUND.BGM, 
+        //     EFFECT: {
+        //         EXPLOSION: CONST_CASH.SOUND.EFFECT.EXPLOSION
+        //     }
+        // },
         size = {
             W: CONST_CASH.MAP.W,
             H: CONST_CASH.MAP.H
@@ -135,7 +135,8 @@ PUBLIC.init = function(config){
     GAME = new Game(size.W,size.H);
     //preload set
     /* GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT, sound.BGM); */
-    GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT,img.STATUS_VIEWER, sound.EFFECT.EXPLOSION);
+    /* GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT,img.STATUS_VIEWER, sound.EFFECT.EXPLOSION); */
+    GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT,img.STATUS_VIEWER);
     //Game onloadSet
     GAME.onload = Amida;
     //Game Start

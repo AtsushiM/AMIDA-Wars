@@ -173,7 +173,7 @@ Amida = function(){
     root.addChild(countdown);
 
     //set sound
-    SOUND.EFFECT.EXPLOSION = GAME.assets[CONST_CASH.SOUND.EFFECT.EXPLOSION];
+    /* SOUND.EFFECT.EXPLOSION = GAME.assets[CONST_CASH.SOUND.EFFECT.EXPLOSION]; */
 
     //Battle init
     Battle.init();

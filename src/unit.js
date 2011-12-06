@@ -57,7 +57,8 @@ Unit = function(config){
                 frames: CONST_CASH.EFFECT.FRAME.EXPLOSION
             });
 
-        SOUND.EFFECT.EXPLOSION.play();
+        //TODO: Effectクラスに移動
+        /* SOUND.EFFECT.EXPLOSION.play(); */
 
         delete UNITS[mode][sprite.myNo];
         GROUP[mode].UNIT.removeChild(sprite);
