@@ -68,7 +68,7 @@ Castle = function(config){
      * @function
      */
     blinkControll = function() {
-        if(GAME.frame % 4 === 0) {
+        if(GAME.frame % 2 === 0) {
             sprite.opacity += 0.1 * opacity_sign;
             if(sprite.opacity <= 0.5) {
                 opacity_sign = 1;
