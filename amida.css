@@ -15,6 +15,7 @@ h1, h2, h3, h4, h5, h6, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
+    min-height: 500px;
 	color: #000;
 	font-family: sans-serif;
 	font-size: 13px;

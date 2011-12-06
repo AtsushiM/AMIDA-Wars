@@ -56,7 +56,7 @@ RaceSelect = function(){
     human_thumb.image = undead_thumb.image = image;
 
     //set position
-    human.x = undead.x = 50;
+    human.x = undead.x = 30;
     human.y = 100;
     undead.y = 200;
 
@@ -70,11 +70,12 @@ RaceSelect = function(){
     human_label.font = human_txt.font = undead_label.font = undead_txt.font = '12px/1.5 ' + CONST_CASH.FONT;
     human_label.text = '<b>HUMAN</b>';
     undead_label.text = '<b>UNDEAD</b>';
-    human_txt.text = 'text sample';
-    undead_txt.text = 'text sample';
-    human_label.x = undead_label.x = 60;
-    human_label.y = undead_label.y = 5;
-    human_txt.x = undead_txt.x = 60;
+    human_txt.text = '使いやすく、高性能な種族。少数精鋭の混成部隊。<br />バランスの良い陸戦隊と効果の強力な魔術師の組み合わせで敵を葬る。';
+    undead_txt.text = '扱いづらい尖った性能を持つユニットが多い種族。<br />操作量に自信があるならば途切れること無く攻め続けられる。';
+    human_label.x = undead_label.x = 50;
+    human_label.y = undead_label.y = 0;
+    human_txt.width = undead_txt.width = 200;
+    human_txt.x = undead_txt.x = 50;
     human_txt.y = undead_txt.y = 20;
 
     //add child
@@ -89,17 +90,6 @@ RaceSelect = function(){
     scene.addChild(human);
     scene.addChild(undead);
 
-    /*
-            case 'HUMAN': 
-                ea.race = 'UNDEAD';
-                ea.order = ['BONE_DOG', 'BONE_WARRIER', 'BONE_ARCHER', 'SHADE', 'BONE_SNAKE', 'GOLEM', 'SPECTOR', 'ARACHNE'];
-                break;
-
-            case 'UNDEAD': 
-                ea.race = 'HUMAN';
-                ea.order = ['LANCER','WARRIOR','KNIGHT','ARCHER', 'CLELIC','FIRE_MAGE','FROST_MAGE','WIZARD'];
-                break;
-    */
     human.addEventListener(enchant.Event.TOUCH_END, function() {
         selectAfter( {
             race: 'HUMAN', 
@@ -109,7 +99,7 @@ RaceSelect = function(){
     undead.addEventListener(enchant.Event.TOUCH_END, function() {
         selectAfter( {
             race: 'UNDEAD', 
-            order: ['BONE_DOG', 'BONE_WARRIER', 'BONE_ARCHER', 'SHADE', 'BONE_SNAKE', 'GOLEM', 'SPECTOR', 'ARACHNE']
+            order: ['BONE_WARRIER', 'BONE_ARCHER', 'BONE_DOG', 'BONE_SNAKE', 'GOLEM', 'ARACHNE', 'SHADE', 'SPECTOR']
         });
     });
 

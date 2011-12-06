@@ -23,6 +23,7 @@ StatusViwer = function(config){
 
     bg.image = bg_image;
     bg.frame = 0;
+    bg.opacity = 0;
 
     //set label font
     label.font = '9px/1.5 ' + CONST_CASH.FONT;
@@ -68,6 +69,7 @@ StatusViwer = function(config){
                 'DownTime: ' + sta.reverse + 'sec';
             }
         }
+        bg.opacity = 1;
     };
 
     group.addChild(bg);
