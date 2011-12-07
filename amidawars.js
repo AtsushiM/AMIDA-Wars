@@ -430,10 +430,13 @@ RaceSelect = function(){
         undead_txt = new Label(), 
         undead_bg = new Sprite(250, 100), 
         selectAfter = function(config) {
-            var i, len, name, order,
+            var i, len, name, order, pos, id, 
+            numlabel = new Label(), 
             thumbs = THUMBS.USER, 
             user_mode = CONST_CASH.HAVE.USER, 
-            thumb_position = CONST_CASH.THUMB.USER.POSITION;
+            cons_user = thumbcons.USER, 
+            positions = cons_user.POSITION, 
+            frames = thumbcons.FRAME;
 
             //set user race
             USER_RACE = config.race;
@@ -443,25 +446,55 @@ RaceSelect = function(){
 
             //set user order
             for(i = 0, len = order.length; i < len; i++) {
+                name = order[i].toUpperCase();
+                pos = positions[i];
                 USER_ORDER[i] = {
-                    name: order[i].toUpperCase(), 
+                    name: name, 
                     onMap: false
                 };
-                name = USER_ORDER[i].name;
                 thumbs[i] = new Thumb({
                     mode: user_mode,
                     name: name,
-                    frame: CONST_CASH.THUMB.FRAME[USER_RACE][name],
-                    x: thumb_position[i][0],
-                    y: thumb_position[i][1]
+                    frame: frames[USER_RACE][name],
+                    x: pos[0],
+                    y: pos[1]
                 });
-                thumbs[i].init();
             }
-            Log.init();
-            EnemyAction.init();
-            LABEL.COUNTDOWN.init();
+
+            numlabel.text = '⑤';
+            numlabel.font = '150px/1.5 ' + CONST_CASH.FONT;
+            numlabel.color = '#fff';
+            numlabel.x = 90;
+            numlabel.y = 100;
+ 
+            GAME.rootScene.addChild(numlabel);
             LABEL.STATUS_VIEWER.init();
+
             GAME.popScene();
+            aid = setTimeout(function(){
+                numlabel.text = '④';
+                aid = setTimeout(function(){
+                    numlabel.text = '③';
+                        aid = setTimeout(function(){
+                            numlabel.text = '②';
+                                aid = setTimeout(function(){
+                                    numlabel.text = '①';
+                                    aid = setTimeout(function(){
+                                        MAP.PATH.vibrate(3);
+
+                                        //set user order
+                                        for(i = 0, len = order.length; i < len; i++) {
+                                            thumbs[i].init();
+                                        }
+                                        Log.init();
+                                        EnemyAction.init();
+                                        LABEL.COUNTDOWN.init();
+                                        GAME.rootScene.removeChild(numlabel);
+                                    }, 1000);
+                                }, 1000);
+                        }, 1000);
+                }, 1000);
+            }, 1000);
         };
 
 
