@@ -4,7 +4,7 @@
  * @function
  * @param config 
  */
-PUBLIC.init = function(config){
+PUBLIC.init = function(){
     var img = {
             UNIT: CONST_CASH.UNIT.IMAGE,
             THUMB: CONST_CASH.THUMB.IMAGE,
@@ -27,7 +27,7 @@ PUBLIC.init = function(config){
         chipset, i, len;
 
     //set map
-    MAP.BASE = chipset = config.map;
+    MAP.BASE = chipset = RandamMap();
     for(i = 0, len = chipset.length; i < len; i++) {
         chipset[i] = chipset[i].split('');
     }
