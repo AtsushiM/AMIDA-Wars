@@ -13,6 +13,9 @@ W.onorientationchange = function(){
 W.addEventListener('load', W.onorientationchange, false);
 /* TODO:
 ☆各クラスの最適＆効率化（常時タスク）
+・ユニットの上部にHPを表示（パーソナルカラーで色分け）
+・チーム制の導入を考える（GPS座標など）
+・国力の要素を入れるか（シンプルさを崩さない実装）
 ・リザルト画面作成
 ・種族選択画面を作成
 ・敵種族をランダム選択（最終的にはAI選択）
