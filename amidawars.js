@@ -431,12 +431,13 @@ var RandamMap = function() {
     castleBeyond = map.length - 2, 
     canputline = map[0].length - 2, 
     arr = [], 
-    i, j, x, y, r, a, len, chip, flg; 
+    i, j, x, y, r, a, len, chip, chip0, chip1, chip2, chip3, flg, 
+    MF = Math.floor, MR = Math.random; 
 
     // 敵と味方の城を結びつける
     for(i = 0; i < castleNum; i++) {
         y = i * 2; // 水平方向の位置
-        r = Math.floor(Math.random() * castleBeyond) + 1; // 曲がる場所
+        r = MF(MR() * castleBeyond) + 1; // 曲がる場所
         
         for(j = 1; j <= castleBeyond; j++) {
             chip = map[j];
@@ -455,27 +456,14 @@ var RandamMap = function() {
     for(i = 0; i < canputline; i++) {
         for(j = 1; j <= castleBeyond; j++) {
             chip = map[j];
-            if( chip[i] === '│' ) {
-                flag = false;
+            chip0 = chip[i];
+            if(chip0 === '│') {
+                chip1 = chip[i + 1];
+                chip2 = chip[i + 2];
+                chip3 = chip[i + 3];
                 
                 // 横線が引けるのは 3 パターン。適当に網羅。
-                
-                // 隣に縦線の場合
-                if(chip[i + 1] === '│' ) { 
-                    flag = true;
-                }
-                // ひとつ空けて縦線の場合
-                else if(chip[i + 1] === '×' && chip[i + 2] === '│') {
-                    flag = true;
-                }
-                // ふたつ空けて縦線の場合
-                else if( i + 3 <= 7) {
-                    if( chip[i + 1] === '×' && chip[i + 2] === '×' && chip[i + 3] === '│') {
-                        flag = true;
-                    }
-                }
-                
-                if(flag === true) {
+                if( chip1 === '│' || (chip1 === '×' && chip2 === '│') || (i + 3 <= 7 && chip1 === '×' && chip2 === '×' && chip3 === '│')) {
                     arr.push({
                         x: i,
                         y : j
@@ -486,10 +474,10 @@ var RandamMap = function() {
     }
 
     // 横線が引ける場所をランダムに並べ替え
+    len = arr.length - 1;
     for(i = 0; i < 100; i++) {
-        r = Math.floor(Math.random() * (arr.length - 1) ) + 1;
+        r = MF(MR() * len) + 1;
         a = arr[0];
-        
         arr[0] = arr[r];
         arr[r] = a;
     }
@@ -501,26 +489,29 @@ var RandamMap = function() {
         y = chip.y;
 
         chip = map[y];
+        chip1 = x + 1;
+        chip2 = x + 2;
+        chip3 = x + 3;
         
         // 横線が引けるのは 3 パターン。例によって網羅。
         
         // 隣に縦線の場合
-        if( chip[x] === "│" && chip[x + 1] === "│" ) {
+        if( chip[x] === "│" && chip[chip1] === "│" ) {
             chip[x] = "├";
-            chip[x + 1] = "┤";
+            chip[chip1] = "┤";
         }
         // ひとつ空けて縦線の場合
-        else if( chip[x] === "│" && chip[x + 1] === "×" && chip[x + 2] === "│" ) {
+        else if( chip[x] === "│" && chip[chip1] === "×" && chip[chip2] === "│" ) {
             chip[x] = "├";
-            chip[x + 1] = "─";
-            chip[x + 2] = "┤";
+            chip[chip1] = "─";
+            chip[chip2] = "┤";
         }
         // ふたつ空けて縦線の場合
-        else if( chip[x] === "│" && chip[x + 1] === "×" && chip[x + 2] === "×" && chip[x + 3] === "│" ) {
+        else if( chip[x] === "│" && chip[chip1] === "×" && chip[chip2] === "×" && chip[chip3] === "│" ) {
             chip[x] = "├";
-            chip[x + 1] = "─";
-            chip[x + 2] = "─";
-            chip[x + 3] = "┤";
+            chip[chip1] = "─";
+            chip[chip2] = "─";
+            chip[chip3] = "┤";
         }
         // 横線が引けなくなってた場合（他に横線を引いた影響で）
         else {
@@ -585,7 +576,7 @@ RaceSelect = function(){
                 });
             }
 
-            numlabel.text = '⑤';
+            numlabel.text = '③';
             numlabel.font = '150px/1.5 ' + CONST_CASH.FONT;
             numlabel.color = '#fff';
             numlabel.x = 90;
@@ -596,27 +587,21 @@ RaceSelect = function(){
 
             GAME.popScene();
             aid = setTimeout(function(){
-                numlabel.text = '④';
+                numlabel.text = '②';
                 aid = setTimeout(function(){
-                    numlabel.text = '③';
-                        aid = setTimeout(function(){
-                            numlabel.text = '②';
-                                aid = setTimeout(function(){
-                                    numlabel.text = '①';
-                                    aid = setTimeout(function(){
-                                        MAP.PATH.vibrate(3);
+                    numlabel.text = '①';
+                    aid = setTimeout(function(){
+                        MAP.PATH.vibrate(3);
 
-                                        //set user order
-                                        for(i = 0, len = order.length; i < len; i++) {
-                                            thumbs[i].init();
-                                        }
-                                        Log.init();
-                                        EnemyAction.init();
-                                        LABEL.COUNTDOWN.init();
-                                        GAME.rootScene.removeChild(numlabel);
-                                    }, 1000);
-                                }, 1000);
-                        }, 1000);
+                        //set user order
+                        for(i = 0, len = order.length; i < len; i++) {
+                            thumbs[i].init();
+                        }
+                        Log.init();
+                        EnemyAction.init();
+                        LABEL.COUNTDOWN.init();
+                        GAME.rootScene.removeChild(numlabel);
+                    }, 1000);
                 }, 1000);
             }, 1000);
         };
@@ -1332,6 +1317,7 @@ Unit = function(config){
         image = GAME.assets[CONST_CASH.UNIT.IMAGE],
         mode = config.mode.toUpperCase(),
         sprite = new Sprite(size,size),
+        hplabel = new Label(), 
         have = CONST_CASH.HAVE,
         line_num = CONST_CASH.UNIT.FRAME_LINE,
         walk_count = 0, walk_true = 0,  
@@ -1343,6 +1329,20 @@ Unit = function(config){
     sprite.direction = 0;
     sprite.image = image;
     sprite = propOverride(sprite,config);
+
+    //hp label
+    sprite.hplabel = hplabel;
+    hplabel.text = sprite.damage + ':' + sprite.hp;
+    hplabel.x = config.x + 1;
+    hplabel.y = config.y - 14;
+    hplabel.font = '9px ' + CONST_CASH.FONT;
+    hplabel.color = '#FAA';
+    hplabel.backgroundColor = 'rgba(0,0,0,0.3)';
+    hplabel.width = 16;
+    addLayer({
+        layer: GROUP[mode].UNIT,
+        sprite: hplabel
+    });
 
     //set Class
     sprite.type = CONST_CASH.TYPE.UNIT;
@@ -1356,6 +1356,7 @@ Unit = function(config){
      */
     sprite.attack = function(vsUnit) {
         vsUnit.hp -= sprite.damage;
+        vsUnit.hplabel.text = vsUnit.damage + ':' + vsUnit.hp;
         if(vsUnit.hp <= 0) {
             vsUnit.kill();
         }
@@ -1381,6 +1382,7 @@ Unit = function(config){
 
         delete UNITS[mode][sprite.myNo];
         GROUP[mode].UNIT.removeChild(sprite);
+        GROUP[mode].UNIT.removeChild(hplabel);
 
         //after action
         if(typeof sprite.after_death === 'function') {
@@ -1531,6 +1533,7 @@ Unit = function(config){
                 aii = ai[i];
                 if(d === aii.direction){
                     sprite[aii.prop] += (s * aii.sign);
+                    hplabel[aii.prop] += (s * aii.sign);
                     if(checkMoveSquere() === true){
                         colision = getCollision();
                         var a= 1;
@@ -1571,6 +1574,7 @@ Unit = function(config){
      * @function
      */
     sprite.stay = function() {
+        GROUP[mode].UNIT.removeChild(hplabel);
         sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
         sprite.addEventListener(enchant.Event.ENTER_FRAME, function() {
             walk();
@@ -1584,6 +1588,7 @@ Unit = function(config){
 
     if(mode === have.USER) {
         moveVal = -moveVal;
+        hplabel.color = '#EEF';
     }
 
     Log.unit(sprite);

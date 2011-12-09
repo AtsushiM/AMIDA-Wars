@@ -48,7 +48,7 @@ RaceSelect = function(){
                 });
             }
 
-            numlabel.text = '⑤';
+            numlabel.text = '③';
             numlabel.font = '150px/1.5 ' + CONST_CASH.FONT;
             numlabel.color = '#fff';
             numlabel.x = 90;
@@ -59,27 +59,21 @@ RaceSelect = function(){
 
             GAME.popScene();
             aid = setTimeout(function(){
-                numlabel.text = '④';
+                numlabel.text = '②';
                 aid = setTimeout(function(){
-                    numlabel.text = '③';
-                        aid = setTimeout(function(){
-                            numlabel.text = '②';
-                                aid = setTimeout(function(){
-                                    numlabel.text = '①';
-                                    aid = setTimeout(function(){
-                                        MAP.PATH.vibrate(3);
+                    numlabel.text = '①';
+                    aid = setTimeout(function(){
+                        MAP.PATH.vibrate(3);
 
-                                        //set user order
-                                        for(i = 0, len = order.length; i < len; i++) {
-                                            thumbs[i].init();
-                                        }
-                                        Log.init();
-                                        EnemyAction.init();
-                                        LABEL.COUNTDOWN.init();
-                                        GAME.rootScene.removeChild(numlabel);
-                                    }, 1000);
-                                }, 1000);
-                        }, 1000);
+                        //set user order
+                        for(i = 0, len = order.length; i < len; i++) {
+                            thumbs[i].init();
+                        }
+                        Log.init();
+                        EnemyAction.init();
+                        LABEL.COUNTDOWN.init();
+                        GAME.rootScene.removeChild(numlabel);
+                    }, 1000);
                 }, 1000);
             }, 1000);
         };

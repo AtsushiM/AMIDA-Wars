@@ -13,6 +13,7 @@ Unit = function(config){
         image = GAME.assets[CONST_CASH.UNIT.IMAGE],
         mode = config.mode.toUpperCase(),
         sprite = new Sprite(size,size),
+        hplabel = new Label(), 
         have = CONST_CASH.HAVE,
         line_num = CONST_CASH.UNIT.FRAME_LINE,
         walk_count = 0, walk_true = 0,  
@@ -24,6 +25,20 @@ Unit = function(config){
     sprite.direction = 0;
     sprite.image = image;
     sprite = propOverride(sprite,config);
+
+    //hp label
+    sprite.hplabel = hplabel;
+    hplabel.text = sprite.damage + ':' + sprite.hp;
+    hplabel.x = config.x + 1;
+    hplabel.y = config.y - 14;
+    hplabel.font = '9px ' + CONST_CASH.FONT;
+    hplabel.color = '#FAA';
+    hplabel.backgroundColor = 'rgba(0,0,0,0.3)';
+    hplabel.width = 16;
+    addLayer({
+        layer: GROUP[mode].UNIT,
+        sprite: hplabel
+    });
 
     //set Class
     sprite.type = CONST_CASH.TYPE.UNIT;
@@ -37,6 +52,7 @@ Unit = function(config){
      */
     sprite.attack = function(vsUnit) {
         vsUnit.hp -= sprite.damage;
+        vsUnit.hplabel.text = vsUnit.damage + ':' + vsUnit.hp;
         if(vsUnit.hp <= 0) {
             vsUnit.kill();
         }
@@ -62,6 +78,7 @@ Unit = function(config){
 
         delete UNITS[mode][sprite.myNo];
         GROUP[mode].UNIT.removeChild(sprite);
+        GROUP[mode].UNIT.removeChild(hplabel);
 
         //after action
         if(typeof sprite.after_death === 'function') {
@@ -212,6 +229,7 @@ Unit = function(config){
                 aii = ai[i];
                 if(d === aii.direction){
                     sprite[aii.prop] += (s * aii.sign);
+                    hplabel[aii.prop] += (s * aii.sign);
                     if(checkMoveSquere() === true){
                         colision = getCollision();
                         var a= 1;
@@ -252,6 +270,7 @@ Unit = function(config){
      * @function
      */
     sprite.stay = function() {
+        GROUP[mode].UNIT.removeChild(hplabel);
         sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
         sprite.addEventListener(enchant.Event.ENTER_FRAME, function() {
             walk();
@@ -265,6 +284,7 @@ Unit = function(config){
 
     if(mode === have.USER) {
         moveVal = -moveVal;
+        hplabel.color = '#EEF';
     }
 
     Log.unit(sprite);
