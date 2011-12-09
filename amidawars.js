@@ -431,7 +431,7 @@ var RandamMap = function() {
     castleBeyond = map.length - 2, 
     canputline = map[0].length - 2, 
     arr = [], 
-    i, j, x, y, r, a, chip, flg; 
+    i, j, x, y, r, a, len, chip, flg; 
 
     // 敵と味方の城を結びつける
     for(i = 0; i < castleNum; i++) {
@@ -465,7 +465,7 @@ var RandamMap = function() {
                     flag = true;
                 }
                 // ひとつ空けて縦線の場合
-                else if(chip[i + 1] === '×' && chip[j][i + 2] === '│') {
+                else if(chip[i + 1] === '×' && chip[i + 2] === '│') {
                     flag = true;
                 }
                 // ふたつ空けて縦線の場合
@@ -475,8 +475,11 @@ var RandamMap = function() {
                     }
                 }
                 
-                if(flag) {
-                    arr.push( { 'x': i, 'y' : j} );
+                if(flag === true) {
+                    arr.push({
+                        x: i,
+                        y : j
+                    });
                 }
             }
         } 
@@ -492,7 +495,7 @@ var RandamMap = function() {
     }
 
     // 横線を引く
-    for(i = 0; i < arr.length - 1 && i < LINES; i++) {
+    for(i = 0; i < arr.length && i < LINES; i++) {
         chip = arr[i];
         x = chip.x;
         y = chip.y;
@@ -527,8 +530,8 @@ var RandamMap = function() {
     }
 
     // 2 次元配列を 1 次元配列に
-    for(i = 0; i < map.length; i++) {
-        map[i] = map[i].join("");
+    for(i = 0, len = map.length; i < len; i++) {
+        map[i] = map[i].join('');
     }
     return map;
 };

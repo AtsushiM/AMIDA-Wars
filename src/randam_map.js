@@ -15,12 +15,13 @@ var RandamMap = function() {
     castleBeyond = map.length - 2, 
     canputline = map[0].length - 2, 
     arr = [], 
-    i, j, x, y, r, a, chip, flg; 
+    i, j, x, y, r, a, len, chip, chip0, chip1, chip2, chip3, flg, 
+    MF = Math.floor, MR = Math.random; 
 
     // 敵と味方の城を結びつける
     for(i = 0; i < castleNum; i++) {
         y = i * 2; // 水平方向の位置
-        r = Math.floor(Math.random() * castleBeyond) + 1; // 曲がる場所
+        r = MF(MR() * castleBeyond) + 1; // 曲がる場所
         
         for(j = 1; j <= castleBeyond; j++) {
             chip = map[j];
@@ -39,69 +40,62 @@ var RandamMap = function() {
     for(i = 0; i < canputline; i++) {
         for(j = 1; j <= castleBeyond; j++) {
             chip = map[j];
-            if( chip[i] === '│' ) {
-                flag = false;
+            chip0 = chip[i];
+            if(chip0 === '│') {
+                chip1 = chip[i + 1];
+                chip2 = chip[i + 2];
+                chip3 = chip[i + 3];
                 
                 // 横線が引けるのは 3 パターン。適当に網羅。
-                
-                // 隣に縦線の場合
-                if(chip[i + 1] === '│' ) { 
-                    flag = true;
-                }
-                // ひとつ空けて縦線の場合
-                else if(chip[i + 1] === '×' && chip[j][i + 2] === '│') {
-                    flag = true;
-                }
-                // ふたつ空けて縦線の場合
-                else if( i + 3 <= 7) {
-                    if( chip[i + 1] === '×' && chip[i + 2] === '×' && chip[i + 3] === '│') {
-                        flag = true;
-                    }
-                }
-                
-                if(flag) {
-                    arr.push( { 'x': i, 'y' : j} );
+                if( chip1 === '│' || (chip1 === '×' && chip2 === '│') || (i + 3 <= 7 && chip1 === '×' && chip2 === '×' && chip3 === '│')) {
+                    arr.push({
+                        x: i,
+                        y : j
+                    });
                 }
             }
         } 
     }
 
     // 横線が引ける場所をランダムに並べ替え
+    len = arr.length - 1;
     for(i = 0; i < 100; i++) {
-        r = Math.floor(Math.random() * (arr.length - 1) ) + 1;
+        r = MF(MR() * len) + 1;
         a = arr[0];
-        
         arr[0] = arr[r];
         arr[r] = a;
     }
 
     // 横線を引く
-    for(i = 0; i < arr.length - 1 && i < LINES; i++) {
+    for(i = 0; i < arr.length && i < LINES; i++) {
         chip = arr[i];
         x = chip.x;
         y = chip.y;
 
         chip = map[y];
+        chip1 = x + 1;
+        chip2 = x + 2;
+        chip3 = x + 3;
         
         // 横線が引けるのは 3 パターン。例によって網羅。
         
         // 隣に縦線の場合
-        if( chip[x] === "│" && chip[x + 1] === "│" ) {
+        if( chip[x] === "│" && chip[chip1] === "│" ) {
             chip[x] = "├";
-            chip[x + 1] = "┤";
+            chip[chip1] = "┤";
         }
         // ひとつ空けて縦線の場合
-        else if( chip[x] === "│" && chip[x + 1] === "×" && chip[x + 2] === "│" ) {
+        else if( chip[x] === "│" && chip[chip1] === "×" && chip[chip2] === "│" ) {
             chip[x] = "├";
-            chip[x + 1] = "─";
-            chip[x + 2] = "┤";
+            chip[chip1] = "─";
+            chip[chip2] = "┤";
         }
         // ふたつ空けて縦線の場合
-        else if( chip[x] === "│" && chip[x + 1] === "×" && chip[x + 2] === "×" && chip[x + 3] === "│" ) {
+        else if( chip[x] === "│" && chip[chip1] === "×" && chip[chip2] === "×" && chip[chip3] === "│" ) {
             chip[x] = "├";
-            chip[x + 1] = "─";
-            chip[x + 2] = "─";
-            chip[x + 3] = "┤";
+            chip[chip1] = "─";
+            chip[chip2] = "─";
+            chip[chip3] = "┤";
         }
         // 横線が引けなくなってた場合（他に横線を引いた影響で）
         else {
@@ -111,8 +105,8 @@ var RandamMap = function() {
     }
 
     // 2 次元配列を 1 次元配列に
-    for(i = 0; i < map.length; i++) {
-        map[i] = map[i].join("");
+    for(i = 0, len = map.length; i < len; i++) {
+        map[i] = map[i].join('');
     }
     return map;
 };
