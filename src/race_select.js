@@ -107,8 +107,8 @@ RaceSelect = function(){
     human_label.color = human_txt.color = undead_label.color = undead_txt.color = '#ddd';
     human_label.text = '<b>HUMAN</b>';
     undead_label.text = '<b>UNDEAD</b>';
-    human_txt.text = '使いやすく、高性能な種族。少数精鋭の混成部隊。<br />バランスの良い陸戦隊と効果の強力な魔術師の組み合わせで敵を葬る。';
-    undead_txt.text = '扱いづらい尖った性能を持つユニットが多い種族。<br />操作量に自信があるならば途切れること無く攻め続けられる。';
+    human_txt.text = '使いやすく、高性能な種族。バランスが良く扱いやすい。';
+    undead_txt.text = '扱いづらい尖った性能を持つユニットが多い種族。<br />操作量に自信がある人向け。';
     human_label.x = undead_label.x = 50;
     human_label.y = undead_label.y = 5;
     human_txt.width = undead_txt.width = 200;

@@ -146,7 +146,7 @@ Thumb = function(config){
         if(this.canDrag === true){
             originX = e.x - this.x;
             originY = e.y - this.y;
-            dragOnCastle();
+            /* dragOnCastle(); */
         }
         statusViwer.update(sprite.unit);
     });
@@ -154,7 +154,7 @@ Thumb = function(config){
         if(this.canDrag === true){
             this.x = e.x - originX;
             this.y = e.y - originY;
-            focusMyCastle(this);
+            /* focusMyCastle(this); */
         }
     });
     sprite.addEventListener(eEv.TOUCH_END, function(e){
@@ -172,11 +172,11 @@ Thumb = function(config){
                 this.lastUnit = new Unit(this.unit);
                 this.lastUnit.thumb = this;
 
-                hit.focusOff();
+                /* hit.focusOff(); */
             }
             this.x = defaultX;
             this.y = defaultY;
-            dragOffCastle();
+            /* dragOffCastle(); */
         }
     });
 

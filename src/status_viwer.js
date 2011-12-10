@@ -57,16 +57,16 @@ StatusViwer = function(config){
     };
 
     group.init = function() {
-        var i, sta, statsies = statuslist[USER_RACE], br = '<br />';
+        var i, sta, statsies = statuslist[USER_RACE], br = '<br />', ws = ' ';
         for(i in statsies) {
             if(statsies.hasOwnProperty(i) === true) {
                 sta = statsies[i];
                 viewcash[i] = '<b>' + sta.name + '</b>' + br +
-                'HP: ' + sta.hp + br +
-                'Armor: ' + sta.armor + br +
-                'Damage: ' + sta.damage + br +
-                'Speed: ' + sta.speed + br +
-                'DownTime: ' + sta.reverse + 'sec';
+                '†: ' + sta.damage + ws +
+                '♥: ' + sta.hp + br +
+                'Θ: ' + sta.armor + br +
+                '⇒: ' + sta.speed + '/frame' + br +
+                '×: ' + sta.reverse + 'sec';
             }
         }
         bg.opacity = 1;

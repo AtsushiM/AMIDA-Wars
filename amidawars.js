@@ -411,6 +411,8 @@ PUBLIC.init = function(){
     GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT,img.STATUS_VIEWER);
     //Game onloadSet
     GAME.onload = Amida;
+    //Game FPS
+    GAME.fps = 15;
     //Game Start
     GAME.start();
 };
@@ -635,8 +637,8 @@ RaceSelect = function(){
     human_label.color = human_txt.color = undead_label.color = undead_txt.color = '#ddd';
     human_label.text = '<b>HUMAN</b>';
     undead_label.text = '<b>UNDEAD</b>';
-    human_txt.text = '使いやすく、高性能な種族。少数精鋭の混成部隊。<br />バランスの良い陸戦隊と効果の強力な魔術師の組み合わせで敵を葬る。';
-    undead_txt.text = '扱いづらい尖った性能を持つユニットが多い種族。<br />操作量に自信があるならば途切れること無く攻め続けられる。';
+    human_txt.text = '使いやすく、高性能な種族。バランスが良く扱いやすい。';
+    undead_txt.text = '扱いづらい尖った性能を持つユニットが多い種族。<br />操作量に自信がある人向け。';
     human_label.x = undead_label.x = 50;
     human_label.y = undead_label.y = 5;
     human_txt.width = undead_txt.width = 200;
@@ -1203,7 +1205,7 @@ Thumb = function(config){
         if(this.canDrag === true){
             originX = e.x - this.x;
             originY = e.y - this.y;
-            dragOnCastle();
+            /* dragOnCastle(); */
         }
         statusViwer.update(sprite.unit);
     });
@@ -1211,7 +1213,7 @@ Thumb = function(config){
         if(this.canDrag === true){
             this.x = e.x - originX;
             this.y = e.y - originY;
-            focusMyCastle(this);
+            /* focusMyCastle(this); */
         }
     });
     sprite.addEventListener(eEv.TOUCH_END, function(e){
@@ -1229,11 +1231,11 @@ Thumb = function(config){
                 this.lastUnit = new Unit(this.unit);
                 this.lastUnit.thumb = this;
 
-                hit.focusOff();
+                /* hit.focusOff(); */
             }
             this.x = defaultX;
             this.y = defaultY;
-            dragOffCastle();
+            /* dragOffCastle(); */
         }
     });
 
@@ -1332,17 +1334,22 @@ Unit = function(config){
 
     //hp label
     sprite.hplabel = hplabel;
-    hplabel.text = sprite.damage + ':' + sprite.hp;
-    hplabel.x = config.x + 1;
+    hplabel.x = config.x - 12;
     hplabel.y = config.y - 14;
     hplabel.font = '9px ' + CONST_CASH.FONT;
     hplabel.color = '#FAA';
-    hplabel.backgroundColor = 'rgba(0,0,0,0.3)';
-    hplabel.width = 16;
+    hplabel.backgroundColor = 'rgba(0,0,0,0.5)';
+    hplabel.width = 40;
+    hplabel.update = function(){
+        hplabel.text = '†' + sprite.damage + '/♥' + sprite.hp;
+    };
+    hplabel.update();
+
     addLayer({
         layer: GROUP[mode].UNIT,
         sprite: hplabel
     });
+
 
     //set Class
     sprite.type = CONST_CASH.TYPE.UNIT;
@@ -1356,7 +1363,7 @@ Unit = function(config){
      */
     sprite.attack = function(vsUnit) {
         vsUnit.hp -= sprite.damage;
-        vsUnit.hplabel.text = vsUnit.damage + ':' + vsUnit.hp;
+        vsUnit.hplabel.update();
         if(vsUnit.hp <= 0) {
             vsUnit.kill();
         }
@@ -1388,7 +1395,8 @@ Unit = function(config){
         if(typeof sprite.after_death === 'function') {
             setTimeout(function() {
                 sprite.after_death(sprite);
-            }, sprite.reverse);
+            }, sprite.reverse * 1000);
+            console.log(sprite.reverse);
         }
 
         if(sprite.thumb !== undefined){
@@ -1588,7 +1596,7 @@ Unit = function(config){
 
     if(mode === have.USER) {
         moveVal = -moveVal;
-        hplabel.color = '#EEF';
+        hplabel.color = '#AAF';
     }
 
     Log.unit(sprite);
@@ -2062,16 +2070,16 @@ StatusViwer = function(config){
     };
 
     group.init = function() {
-        var i, sta, statsies = statuslist[USER_RACE], br = '<br />';
+        var i, sta, statsies = statuslist[USER_RACE], br = '<br />', ws = ' ';
         for(i in statsies) {
             if(statsies.hasOwnProperty(i) === true) {
                 sta = statsies[i];
                 viewcash[i] = '<b>' + sta.name + '</b>' + br +
-                'HP: ' + sta.hp + br +
-                'Armor: ' + sta.armor + br +
-                'Damage: ' + sta.damage + br +
-                'Speed: ' + sta.speed + br +
-                'DownTime: ' + sta.reverse + 'sec';
+                '†: ' + sta.damage + ws +
+                '♥: ' + sta.hp + br +
+                'Θ: ' + sta.armor + br +
+                '⇒: ' + sta.speed + '/frame' + br +
+                '×: ' + sta.reverse + 'sec';
             }
         }
         bg.opacity = 1;
@@ -2118,10 +2126,26 @@ var Log = {
         Log.data.castle[castle.mode]++;
     },
     send: function() {
-        Log.data.time = LABEL.COUNTDOWN.getDiff();
+        // Log.data.time = LABEL.COUNTDOWN.getDiff();
 
-        //TODO: DBにデータ保存
-        console.log(JSON.stringify(Log.data));
+        // //TODO: DBにデータ保存
+        // httpRequest = false;
+        // if(window.XMLHttpRequest) {
+        //     // Firefox, Opera など
+        //     httpRequest = new XMLHttpRequest();
+        //     httpRequest.overrideMimeType('text/xml');
+        // } else if(window.ActiveXObject) {
+        //     // IE
+        //     try {
+        //         httpRequest = new ActiveXObject('Msxml2.XMLHTTP');
+        //     } catch (e) {
+        //         httpRequest = new ActiveXObject('Microsoft.XMLHTTP');
+        //     }
+        // }
+        // httpRequest.open('POST', 'https://atms.sakura.ne.jp/log.php', true);
+        // /* httpRequest.onreadystatechange = processResult; */
+        // httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        // httpRequest.send(JSON.stringify(Log.data));
     },
     reset: function() {
         Log.data = {

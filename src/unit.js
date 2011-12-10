@@ -28,17 +28,22 @@ Unit = function(config){
 
     //hp label
     sprite.hplabel = hplabel;
-    hplabel.text = sprite.damage + ':' + sprite.hp;
-    hplabel.x = config.x + 1;
+    hplabel.x = config.x - 12;
     hplabel.y = config.y - 14;
     hplabel.font = '9px ' + CONST_CASH.FONT;
     hplabel.color = '#FAA';
-    hplabel.backgroundColor = 'rgba(0,0,0,0.3)';
-    hplabel.width = 16;
+    hplabel.backgroundColor = 'rgba(0,0,0,0.5)';
+    hplabel.width = 40;
+    hplabel.update = function(){
+        hplabel.text = '†' + sprite.damage + '/♥' + sprite.hp;
+    };
+    hplabel.update();
+
     addLayer({
         layer: GROUP[mode].UNIT,
         sprite: hplabel
     });
+
 
     //set Class
     sprite.type = CONST_CASH.TYPE.UNIT;
@@ -52,7 +57,7 @@ Unit = function(config){
      */
     sprite.attack = function(vsUnit) {
         vsUnit.hp -= sprite.damage;
-        vsUnit.hplabel.text = vsUnit.damage + ':' + vsUnit.hp;
+        vsUnit.hplabel.update();
         if(vsUnit.hp <= 0) {
             vsUnit.kill();
         }
@@ -84,7 +89,8 @@ Unit = function(config){
         if(typeof sprite.after_death === 'function') {
             setTimeout(function() {
                 sprite.after_death(sprite);
-            }, sprite.reverse);
+            }, sprite.reverse * 1000);
+            console.log(sprite.reverse);
         }
 
         if(sprite.thumb !== undefined){
@@ -284,7 +290,7 @@ Unit = function(config){
 
     if(mode === have.USER) {
         moveVal = -moveVal;
-        hplabel.color = '#EEF';
+        hplabel.color = '#AAF';
     }
 
     Log.unit(sprite);

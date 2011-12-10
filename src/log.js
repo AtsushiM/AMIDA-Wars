@@ -33,10 +33,26 @@ var Log = {
         Log.data.castle[castle.mode]++;
     },
     send: function() {
-        Log.data.time = LABEL.COUNTDOWN.getDiff();
+        // Log.data.time = LABEL.COUNTDOWN.getDiff();
 
-        //TODO: DBにデータ保存
-        console.log(JSON.stringify(Log.data));
+        // //TODO: DBにデータ保存
+        // httpRequest = false;
+        // if(window.XMLHttpRequest) {
+        //     // Firefox, Opera など
+        //     httpRequest = new XMLHttpRequest();
+        //     httpRequest.overrideMimeType('text/xml');
+        // } else if(window.ActiveXObject) {
+        //     // IE
+        //     try {
+        //         httpRequest = new ActiveXObject('Msxml2.XMLHTTP');
+        //     } catch (e) {
+        //         httpRequest = new ActiveXObject('Microsoft.XMLHTTP');
+        //     }
+        // }
+        // httpRequest.open('POST', 'https://atms.sakura.ne.jp/log.php', true);
+        // /* httpRequest.onreadystatechange = processResult; */
+        // httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        // httpRequest.send(JSON.stringify(Log.data));
     },
     reset: function() {
         Log.data = {

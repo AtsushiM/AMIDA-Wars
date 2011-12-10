@@ -139,6 +139,8 @@ PUBLIC.init = function(){
     GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT,img.STATUS_VIEWER);
     //Game onloadSet
     GAME.onload = Amida;
+    //Game FPS
+    GAME.fps = 15;
     //Game Start
     GAME.start();
 };
