@@ -13,6 +13,7 @@ Result = function(end){
             switch(end) {
                 case have.ENEMY: 
                     end = 'WIN';
+                    Log.data.victory = 1;
                     calc = LABEL.COUNTDOWN.getDiff() * point.TIME;
                     txt += '&nbsp;WIN: ' + point.WIN + br +
                             '&nbsp;CLEAR TIME BONUS: ' + calc;
@@ -21,6 +22,7 @@ Result = function(end){
                     break;
                 case have.USER: 
                     end = 'LOSE';
+                    Log.data.victory = -1;
                     txt += '&nbsp;LOSE: ' + point.LOSE;
                     
                     score += point.LOSE;

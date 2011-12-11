@@ -3,6 +3,7 @@ var Log = {
     logid: 0, 
     data: {
         time: 0, 
+        victory: 0, 
         unit: {
             USER: 0, 
             ENEMY: 0
@@ -33,26 +34,26 @@ var Log = {
         Log.data.castle[castle.mode]++;
     },
     send: function() {
-        // Log.data.time = LABEL.COUNTDOWN.getDiff();
+        Log.data.time = LABEL.COUNTDOWN.getDiff();
 
-        // //TODO: DBにデータ保存
-        // httpRequest = false;
-        // if(window.XMLHttpRequest) {
-        //     // Firefox, Opera など
-        //     httpRequest = new XMLHttpRequest();
-        //     httpRequest.overrideMimeType('text/xml');
-        // } else if(window.ActiveXObject) {
-        //     // IE
-        //     try {
-        //         httpRequest = new ActiveXObject('Msxml2.XMLHTTP');
-        //     } catch (e) {
-        //         httpRequest = new ActiveXObject('Microsoft.XMLHTTP');
-        //     }
-        // }
-        // httpRequest.open('POST', 'https://atms.sakura.ne.jp/log.php', true);
-        // /* httpRequest.onreadystatechange = processResult; */
-        // httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        // httpRequest.send(JSON.stringify(Log.data));
+        //TODO: DBにデータ保存
+        httpRequest = false;
+        if(window.XMLHttpRequest) {
+            // Firefox, Opera など
+            httpRequest = new XMLHttpRequest();
+            httpRequest.overrideMimeType('text/xml');
+        } else if(window.ActiveXObject) {
+            // IE
+            try {
+                httpRequest = new ActiveXObject('Msxml2.XMLHTTP');
+            } catch (e) {
+                httpRequest = new ActiveXObject('Microsoft.XMLHTTP');
+            }
+        }
+        httpRequest.open('POST', '/amidawars/log.php', true);
+        /* httpRequest.onreadystatechange = processResult; */
+        httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        httpRequest.send('log=' + JSON.stringify(Log.data));
     },
     reset: function() {
         Log.data = {
@@ -77,8 +78,8 @@ var Log = {
     }, 
     init: function() {
         Log.reset();
-        Log.end();
-        Log.logid = setInterval(Log.send, 30000);
+        /* Log.end(); */
+        /* Log.logid = setInterval(Log.send, 30000); */
     },
     end: function() {
         Log.send();

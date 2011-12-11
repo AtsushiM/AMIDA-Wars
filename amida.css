@@ -15,9 +15,44 @@ h1, h2, h3, h4, h5, h6, header, hgroup, menu, nav, section {
 	display: block;
 }
 body {
-    min-height: 500px;
+    padding-top: 10px;
 	color: #000;
 	font-family: sans-serif;
 	font-size: 13px;
 	line-height: 1.5;
 }
+
+#game {
+    float: left;
+    width: 320px;
+    height: 480px;
+    overflow: none;
+    overflow: hidden;
+}
+
+#explanation {
+    padding: 10px 0 0 350px;
+    font-size: 12px;
+}
+#explanation section {
+    padding-bottom: 20px;
+}
+#explanation section h2 {
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #AAA;
+    font-size: 12px;
+}
+#explanation section dl {
+    margin-left: 10px;
+}
+#explanation section dt {
+    font-weight: bold;
+}
+#explanation section dd {
+    padding-bottom: 10px;
+}
+#explanation section dd ul {
+    margin-left: 30px;
+}
+

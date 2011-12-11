@@ -57,8 +57,16 @@ Unit = function(config){
      */
     sprite.attack = function(vsUnit) {
         vsUnit.hp -= sprite.damage;
+        sprite.attacked({
+            mine: sprite, 
+            enemy: vsUnit
+        });
         vsUnit.hplabel.update();
         if(vsUnit.hp <= 0) {
+            vsUnit.dead({
+                mine: sprite, 
+                enemy: vsUnit
+            });
             vsUnit.kill();
         }
         return vsUnit.hp;
@@ -90,7 +98,6 @@ Unit = function(config){
             setTimeout(function() {
                 sprite.after_death(sprite);
             }, sprite.reverse * 1000);
-            console.log(sprite.reverse);
         }
 
         if(sprite.thumb !== undefined){
@@ -228,39 +235,41 @@ Unit = function(config){
             i,len = ai.length,aii,colision;
 
         move = function() {
-            walk();
-            moveVal += s;
-            // unit move
-            for(i = 0; i < len; i++) {
-                aii = ai[i];
-                if(d === aii.direction){
-                    sprite[aii.prop] += (s * aii.sign);
-                    hplabel[aii.prop] += (s * aii.sign);
-                    if(checkMoveSquere() === true){
-                        colision = getCollision();
-                        var a= 1;
-                        if(colision !== false){
-                            if(colision.type !== sprite_type.CASTLE){
-                                if(colision[aii.order[0]] === 1){
-                                    sprite.direction = aii.order[0];
-                                }
-                                else if(colision[aii.order[1]] === 1){
-                                    sprite.direction = aii.order[1];
-                                }
-                                else if(colision[aii.order[2]] === 1){
-                                    sprite.direction = aii.order[2];
+            if(GAME.frame % 3 === 0) {
+                walk();
+                moveVal += s;
+                // unit move
+                for(i = 0; i < len; i++) {
+                    aii = ai[i];
+                    if(d === aii.direction){
+                        sprite[aii.prop] += (s * aii.sign);
+                        hplabel[aii.prop] += (s * aii.sign);
+                        if(checkMoveSquere() === true){
+                            colision = getCollision();
+                            var a= 1;
+                            if(colision !== false){
+                                if(colision.type !== sprite_type.CASTLE){
+                                    if(colision[aii.order[0]] === 1){
+                                        sprite.direction = aii.order[0];
+                                    }
+                                    else if(colision[aii.order[1]] === 1){
+                                        sprite.direction = aii.order[1];
+                                    }
+                                    else if(colision[aii.order[2]] === 1){
+                                        sprite.direction = aii.order[2];
+                                    }
+                                    else {
+                                        sprite.direction = aii.order[3];
+                                    }
                                 }
                                 else {
-                                    sprite.direction = aii.order[3];
+                                    Battle.siege(sprite,colision);
                                 }
                             }
-                            else {
-                                Battle.siege(sprite,colision);
-                            }
                         }
-                    }
 
-                    break;
+                        break;
+                    }
                 }
             }
         };

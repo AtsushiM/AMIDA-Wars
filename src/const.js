@@ -24,24 +24,93 @@ var CONST = function(){
                 },
                 STATUS: {
                     HUMAN: {
-                        WARRIOR:      { name:'WARRIOR',      frame:  0, hp:2, armor:TYPE.MIDIUM,  speed:1,   damage:3, siege:1, reverse:4 },
-                        LANCER:       { name:'LANCER',       frame:  4, hp:3, armor:TYPE.MIDIUM,  speed:1,   damage:2, siege:1, reverse:2 },
-                        KNIGHT:       { name:'KNIGHT',       frame:  8, hp:4, armor:TYPE.HEAVY,   speed:0.9, damage:2, siege:1, reverse:7 },
-                        ARCHER:       { name:'ARCHER',       frame: 12, hp:1, armor:TYPE.LIGHT,   speed:1.1, damage:3, siege:1, reverse:3 },
-                        CLELIC:       { name:'CLELIC',       frame: 48, hp:1, armor:TYPE.NOARMOR, speed:0.5, damage:1, siege:1, reverse:2 },
-                        FIRE_MAGE:    { name:'FIRE_MAGE',    frame: 52, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, siege:1, reverse:3 },
-                        FROST_MAGE:   { name:'FROST_MAGE',   frame: 56, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, siege:1, reverse:3 },
-                        WIZARD:       { name:'WIZARD',       frame: 60, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:3, siege:1, reverse:4 }
+                        WARRIOR: {
+                            name:'WARRIOR', frame: 0, hp: 3, armor: TYPE.MIDIUM, speed: 2, damage: 3, siege: 1, reverse: 5,
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        LANCER: {
+                            name: 'LANCER', frame: 4, hp: 4, armor: TYPE.MIDIUM, speed: 2, damage: 2, siege: 1, reverse: 3, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        KNIGHT: {
+                            name: 'KNIGHT', frame: 8, hp: 5, armor: TYPE.HEAVY, speed: 1.8, damage: 2, siege: 1, reverse: 8, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        ARCHER: {
+                            name: 'ARCHER', frame: 12, hp: 2, armor: TYPE.LIGHT, speed: 2.2, damage: 3, siege: 1, reverse: 4, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        CLELIC: {
+                            name: 'CLELIC', frame: 48, hp: 2, armor: TYPE.NOARMOR, speed: 1,   damage: 1, siege: 1, reverse: 3,
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        FIRE_MAGE: {
+                            name: 'FIRE_MAGE', frame: 52, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 2, siege: 1, reverse: 4, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        FROST_MAGE: {
+                            name: 'FROST_MAGE', frame: 56, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 2, siege: 1, reverse: 4, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        WIZARD: { 
+                            name:'WIZARD', frame: 60, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 3, siege: 1, reverse: 5, 
+                            attacked: function(){},
+                            dead: function(){}
+                        }
                     },
                     UNDEAD: {
-                        BONE_DOG:     { name:'BONE_DOG',     frame: 96, hp:1, armor:TYPE.LIGHT,   speed:1.4, damage:2, siege:1, reverse:1 },
-                        BONE_WARRIER: { name:'BONE_WARRIER', frame:100, hp:2, armor:TYPE.MIDIUM,  speed:1,   damage:2, siege:1, reverse:1 },
-                        BONE_ARCHER:  { name:'BONE_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM,  speed:1,   damage:3, siege:1, reverse:1 },
-                        SHADE:        { name:'SHADE',        frame:108, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, siege:1, reverse:3 },
-                        BONE_SNAKE:   { name:'BONE_SNAKE',   frame:144, hp:2, armor:TYPE.LIGHT,   speed:1.3, damage:1, siege:1, reverse:1 },
-                        GOLEM:        { name:'GOLEM',        frame:148, hp:5, armor:TYPE.HEAVY,   speed:0.5, damage:2, siege:10, reverse:6 },
-                        SPECTOR:      { name:'SPECTOR',      frame:152, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, siege:1, reverse:3 },
-                        ARACHNE:      { name:'ARACHNE',      frame:156, hp:3, armor:TYPE.MIDIUM,  speed:1,   damage:2, siege:1, reverse:4 }
+                        BONE_DOG: {
+                            name:'BONE_DOG', frame: 96, hp: 1, armor: TYPE.LIGHT, speed: 2.8, damage: 2, siege: 1, reverse: 1, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        BONE_WARRIER: {
+                            name:'BONE_WARRIER', frame: 100, hp: 2, armor: TYPE.MIDIUM,  speed: 2, damage: 2, siege: 1, reverse: 1, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        BONE_ARCHER: { 
+                            name:'BONE_ARCHER', frame: 104, hp: 1, armor: TYPE.MIDIUM,  speed: 2,   damage: 3, siege: 1, reverse: 1, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        SHADE: { 
+                            name:'SHADE', frame: 108, hp: 1, armor: TYPE.NOARMOR, speed: 1.8, damage: 0, siege: 9, reverse: 3, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        BONE_SNAKE: {
+                            name:'BONE_SNAKE', frame: 144, hp: 2, armor: TYPE.LIGHT,   speed: 2.6, damage: 1, siege: 1, reverse: 1,
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        GOLEM: {
+                            name:'GOLEM', frame: 148, hp: 7, armor: TYPE.HEAVY, speed: 1, damage: 2, siege: 1, reverse: 6, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        SPECTOR: {
+                            name:'SPECTOR', frame: 152, hp: 1, armor: TYPE.NOARMOR, speed: 1.8, damage: 9, siege: 0, reverse: 3, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        ARACHNE: { 
+                            name:'ARACHNE', frame: 156, hp: 3, armor: TYPE.MIDIUM,  speed: 2, damage: 3, siege: 1, reverse:4, 
+                            attacked: function(obj){
+                                var mine = obj.mine, 
+                                    enemy = obj.enemy;
+                                enemy.reverse = 9;
+                                enemy.speed /= 2;
+                            },
+                            dead: function(){}
+                        }
                     }
                 },
                 AI: {

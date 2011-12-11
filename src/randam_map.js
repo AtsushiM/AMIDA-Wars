@@ -10,7 +10,7 @@ var RandamMap = function() {
         ['×', '×', '×', '×', '×', '×', '×', '×'],
         ['×', '□', '×', '□', '×', '□', '×', '□']
     ], 
-    LINES = 8, // 引く本数
+    LINES = 3, // 引く本数
     castleNum = 4, 
     castleBeyond = map.length - 2, 
     canputline = map[0].length - 2, 

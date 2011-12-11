@@ -15,7 +15,8 @@
 <h2>遊び方</h2>
 <p class="text">ユニットをドラッグ＆ドロップして手前の城に配置してください。<br />
 自動的にアミダくじにそって敵の城を目指します。<br />
-※このゲームは古いInternet Explorerには対応していません。</section>
+<strong>※このゲームは古いInternet Explorerには対応していません。</strong></p>
+</section>
 <section>
 <h2>ランカーランキング</h2>
 <p class="text">ランキングデータは現在収集中です。<br />

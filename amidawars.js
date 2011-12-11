@@ -144,24 +144,93 @@ var CONST = function(){
                 },
                 STATUS: {
                     HUMAN: {
-                        WARRIOR:      { name:'WARRIOR',      frame:  0, hp:2, armor:TYPE.MIDIUM,  speed:1,   damage:3, siege:1, reverse:4 },
-                        LANCER:       { name:'LANCER',       frame:  4, hp:3, armor:TYPE.MIDIUM,  speed:1,   damage:2, siege:1, reverse:2 },
-                        KNIGHT:       { name:'KNIGHT',       frame:  8, hp:4, armor:TYPE.HEAVY,   speed:0.9, damage:2, siege:1, reverse:7 },
-                        ARCHER:       { name:'ARCHER',       frame: 12, hp:1, armor:TYPE.LIGHT,   speed:1.1, damage:3, siege:1, reverse:3 },
-                        CLELIC:       { name:'CLELIC',       frame: 48, hp:1, armor:TYPE.NOARMOR, speed:0.5, damage:1, siege:1, reverse:2 },
-                        FIRE_MAGE:    { name:'FIRE_MAGE',    frame: 52, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, siege:1, reverse:3 },
-                        FROST_MAGE:   { name:'FROST_MAGE',   frame: 56, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:2, siege:1, reverse:3 },
-                        WIZARD:       { name:'WIZARD',       frame: 60, hp:1, armor:TYPE.NOARMOR, speed:0.8, damage:3, siege:1, reverse:4 }
+                        WARRIOR: {
+                            name:'WARRIOR', frame: 0, hp: 3, armor: TYPE.MIDIUM, speed: 2, damage: 3, siege: 1, reverse: 5,
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        LANCER: {
+                            name: 'LANCER', frame: 4, hp: 4, armor: TYPE.MIDIUM, speed: 2, damage: 2, siege: 1, reverse: 3, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        KNIGHT: {
+                            name: 'KNIGHT', frame: 8, hp: 5, armor: TYPE.HEAVY, speed: 1.8, damage: 2, siege: 1, reverse: 8, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        ARCHER: {
+                            name: 'ARCHER', frame: 12, hp: 2, armor: TYPE.LIGHT, speed: 2.2, damage: 3, siege: 1, reverse: 4, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        CLELIC: {
+                            name: 'CLELIC', frame: 48, hp: 2, armor: TYPE.NOARMOR, speed: 1,   damage: 1, siege: 1, reverse: 3,
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        FIRE_MAGE: {
+                            name: 'FIRE_MAGE', frame: 52, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 2, siege: 1, reverse: 4, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        FROST_MAGE: {
+                            name: 'FROST_MAGE', frame: 56, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 2, siege: 1, reverse: 4, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        WIZARD: { 
+                            name:'WIZARD', frame: 60, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 3, siege: 1, reverse: 5, 
+                            attacked: function(){},
+                            dead: function(){}
+                        }
                     },
                     UNDEAD: {
-                        BONE_DOG:     { name:'BONE_DOG',     frame: 96, hp:1, armor:TYPE.LIGHT,   speed:1.4, damage:2, siege:1, reverse:1 },
-                        BONE_WARRIER: { name:'BONE_WARRIER', frame:100, hp:2, armor:TYPE.MIDIUM,  speed:1,   damage:2, siege:1, reverse:1 },
-                        BONE_ARCHER:  { name:'BONE_ARCHER',  frame:104, hp:1, armor:TYPE.MIDIUM,  speed:1,   damage:3, siege:1, reverse:1 },
-                        SHADE:        { name:'SHADE',        frame:108, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, siege:1, reverse:3 },
-                        BONE_SNAKE:   { name:'BONE_SNAKE',   frame:144, hp:2, armor:TYPE.LIGHT,   speed:1.3, damage:1, siege:1, reverse:1 },
-                        GOLEM:        { name:'GOLEM',        frame:148, hp:5, armor:TYPE.HEAVY,   speed:0.5, damage:2, siege:10, reverse:6 },
-                        SPECTOR:      { name:'SPECTOR',      frame:152, hp:1, armor:TYPE.NOARMOR, speed:0.7, damage:1, siege:1, reverse:3 },
-                        ARACHNE:      { name:'ARACHNE',      frame:156, hp:3, armor:TYPE.MIDIUM,  speed:1,   damage:2, siege:1, reverse:4 }
+                        BONE_DOG: {
+                            name:'BONE_DOG', frame: 96, hp: 1, armor: TYPE.LIGHT, speed: 2.8, damage: 2, siege: 1, reverse: 1, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        BONE_WARRIER: {
+                            name:'BONE_WARRIER', frame: 100, hp: 2, armor: TYPE.MIDIUM,  speed: 2, damage: 2, siege: 1, reverse: 1, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        BONE_ARCHER: { 
+                            name:'BONE_ARCHER', frame: 104, hp: 1, armor: TYPE.MIDIUM,  speed: 2,   damage: 3, siege: 1, reverse: 1, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        SHADE: { 
+                            name:'SHADE', frame: 108, hp: 1, armor: TYPE.NOARMOR, speed: 1.8, damage: 0, siege: 9, reverse: 3, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        BONE_SNAKE: {
+                            name:'BONE_SNAKE', frame: 144, hp: 2, armor: TYPE.LIGHT,   speed: 2.6, damage: 1, siege: 1, reverse: 1,
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        GOLEM: {
+                            name:'GOLEM', frame: 148, hp: 7, armor: TYPE.HEAVY, speed: 1, damage: 2, siege: 1, reverse: 6, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        SPECTOR: {
+                            name:'SPECTOR', frame: 152, hp: 1, armor: TYPE.NOARMOR, speed: 1.8, damage: 9, siege: 0, reverse: 3, 
+                            attacked: function(){},
+                            dead: function(){}
+                        },
+                        ARACHNE: { 
+                            name:'ARACHNE', frame: 156, hp: 3, armor: TYPE.MIDIUM,  speed: 2, damage: 3, siege: 1, reverse:4, 
+                            attacked: function(obj){
+                                var mine = obj.mine, 
+                                    enemy = obj.enemy;
+                                enemy.reverse = 9;
+                                enemy.speed /= 2;
+                            },
+                            dead: function(){}
+                        }
                     }
                 },
                 AI: {
@@ -411,8 +480,6 @@ PUBLIC.init = function(){
     GAME.preload(img.UNIT,img.THUMB,img.MAP,img.EFFECT,img.STATUS_VIEWER);
     //Game onloadSet
     GAME.onload = Amida;
-    //Game FPS
-    GAME.fps = 15;
     //Game Start
     GAME.start();
 };
@@ -428,7 +495,7 @@ var RandamMap = function() {
         ['×', '×', '×', '×', '×', '×', '×', '×'],
         ['×', '□', '×', '□', '×', '□', '×', '□']
     ], 
-    LINES = 8, // 引く本数
+    LINES = 3, // 引く本数
     castleNum = 4, 
     castleBeyond = map.length - 2, 
     canputline = map[0].length - 2, 
@@ -1363,8 +1430,16 @@ Unit = function(config){
      */
     sprite.attack = function(vsUnit) {
         vsUnit.hp -= sprite.damage;
+        sprite.attacked({
+            mine: sprite, 
+            enemy: vsUnit
+        });
         vsUnit.hplabel.update();
         if(vsUnit.hp <= 0) {
+            vsUnit.dead({
+                mine: sprite, 
+                enemy: vsUnit
+            });
             vsUnit.kill();
         }
         return vsUnit.hp;
@@ -1396,7 +1471,6 @@ Unit = function(config){
             setTimeout(function() {
                 sprite.after_death(sprite);
             }, sprite.reverse * 1000);
-            console.log(sprite.reverse);
         }
 
         if(sprite.thumb !== undefined){
@@ -1534,39 +1608,41 @@ Unit = function(config){
             i,len = ai.length,aii,colision;
 
         move = function() {
-            walk();
-            moveVal += s;
-            // unit move
-            for(i = 0; i < len; i++) {
-                aii = ai[i];
-                if(d === aii.direction){
-                    sprite[aii.prop] += (s * aii.sign);
-                    hplabel[aii.prop] += (s * aii.sign);
-                    if(checkMoveSquere() === true){
-                        colision = getCollision();
-                        var a= 1;
-                        if(colision !== false){
-                            if(colision.type !== sprite_type.CASTLE){
-                                if(colision[aii.order[0]] === 1){
-                                    sprite.direction = aii.order[0];
-                                }
-                                else if(colision[aii.order[1]] === 1){
-                                    sprite.direction = aii.order[1];
-                                }
-                                else if(colision[aii.order[2]] === 1){
-                                    sprite.direction = aii.order[2];
+            if(GAME.frame % 3 === 0) {
+                walk();
+                moveVal += s;
+                // unit move
+                for(i = 0; i < len; i++) {
+                    aii = ai[i];
+                    if(d === aii.direction){
+                        sprite[aii.prop] += (s * aii.sign);
+                        hplabel[aii.prop] += (s * aii.sign);
+                        if(checkMoveSquere() === true){
+                            colision = getCollision();
+                            var a= 1;
+                            if(colision !== false){
+                                if(colision.type !== sprite_type.CASTLE){
+                                    if(colision[aii.order[0]] === 1){
+                                        sprite.direction = aii.order[0];
+                                    }
+                                    else if(colision[aii.order[1]] === 1){
+                                        sprite.direction = aii.order[1];
+                                    }
+                                    else if(colision[aii.order[2]] === 1){
+                                        sprite.direction = aii.order[2];
+                                    }
+                                    else {
+                                        sprite.direction = aii.order[3];
+                                    }
                                 }
                                 else {
-                                    sprite.direction = aii.order[3];
+                                    Battle.siege(sprite,colision);
                                 }
                             }
-                            else {
-                                Battle.siege(sprite,colision);
-                            }
                         }
-                    }
 
-                    break;
+                        break;
+                    }
                 }
             }
         };
@@ -1937,7 +2013,7 @@ var Battle = {
             Battle.score(unit2);
         }
 
-        MAP.PATH.vibrate(1);
+        /* MAP.PATH.vibrate(1); */
     }, 
     /**
      * battle unit and castle
@@ -2096,6 +2172,7 @@ var Log = {
     logid: 0, 
     data: {
         time: 0, 
+        victory: 0, 
         unit: {
             USER: 0, 
             ENEMY: 0
@@ -2126,26 +2203,26 @@ var Log = {
         Log.data.castle[castle.mode]++;
     },
     send: function() {
-        // Log.data.time = LABEL.COUNTDOWN.getDiff();
+        Log.data.time = LABEL.COUNTDOWN.getDiff();
 
-        // //TODO: DBにデータ保存
-        // httpRequest = false;
-        // if(window.XMLHttpRequest) {
-        //     // Firefox, Opera など
-        //     httpRequest = new XMLHttpRequest();
-        //     httpRequest.overrideMimeType('text/xml');
-        // } else if(window.ActiveXObject) {
-        //     // IE
-        //     try {
-        //         httpRequest = new ActiveXObject('Msxml2.XMLHTTP');
-        //     } catch (e) {
-        //         httpRequest = new ActiveXObject('Microsoft.XMLHTTP');
-        //     }
-        // }
-        // httpRequest.open('POST', 'https://atms.sakura.ne.jp/log.php', true);
-        // /* httpRequest.onreadystatechange = processResult; */
-        // httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        // httpRequest.send(JSON.stringify(Log.data));
+        //TODO: DBにデータ保存
+        httpRequest = false;
+        if(window.XMLHttpRequest) {
+            // Firefox, Opera など
+            httpRequest = new XMLHttpRequest();
+            httpRequest.overrideMimeType('text/xml');
+        } else if(window.ActiveXObject) {
+            // IE
+            try {
+                httpRequest = new ActiveXObject('Msxml2.XMLHTTP');
+            } catch (e) {
+                httpRequest = new ActiveXObject('Microsoft.XMLHTTP');
+            }
+        }
+        httpRequest.open('POST', '/amidawars/log.php', true);
+        /* httpRequest.onreadystatechange = processResult; */
+        httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        httpRequest.send('log=' + JSON.stringify(Log.data));
     },
     reset: function() {
         Log.data = {
@@ -2170,8 +2247,8 @@ var Log = {
     }, 
     init: function() {
         Log.reset();
-        Log.end();
-        Log.logid = setInterval(Log.send, 30000);
+        /* Log.end(); */
+        /* Log.logid = setInterval(Log.send, 30000); */
     },
     end: function() {
         Log.send();
@@ -2193,6 +2270,7 @@ Result = function(end){
             switch(end) {
                 case have.ENEMY: 
                     end = 'WIN';
+                    Log.data.victory = 1;
                     calc = LABEL.COUNTDOWN.getDiff() * point.TIME;
                     txt += '&nbsp;WIN: ' + point.WIN + br +
                             '&nbsp;CLEAR TIME BONUS: ' + calc;
@@ -2201,6 +2279,7 @@ Result = function(end){
                     break;
                 case have.USER: 
                     end = 'LOSE';
+                    Log.data.victory = -1;
                     txt += '&nbsp;LOSE: ' + point.LOSE;
                     
                     score += point.LOSE;
