@@ -1,8 +1,11 @@
 <?php
-ini_set( 'display_errors', 1 );
 require_once('lib/auth.php');
 require_once('lib/DB.php');
 /* require_once('lib/Format.php'); */
+
+if(!$_POST['log']){
+    $_POST['log'] = 'test';
+}
 
 if(!is_null($_POST['log'])){
 	$me = $facebook->api('/me');
@@ -17,6 +20,9 @@ if(!is_null($_POST['log'])){
     $sql = "INSERT INTO".$sql.',created = now()';
 	$result = $db->sqlQuery($sql);
 	$db->dbClose();
+
+    echo 'spl:'.$sql.'
+result:'.$result;
 }
 else {
 	echo 'false';

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<?php require_once('lib/auth.php'); ?><!DOCTYPE html>
 <html>
 <head>
 <meta charset="utf-8">
@@ -9,14 +9,13 @@
 <link rel="stylesheet" href="amida.css" />
 </head>
 <body>
-<iframe id="game" src="amida.php" frameborder="0" scrolling="no"></iframe>
+<div id="enchant-stage" style="width:320px; height:480px;"></div>
 <div id="explanation">
 <section>
 <h2>遊び方</h2>
 <p class="text">ユニットをドラッグ＆ドロップして手前の城に配置してください。<br />
 自動的にアミダくじにそって敵の城を目指します。<br />
-<strong>※このゲームは古いInternet Explorerには対応していません。</strong></p>
-</section>
+※このゲームは古いInternet Explorerには対応していません。</section>
 <section>
 <h2>ランカーランキング</h2>
 <p class="text">ランキングデータは現在収集中です。<br />
@@ -64,5 +63,8 @@
 ・<a href="http://www.amazon.co.jp/s/ref=nb_sb_noss?__mk_ja_JP=%83J%83%5E%83J%83i&url=search-alias%3Daps&field-keywords=warcraft3&x=0&y=0#/ref=nb_sb_noss?__mk_ja_JP=%E3%82%AB%E3%82%BF%E3%82%AB%E3%83%8A&url=search-alias%3Daps&field-keywords=starcraft&rh=i%3Aaps%2Ck%3Astarcraft" target="_blank">StarCraft2</a></p>
 </section>
 </div>
+<script type="text/javascript" src="enchant.js"></script>
+<script type="text/javascript" src="plugins/nineleap.enchant.js"></script>
+<script type="text/javascript" src="amidawars.js"></script>
 </body>
 </html>

@@ -1,62 +1,6 @@
 //init enchant.js
 enchant();
 var AW = (function(W){
-//set scroll
-var doScroll = function() {
-    if (W.pageYOffset === 0) {
-        W.scrollTo(0,1);
-    }
-};
-W.onorientationchange = function(){
-    setTimeout(doScroll, 100);
-};
-W.addEventListener('load', W.onorientationchange, false);
-/* TODO:
-☆各クラスの最適＆効率化（常時タスク）
-・ユニットの上部にHPを表示（パーソナルカラーで色分け）
-・チーム制の導入を考える（GPS座標など）
-・国力の要素を入れるか（シンプルさを崩さない実装）
-・リザルト画面作成
-・種族選択画面を作成
-・敵種族をランダム選択（最終的にはAI選択）
-・自分のAIを投稿するフォーム？（AIを書いてもらうor自動）
-・ユニットのステータスを公開したページの作成
-・クリア演出
-・ユニットの性能設定
-・ユーザーの行動を保存する（AI作成のため）
-・ランキング作成
-・ヒーロー実装（自ユニットが死んだ回数や、敵城の状態等を見て使えるかどうか判断するなど）
-・イラストを独自に
-
-//ユニット性能原案
-・見た目の印象と実際の操作の乖離を少なくする。
-・ユーザーは説明をみない、という前提でゴリ押しでもなんとかなる調整を行う。
-・RTSらしさ、を少しでもいいから残す。
-
-
-▼Human
-バランス型
-性能は基本を抑えた使いやすい種族という設定を保つ。
-他のユニットとの組み合わせで敵を掃討する特性をもたせる。
-
-・WIZARDはランダム効果（時間を増減させる、敵を強制移動させるなど？）
-・FROST-MAGEは敵を戦闘場所に一定時間停止させ、攻撃できなくする。
-・FIRE-MAGEは敵の防御力を0にする。
-・CLELICはマップに出ていない場合、自軍の復活速度を早くする
-
-
-▼Undead
-ピーキーな設定にする。
-尖った性能のユニットを多数作り、慣れれば強い、というバランスを目指す。
-
-・骨系は復活を早くする代わりに弱い。
-・ゴーレムは城を一撃で壊すが遅い。
-・蜘蛛は攻撃したユニットの行動＆復活を遅くする
-・シェードは城のみ攻撃可能で足が遅く、ユニットからは一方的にダメージを受ける
-・スペクターは敵のみ攻撃可能で足が遅く、必ずユニットと相打ちになる
-
-*/
-
 //private valiables
 var GAME,
     DOM, 
@@ -172,19 +116,7 @@ var CONST = function(){
                         FIRE_MAGE: {
                             name: 'FIRE_MAGE', frame: 52, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 2, siege: 1, reverse: 4, 
                             attacked: function(){},
-                            dead: function(obj){
-                                var mine = obj.mine, 
-                                    ef = new Effect({
-                                        type: mine.type.toUpperCase(), 
-                                        x: mine.x, 
-                                        y: mine.y, 
-                                        frames: CONST_CASH.EFFECT.FRAME.FIRE
-                                    });
-                                    
-                                addLayer({
-                                    layer: GROUP.EFFECT.UNIT, 
-                                    sprite: ef
-                                });
+                            dead: function(){
                             }
                         },
                         FROST_MAGE: {
@@ -2259,28 +2191,6 @@ var Log = {
         Log.data.castle[castle.mode]++;
     },
     send: function() {
-        Log.data.time = LABEL.COUNTDOWN.getDiff();
-
-        //TODO: DBにデータ保存
-        httpRequest = false;
-        if(window.XMLHttpRequest) {
-            // Firefox, Opera など
-            httpRequest = new XMLHttpRequest();
-            httpRequest.overrideMimeType('text/xml');
-        } else if(window.ActiveXObject) {
-            // IE
-            try {
-                httpRequest = new ActiveXObject('Msxml2.XMLHTTP');
-            } catch (e) {
-                httpRequest = new ActiveXObject('Microsoft.XMLHTTP');
-            }
-        }
-        httpRequest.open('POST', '/amidawars/log.php', true);
-        httpRequest.onreadystatechange = function(e) {
-            console.log(e);
-        };
-        httpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        httpRequest.send('log=' + JSON.stringify(Log.data));
     },
     reset: function() {
         Log.data = {
