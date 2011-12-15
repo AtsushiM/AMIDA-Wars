@@ -62,9 +62,7 @@ StatusViwer = function(config){
             if(statsies.hasOwnProperty(i) === true) {
                 sta = statsies[i];
                 viewcash[i] = '<b>' + sta.name + '</b>' + br +
-                '†: ' + sta.damage + ws +
-                '♥: ' + sta.hp + br +
-                'Θ: ' + sta.armor + br +
+                '†: ' + sta.hp + br +
                 '⇒: ' + sta.speed + '/frame' + br +
                 '×: ' + sta.reverse + 'sec';
             }

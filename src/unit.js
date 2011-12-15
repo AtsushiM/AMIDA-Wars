@@ -28,14 +28,14 @@ Unit = function(config){
 
     //hp label
     sprite.hplabel = hplabel;
-    hplabel.x = config.x - 12;
+    hplabel.x = config.x - 2;
     hplabel.y = config.y - 14;
     hplabel.font = '9px ' + CONST_CASH.FONT;
     hplabel.color = '#FAA';
     hplabel.backgroundColor = 'rgba(0,0,0,0.5)';
-    hplabel.width = 40;
+    hplabel.width = 20;
     hplabel.update = function(){
-        hplabel.text = '†' + sprite.damage + '/♥' + sprite.hp;
+        hplabel.text = '†' + sprite.hp;
     };
     hplabel.update();
 
@@ -55,8 +55,8 @@ Unit = function(config){
      * @param vsUnit 
      * @return 
      */
-    sprite.attack = function(vsUnit) {
-        vsUnit.hp -= sprite.damage;
+    sprite.attack = function(vsUnit, damage) {
+        vsUnit.hp -= damage;
         sprite.attacked({
             mine: sprite, 
             enemy: vsUnit

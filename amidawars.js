@@ -149,32 +149,32 @@ var CONST = function(){
                 STATUS: {
                     HUMAN: {
                         WARRIOR: {
-                            name:'WARRIOR', frame: 0, hp: 3, armor: TYPE.MIDIUM, speed: 2, damage: 3, siege: 1, reverse: 5,
+                            name:'WARRIOR', frame: 0, hp: 3, speed: 2, siege: 1, reverse: 5,
                             attacked: function(){},
                             dead: function(){}
                         },
                         LANCER: {
-                            name: 'LANCER', frame: 4, hp: 4, armor: TYPE.MIDIUM, speed: 2, damage: 2, siege: 1, reverse: 3, 
+                            name: 'LANCER', frame: 4, hp: 4, speed: 2, siege: 1, reverse: 3, 
                             attacked: function(){},
                             dead: function(){}
                         },
                         KNIGHT: {
-                            name: 'KNIGHT', frame: 8, hp: 5, armor: TYPE.HEAVY, speed: 1.8, damage: 2, siege: 1, reverse: 8, 
+                            name: 'KNIGHT', frame: 8, hp: 5, speed: 1.8, siege: 1, reverse: 8, 
                             attacked: function(){},
                             dead: function(){}
                         },
                         ARCHER: {
-                            name: 'ARCHER', frame: 12, hp: 2, armor: TYPE.LIGHT, speed: 2.2, damage: 3, siege: 1, reverse: 4, 
+                            name: 'ARCHER', frame: 12, hp: 2, speed: 2.2, siege: 1, reverse: 4, 
                             attacked: function(){},
                             dead: function(){}
                         },
                         CLELIC: {
-                            name: 'CLELIC', frame: 48, hp: 2, armor: TYPE.NOARMOR, speed: 1,   damage: 1, siege: 1, reverse: 3,
+                            name: 'CLELIC', frame: 48, hp: 2, speed: 1, siege: 1, reverse: 3,
                             attacked: function(){},
                             dead: function(){}
                         },
                         FIRE_MAGE: {
-                            name: 'FIRE_MAGE', frame: 52, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 2, siege: 1, reverse: 4, 
+                            name: 'FIRE_MAGE', frame: 52, hp: 2, speed: 1.6, siege: 1, reverse: 4, 
                             attacked: function(){},
                             dead: function(obj){
                                 // var mine = obj.mine, 
@@ -192,54 +192,54 @@ var CONST = function(){
                             }
                         },
                         FROST_MAGE: {
-                            name: 'FROST_MAGE', frame: 56, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 2, siege: 1, reverse: 4, 
+                            name: 'FROST_MAGE', frame: 56, hp: 2, speed: 1.6, siege: 1, reverse: 4, 
                             attacked: function(){},
                             dead: function(){}
                         },
                         WIZARD: { 
-                            name:'WIZARD', frame: 60, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 3, siege: 1, reverse: 5, 
+                            name:'WIZARD', frame: 60, hp: 2, speed: 1.6, siege: 1, reverse: 5, 
                             attacked: function(){},
                             dead: function(){}
                         }
                     },
                     UNDEAD: {
                         BONE_DOG: {
-                            name:'BONE_DOG', frame: 96, hp: 1, armor: TYPE.LIGHT, speed: 2.8, damage: 2, siege: 1, reverse: 1, 
+                            name:'BONE_DOG', frame: 96, hp: 1, speed: 2.8, siege: 1, reverse: 1, 
                             attacked: function(){},
                             dead: function(){}
                         },
                         BONE_WARRIER: {
-                            name:'BONE_WARRIER', frame: 100, hp: 2, armor: TYPE.MIDIUM,  speed: 2, damage: 2, siege: 1, reverse: 1, 
+                            name:'BONE_WARRIER', frame: 100, hp: 2, speed: 2, siege: 1, reverse: 1, 
                             attacked: function(){},
                             dead: function(){}
                         },
                         BONE_ARCHER: { 
-                            name:'BONE_ARCHER', frame: 104, hp: 1, armor: TYPE.MIDIUM,  speed: 2,   damage: 3, siege: 1, reverse: 1, 
+                            name:'BONE_ARCHER', frame: 104, hp: 1, speed: 2,   siege: 1, reverse: 1, 
                             attacked: function(){},
                             dead: function(){}
                         },
                         SHADE: { 
-                            name:'SHADE', frame: 108, hp: 1, armor: TYPE.NOARMOR, speed: 1.8, damage: 0, siege: 9, reverse: 3, 
+                            name:'SHADE', frame: 108, hp: 1, speed: 1.8, siege: 9, reverse: 3, 
                             attacked: function(){},
                             dead: function(){}
                         },
                         BONE_SNAKE: {
-                            name:'BONE_SNAKE', frame: 144, hp: 2, armor: TYPE.LIGHT,   speed: 2.6, damage: 1, siege: 1, reverse: 1,
+                            name:'BONE_SNAKE', frame: 144, hp: 2, speed: 2.6, siege: 1, reverse: 1,
                             attacked: function(){},
                             dead: function(){}
                         },
                         GOLEM: {
-                            name:'GOLEM', frame: 148, hp: 7, armor: TYPE.HEAVY, speed: 1, damage: 2, siege: 1, reverse: 6, 
+                            name:'GOLEM', frame: 148, hp: 7, speed: 1, siege: 1, reverse: 6, 
                             attacked: function(){},
                             dead: function(){}
                         },
                         SPECTOR: {
-                            name:'SPECTOR', frame: 152, hp: 1, armor: TYPE.NOARMOR, speed: 1.8, damage: 9, siege: 0, reverse: 3, 
+                            name:'SPECTOR', frame: 152, hp: 1, speed: 1.8, siege: 0, reverse: 3, 
                             attacked: function(){},
                             dead: function(){}
                         },
                         ARACHNE: { 
-                            name:'ARACHNE', frame: 156, hp: 3, armor: TYPE.MIDIUM,  speed: 2, damage: 3, siege: 1, reverse:4, 
+                            name:'ARACHNE', frame: 156, hp: 3, speed: 2, siege: 1, reverse:4, 
                             attacked: function(obj){
                                 var mine = obj.mine, 
                                     enemy = obj.enemy;
@@ -967,8 +967,9 @@ Amida = function(){
 
                 Surveillant.end();
                 EnemyAction.end();
-                Log.end();
                 countdown.stop();
+                GAME.end();
+                Log.end();
             };
 
         Surveillant.add(function() {
@@ -1435,14 +1436,14 @@ Unit = function(config){
 
     //hp label
     sprite.hplabel = hplabel;
-    hplabel.x = config.x - 12;
+    hplabel.x = config.x - 2;
     hplabel.y = config.y - 14;
     hplabel.font = '9px ' + CONST_CASH.FONT;
     hplabel.color = '#FAA';
     hplabel.backgroundColor = 'rgba(0,0,0,0.5)';
-    hplabel.width = 40;
+    hplabel.width = 20;
     hplabel.update = function(){
-        hplabel.text = '†' + sprite.damage + '/♥' + sprite.hp;
+        hplabel.text = '†' + sprite.hp;
     };
     hplabel.update();
 
@@ -1462,8 +1463,8 @@ Unit = function(config){
      * @param vsUnit 
      * @return 
      */
-    sprite.attack = function(vsUnit) {
-        vsUnit.hp -= sprite.damage;
+    sprite.attack = function(vsUnit, damage) {
+        vsUnit.hp -= damage;
         sprite.attacked({
             mine: sprite, 
             enemy: vsUnit
@@ -2056,11 +2057,13 @@ var Battle = {
      */
     unitAndUnit: function(unit1, unit2) {
         var unit1_hp = unit1.hp, 
-            unit2_hp = unit2.hp;
+            unit2_hp = unit2.hp, 
+            damage1 = unit1_hp, 
+            damage2 = unit2_hp;
 
         while(unit1_hp > 0 && unit2_hp > 0) {
-            unit1_hp = unit1.attack(unit2);
-            unit2_hp = unit2.attack(unit1);
+            unit1_hp = unit1.attack(unit2, damage1);
+            unit2_hp = unit2.attack(unit1, damage2);
         }
 
         //check death
@@ -2211,9 +2214,7 @@ StatusViwer = function(config){
             if(statsies.hasOwnProperty(i) === true) {
                 sta = statsies[i];
                 viewcash[i] = '<b>' + sta.name + '</b>' + br +
-                '†: ' + sta.damage + ws +
-                '♥: ' + sta.hp + br +
-                'Θ: ' + sta.armor + br +
+                '†: ' + sta.hp + br +
                 '⇒: ' + sta.speed + '/frame' + br +
                 '×: ' + sta.reverse + 'sec';
             }

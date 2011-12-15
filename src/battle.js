@@ -57,11 +57,13 @@ var Battle = {
      */
     unitAndUnit: function(unit1, unit2) {
         var unit1_hp = unit1.hp, 
-            unit2_hp = unit2.hp;
+            unit2_hp = unit2.hp, 
+            damage1 = unit1_hp, 
+            damage2 = unit2_hp;
 
         while(unit1_hp > 0 && unit2_hp > 0) {
-            unit1_hp = unit1.attack(unit2);
-            unit2_hp = unit2.attack(unit1);
+            unit1_hp = unit1.attack(unit2, damage1);
+            unit2_hp = unit2.attack(unit1, damage2);
         }
 
         //check death

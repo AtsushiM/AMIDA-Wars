@@ -192,8 +192,9 @@ Amida = function(){
 
                 Surveillant.end();
                 EnemyAction.end();
-                Log.end();
                 countdown.stop();
+                GAME.end();
+                Log.end();
             };
 
         Surveillant.add(function() {
