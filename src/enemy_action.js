@@ -69,7 +69,7 @@ var EnemyAction = {
 
                 unit = new Unit(r);
             }
-        }, 3000);
+        }, 6000);
     }, 
     /**
      * stop enemy action

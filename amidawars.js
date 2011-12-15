@@ -27,6 +27,10 @@ W.addEventListener('load', W.onorientationchange, false);
 ・ランキング作成
 ・ヒーロー実装（自ユニットが死んだ回数や、敵城の状態等を見て使えるかどうか判断するなど）
 ・イラストを独自に
+・ループボタン設置
+・表示内容の再検討（攻撃力は表示すべきか否か）
+・ログを取るデータを再検討
+・ステータス内容を再考（攻撃力・防御力・HPではなく、強さに統一）
 
 //ユニット性能原案
 ・見た目の印象と実際の操作の乖離を少なくする。
@@ -173,18 +177,18 @@ var CONST = function(){
                             name: 'FIRE_MAGE', frame: 52, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 2, siege: 1, reverse: 4, 
                             attacked: function(){},
                             dead: function(obj){
-                                var mine = obj.mine, 
-                                    ef = new Effect({
-                                        type: mine.type.toUpperCase(), 
-                                        x: mine.x, 
-                                        y: mine.y, 
-                                        frames: CONST_CASH.EFFECT.FRAME.FIRE
-                                    });
-                                    
-                                addLayer({
-                                    layer: GROUP.EFFECT.UNIT, 
-                                    sprite: ef
-                                });
+                                // var mine = obj.mine, 
+                                //     ef = new Effect({
+                                //         type: mine.type.toUpperCase(), 
+                                //         x: mine.x, 
+                                //         y: mine.y, 
+                                //         frames: CONST_CASH.EFFECT.FRAME.FIRE
+                                //     });
+                                //     
+                                // addLayer({
+                                //     layer: GROUP.EFFECT.UNIT, 
+                                //     sprite: ef
+                                // });
                             }
                         },
                         FROST_MAGE: {
@@ -1982,7 +1986,7 @@ var EnemyAction = {
 
                 unit = new Unit(r);
             }
-        }, 3000);
+        }, 6000);
     }, 
     /**
      * stop enemy action

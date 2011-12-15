@@ -53,18 +53,18 @@ var CONST = function(){
                             name: 'FIRE_MAGE', frame: 52, hp: 2, armor: TYPE.NOARMOR, speed: 1.6, damage: 2, siege: 1, reverse: 4, 
                             attacked: function(){},
                             dead: function(obj){
-                                var mine = obj.mine, 
-                                    ef = new Effect({
-                                        type: mine.type.toUpperCase(), 
-                                        x: mine.x, 
-                                        y: mine.y, 
-                                        frames: CONST_CASH.EFFECT.FRAME.FIRE
-                                    });
-                                    
-                                addLayer({
-                                    layer: GROUP.EFFECT.UNIT, 
-                                    sprite: ef
-                                });
+                                // var mine = obj.mine, 
+                                //     ef = new Effect({
+                                //         type: mine.type.toUpperCase(), 
+                                //         x: mine.x, 
+                                //         y: mine.y, 
+                                //         frames: CONST_CASH.EFFECT.FRAME.FIRE
+                                //     });
+                                //     
+                                // addLayer({
+                                //     layer: GROUP.EFFECT.UNIT, 
+                                //     sprite: ef
+                                // });
                             }
                         },
                         FROST_MAGE: {
