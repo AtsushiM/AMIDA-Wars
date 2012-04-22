@@ -1,0 +1,45 @@
+" Vake!
+call system("growlnotify -t 'Vake' -m 'Vake start.'")
+
+" remove
+call system('rm -r ../deploy/*')
+
+" html
+HTMLMinifier -input=index.html -output=../deploy/index.php
+let s:html = join(readfile('../deploy/index.php'), '')
+let s:html = substitute(s:html, '<script src="enchant\/enchant.js"><\/script>', '', 'g')
+let s:html = substitute(s:html, '<script src="enchant\/plugins\/nineleap.enchant.js"><\/script>', '', 'g')
+let s:html = substitute(s:html, 'amidawars.js', 'a.js', 'g')
+call writefile([s:html], '../deploy/index.php')
+call system('cp -f ../deploy/index.php ../deploy/index.html')
+
+" file copy
+call system('cp -f aw.js ../deploy/a.js')
+call system('cp -f end.png ../deploy/e.png')
+call system('cp -f start.png ../deploy/s.png')
+call system('cp -f img/char.gif ../deploy/c.gif')
+call system('cp -f img/effect.gif ../deploy/e.gif')
+call system('cp -f img/map.png ../deploy/m.png')
+call system('cp -f img/thumb.png ../deploy/t.png')
+call system('cp -f img/window_status.png ../deploy/w.png')
+call system('cp -f sound/explosion.wav ../deploy/e.wav')
+
+" js read & last minifier
+let s:js = join(readfile('../deploy/a.js'), '')
+
+" replace file path
+let s:js = substitute(s:js, 'img\/char.gif', 'c.gif', 'g')
+let s:js = substitute(s:js, 'img\/effect.gif', 'e.gif', 'g')
+let s:js = substitute(s:js, 'img\/map.png', 'm.png', 'g')
+let s:js = substitute(s:js, 'img\/thumb.png', 't.png', 'g')
+let s:js = substitute(s:js, 'img\/window_status.png', 'w.png', 'g')
+let s:js = substitute(s:js, 'start.png', 's.png', 'g')
+let s:js = substitute(s:js, 'end.png', 'e.png', 'g')
+let s:js = substitute(s:js, 'sound\/explosion.wav', 'e.wav', 'g')
+
+call writefile([s:js], '../deploy/a.js', 'b')
+
+unlet s:html
+unlet s:js
+
+call system("growlnotify -t 'Vake' -m 'Vake complete.'")
