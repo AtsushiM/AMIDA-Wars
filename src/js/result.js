@@ -1,4 +1,4 @@
-Result = function(end) {
+var Result = function(end) {
     var resultView = new Scene(),
         title = new Label(),
         result = new Label(),

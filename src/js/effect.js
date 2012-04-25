@@ -3,7 +3,7 @@
  * @param {Object} config Config object.
  * @return {Object} Effect object.
  */
-Effect = function(config) {
+var Effect = function(config) {
     var size = CONST_CASH.UNIT.CHIP_SIZE,
         frames = config.frames,
         frame_start = frames.start,

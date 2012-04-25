@@ -3,7 +3,7 @@
  * @param {Object} config Config object.
  * @return {Object} castle object.
  */
-Castle = function(config) {
+var Castle = function(config) {
     var size = CONST_CASH.MAP.CHIP_SIZE,
         image = GAME.assets[CONST_CASH.MAP.IMAGE],
         prop = CONST().CASTLE().PROP,

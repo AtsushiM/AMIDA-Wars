@@ -109,14 +109,14 @@ var GAME,
         MIDIUM: 'MIDIUM',
         HEAVY: 'NOARMOR',
         NOARMOR: 'LIGHT'
-    };
+    },
     /**
      * override object property
      * @param {Object} prop Property Object.
      * @param {Object} config Config Object.
      * @return {Object} Property Object.
      */
-var propOverride = function(prop, config) {
+    propOverride = function(prop, config) {
         var i;
         if (prop === undefined) {
             prop = {};
@@ -127,13 +127,13 @@ var propOverride = function(prop, config) {
             }
         }
         return prop;
-    };
+    },
     /**
      * add object to layer
      * @param {Object} config Config Object.
      * @return {Object} Sprite Object.
      */
-var addLayer = function(config) {
+    addLayer = function(config) {
         config.layer.addChild(config.sprite);
         return config.sprite;
     };
@@ -646,9 +646,10 @@ CONST_CASH = {
     POINT: CONST_CASH.POINT()
 };
 /**
- * init game data
+ * game init
+ * @param {Object} config Config Object.
  */
-PUBLIC.init = function(config) {
+var init = function(config) {
     var img = {
             UNIT: CONST_CASH.UNIT.IMAGE,
             THUMB: CONST_CASH.THUMB.IMAGE,
@@ -656,7 +657,7 @@ PUBLIC.init = function(config) {
             EFFECT: CONST_CASH.EFFECT.IMAGE,
             STATUS_VIEWER: CONST_CASH.STATUS_VIEWER.IMAGE
         },
-        sound =  {
+        sound = {
             BGM: CONST_CASH.SOUND.BGM,
             EFFECT: {
                 EXPLOSION: CONST_CASH.SOUND.EFFECT.EXPLOSION
@@ -821,7 +822,7 @@ PUBLIC.init = function(config) {
     }());
 
     //new Game
-    GAME = new Game(size.W, size.H);
+    AW.GAME = GAME = new Game(size.W, size.H);
     //preload set
     GAME.preload(
         img.UNIT,
@@ -968,7 +969,7 @@ var RandamMap = function() {
     }
     return map;
 };
-RaceSelect = function() {
+var RaceSelect = function() {
     var thumbcons = CONST_CASH.THUMB,
         chip_size = thumbcons.CHIP_SIZE,
         sta_human = thumbcons.FRAME.HUMAN,
@@ -1141,7 +1142,7 @@ RaceSelect = function() {
 
     GAME.pushScene(scene);
 };
-Amida = function() {
+var Amida = function() {
     var chip_size = CONST_CASH.MAP.CHIP_SIZE,
         chipset = MAP.BASE,
         map = new Map(chip_size, chip_size),
@@ -1235,6 +1236,7 @@ Amida = function() {
             len,
             castles,
             castle;
+
 
         if (
             (mc = mc[unitPoint.y]) &&
@@ -1385,13 +1387,15 @@ Amida = function() {
         }, 'playEnd');
         Surveillant.init();
     }());
+
+    return map;
 };
 /**
  * Create castle object
  * @param {Object} config Config object.
  * @return {Object} castle object.
  */
-Castle = function(config) {
+var Castle = function(config) {
     var size = CONST_CASH.MAP.CHIP_SIZE,
         image = GAME.assets[CONST_CASH.MAP.IMAGE],
         prop = CONST().CASTLE().PROP,
@@ -1516,7 +1520,7 @@ Castle = function(config) {
  * @param {Object} config Config Object.
  * @return {Object} Thumb Object.
  */
-Thumb = function(config) {
+var Thumb = function(config) {
     var size = CONST_CASH.THUMB.CHIP_SIZE,
         image = GAME.assets[CONST_CASH.THUMB.IMAGE],
         prop = CONST().THUMB().PROP,
@@ -1750,7 +1754,7 @@ Thumb = function(config) {
  * @param  {Object} config Config Object.
  * @return  {Object} Unit Object.
  */
-Unit = function(config) {
+var Unit = function(config) {
     var size = CONST_CASH.UNIT.CHIP_SIZE,
         map_chip_size = CONST_CASH.MAP.CHIP_SIZE,
         unit_size_diff_x = size / 2,
@@ -1978,7 +1982,6 @@ Unit = function(config) {
                         hplabel[aii.prop] += (s * aii.sign);
                         if (checkMoveSquere() === true) {
                             colision = getCollision();
-                            var a = 1;
                             if (colision !== false) {
                                 if (colision.type !== sprite_type.CASTLE) {
                                     if (colision[aii.order[0]] === 1) {
@@ -2038,7 +2041,7 @@ Unit = function(config) {
         sprite: sprite
     });
 };
-Score = function(config) {
+var Score = function(config) {
     var total = 0,
         //enemy point rate
         rate = 0.5,
@@ -2096,7 +2099,7 @@ Score = function(config) {
  * @param {Object} config Config object.
  * @return {Object} Countdown Object.
  */
-Countdown = function(config) {
+var Countdown = function(config) {
     var label = new Label(),
         timelimit = CONST_CASH.TIMELIMIT,
         sec = 0,
@@ -2166,7 +2169,7 @@ Countdown = function(config) {
  * @param {Object} config Config object.
  * @return {Object} Effect object.
  */
-Effect = function(config) {
+var Effect = function(config) {
     var size = CONST_CASH.UNIT.CHIP_SIZE,
         frames = config.frames,
         frame_start = frames.start,
@@ -2479,7 +2482,7 @@ var Surveillant = {
  * @param {Object} config Config Object.
  * @return {Object} StatisViwer Object.
  */
-StatusViwer = function(config) {
+var StatusViwer = function(config) {
     var label = new Label(),
         group = new Group(),
         unit,
@@ -2645,7 +2648,7 @@ var Log = {
         clearInterval(Log.logid);
     }
 };
-Result = function(end) {
+var Result = function(end) {
     var resultView = new Scene(),
         title = new Label(),
         result = new Label(),
@@ -2708,6 +2711,26 @@ Result = function(end) {
     GAME.pushScene(resultView);
     GAME.end(score, end + ':' + score);
 };
+    PUBLIC = {
+        GAME: GAME,
+        Amida: Amida,
+        Battle: Battle,
+        Castle: Castle,
+        CONST: CONST_CASH,
+        Countdown: Countdown,
+        Effect: Effect,
+        EnemyAction: EnemyAction,
+        init: init,
+        Log: Log,
+        RaceSelect: RaceSelect,
+        RandamMap: RandamMap,
+        Result: Result,
+        Score: Score,
+        StatusViwer: StatusViwer,
+        Surveillant: Surveillant,
+        Thumb: Thumb,
+        Unit: Unit
+    };
     return PUBLIC;
 }(window));
 //AMIDA Wars init

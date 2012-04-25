@@ -1,7 +1,8 @@
 /**
- * init game data
+ * game init
+ * @param {Object} config Config Object.
  */
-PUBLIC.init = function(config) {
+var init = function(config) {
     var img = {
             UNIT: CONST_CASH.UNIT.IMAGE,
             THUMB: CONST_CASH.THUMB.IMAGE,
@@ -9,7 +10,7 @@ PUBLIC.init = function(config) {
             EFFECT: CONST_CASH.EFFECT.IMAGE,
             STATUS_VIEWER: CONST_CASH.STATUS_VIEWER.IMAGE
         },
-        sound =  {
+        sound = {
             BGM: CONST_CASH.SOUND.BGM,
             EFFECT: {
                 EXPLOSION: CONST_CASH.SOUND.EFFECT.EXPLOSION

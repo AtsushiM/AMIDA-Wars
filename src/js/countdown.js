@@ -3,7 +3,7 @@
  * @param {Object} config Config object.
  * @return {Object} Countdown Object.
  */
-Countdown = function(config) {
+var Countdown = function(config) {
     var label = new Label(),
         timelimit = CONST_CASH.TIMELIMIT,
         sec = 0,

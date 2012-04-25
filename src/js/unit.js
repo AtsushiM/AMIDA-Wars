@@ -3,7 +3,7 @@
  * @param  {Object} config Config Object.
  * @return  {Object} Unit Object.
  */
-Unit = function(config) {
+var Unit = function(config) {
     var size = CONST_CASH.UNIT.CHIP_SIZE,
         map_chip_size = CONST_CASH.MAP.CHIP_SIZE,
         unit_size_diff_x = size / 2,
@@ -231,7 +231,6 @@ Unit = function(config) {
                         hplabel[aii.prop] += (s * aii.sign);
                         if (checkMoveSquere() === true) {
                             colision = getCollision();
-                            var a = 1;
                             if (colision !== false) {
                                 if (colision.type !== sprite_type.CASTLE) {
                                     if (colision[aii.order[0]] === 1) {

@@ -1,4 +1,4 @@
-Score = function(config) {
+var Score = function(config) {
     var total = 0,
         //enemy point rate
         rate = 0.5,

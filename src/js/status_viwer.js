@@ -3,7 +3,7 @@
  * @param {Object} config Config Object.
  * @return {Object} StatisViwer Object.
  */
-StatusViwer = function(config) {
+var StatusViwer = function(config) {
     var label = new Label(),
         group = new Group(),
         unit,

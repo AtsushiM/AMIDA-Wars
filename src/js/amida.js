@@ -1,4 +1,4 @@
-Amida = function() {
+var Amida = function() {
     var chip_size = CONST_CASH.MAP.CHIP_SIZE,
         chipset = MAP.BASE,
         map = new Map(chip_size, chip_size),
@@ -242,4 +242,6 @@ Amida = function() {
         }, 'playEnd');
         Surveillant.init();
     }());
+
+    return map;
 };

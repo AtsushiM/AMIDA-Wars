@@ -3,7 +3,7 @@
  * @param {Object} config Config Object.
  * @return {Object} Thumb Object.
  */
-Thumb = function(config) {
+var Thumb = function(config) {
     var size = CONST_CASH.THUMB.CHIP_SIZE,
         image = GAME.assets[CONST_CASH.THUMB.IMAGE],
         prop = CONST().THUMB().PROP,

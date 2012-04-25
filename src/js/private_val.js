@@ -46,14 +46,14 @@ var GAME,
         MIDIUM: 'MIDIUM',
         HEAVY: 'NOARMOR',
         NOARMOR: 'LIGHT'
-    };
+    },
     /**
      * override object property
      * @param {Object} prop Property Object.
      * @param {Object} config Config Object.
      * @return {Object} Property Object.
      */
-var propOverride = function(prop, config) {
+    propOverride = function(prop, config) {
         var i;
         if (prop === undefined) {
             prop = {};
@@ -64,13 +64,13 @@ var propOverride = function(prop, config) {
             }
         }
         return prop;
-    };
+    },
     /**
      * add object to layer
      * @param {Object} config Config Object.
      * @return {Object} Sprite Object.
      */
-var addLayer = function(config) {
+    addLayer = function(config) {
         config.layer.addChild(config.sprite);
         return config.sprite;
     };

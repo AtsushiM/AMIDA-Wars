@@ -1,4 +1,4 @@
-RaceSelect = function() {
+var RaceSelect = function() {
     var thumbcons = CONST_CASH.THUMB,
         chip_size = thumbcons.CHIP_SIZE,
         sta_human = thumbcons.FRAME.HUMAN,
