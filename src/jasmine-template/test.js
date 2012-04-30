@@ -720,7 +720,6 @@ describe('AW.Resultクラスは ', function() {
     });
 });
 
-/*
 describe('AW.Effectクラスは ', function() {
     AW.GAME.start();
     var EffectLoop, EffectUnLoop;
@@ -753,24 +752,34 @@ describe('AW.Effectクラスは ', function() {
         EffectUnLoop = null;
     });
 
+    it('frames.loopオプションでループするかどうかが決定する', function() {
+        expect(EffectLoop.endFlg).toBeFalsy();
+        expect(EffectUnLoop.endFlg).toBeFalsy();
+
+        EffectLoop.effect();
+        EffectLoop.effect();
+        EffectLoop.effect();
+        EffectLoop.effect();
+        EffectLoop.effect();
+        EffectLoop.effect();
+
+        expect(EffectLoop.endFlg).toBeFalsy();
+
+        EffectUnLoop.effect();
+        EffectUnLoop.effect();
+        EffectUnLoop.effect();
+        EffectUnLoop.effect();
+        EffectUnLoop.effect();
+        EffectUnLoop.effect();
+
+        expect(EffectUnLoop.endFlg).toBeTruthy();
+    });
     it('end()でアニメーションを停止する', function() {
         expect(EffectLoop.end).toBeDefined();
         expect(EffectLoop.end()).toBeTruthy();
         expect(EffectUnLoop.end()).toBeTruthy();
     });
-    it('frames.loopオプションでループするかどうかが決定する', function() {
-        runs(function() {
-            expect(EffectLoop.endFlg).toBeFalsy();
-            expect(EffectUnLoop.endFlg).toBeFalsy();
-        });
-        waits(1000);
-        runs(function() {
-            expect(EffectLoop.endFlg).toBeFalsy();
-            expect(EffectUnLoop.endFlg).toBeTruthy();
-        });
-    });
 });
-*/
 
 describe('AW.Countdownクラスは ', function() {
     var Countdown;
