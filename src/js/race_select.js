@@ -81,8 +81,9 @@ var RaceSelect = function() {
                     }, 1000);
                 }, 1000);
             }, 1000);
-        };
 
+            return USER_RACE;
+        };
 
     //scene config
     scene.backgroundColor = 'rgba(0,0,0,0.3)';
@@ -139,7 +140,7 @@ var RaceSelect = function() {
     scene.addChild(undead);
 
     human.addEventListener(enchant.Event.TOUCH_END, function() {
-        selectAfter({
+        return selectAfter({
             race: 'HUMAN',
             order: [
                 'LANCER',
@@ -154,7 +155,7 @@ var RaceSelect = function() {
         });
     });
     undead.addEventListener(enchant.Event.TOUCH_END, function() {
-        selectAfter({
+        return selectAfter({
             race: 'UNDEAD',
             order: [
                 'BONE_WARRIER',
@@ -170,4 +171,8 @@ var RaceSelect = function() {
     });
 
     GAME.pushScene(scene);
+
+    return {
+        select: selectAfter
+    };
 };

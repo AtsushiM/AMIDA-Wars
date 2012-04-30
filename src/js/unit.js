@@ -74,6 +74,7 @@ var Unit = function(config) {
     };
     /**
      * unit kill process
+     * @return {Boolean} true.
      */
     sprite.kill = function() {
         var x = sprite.x,
@@ -102,6 +103,8 @@ var Unit = function(config) {
         if (sprite.thumb !== undefined) {
             sprite.thumb.reverse(sprite);
         }
+
+        return true;
     };
 
     /**
@@ -109,7 +112,7 @@ var Unit = function(config) {
      * @return {Boolean} death flg.
      */
     sprite.checkDeath = function() {
-        if (sprite.hp === 0) {
+        if (sprite.hp <= 0) {
             return true;
         }
         return false;
@@ -120,9 +123,11 @@ var Unit = function(config) {
     /**
      * change sprite view
      * @param {Object} unit Unit Object.
+     * @return {Boolean} true.
      */
     sprite.changeUnit = function(unit) {
         default_frame = unit.frame;
+        return true;
     };
 
     /**
@@ -266,10 +271,12 @@ var Unit = function(config) {
 
     /**
      * unit stop and walk effect
+     * @return {Boolean} true.
      */
     sprite.stay = function() {
         GROUP[mode].UNIT.removeChild(hplabel);
         sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
+        return true;
     };
 
     //add array

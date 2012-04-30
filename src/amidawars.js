@@ -1052,8 +1052,9 @@ var RaceSelect = function() {
                     }, 1000);
                 }, 1000);
             }, 1000);
-        };
 
+            return USER_RACE;
+        };
 
     //scene config
     scene.backgroundColor = 'rgba(0,0,0,0.3)';
@@ -1110,7 +1111,7 @@ var RaceSelect = function() {
     scene.addChild(undead);
 
     human.addEventListener(enchant.Event.TOUCH_END, function() {
-        selectAfter({
+        return selectAfter({
             race: 'HUMAN',
             order: [
                 'LANCER',
@@ -1125,7 +1126,7 @@ var RaceSelect = function() {
         });
     });
     undead.addEventListener(enchant.Event.TOUCH_END, function() {
-        selectAfter({
+        return selectAfter({
             race: 'UNDEAD',
             order: [
                 'BONE_WARRIER',
@@ -1141,6 +1142,10 @@ var RaceSelect = function() {
     });
 
     GAME.pushScene(scene);
+
+    return {
+        select: selectAfter
+    };
 };
 var Amida = function() {
     var chip_size = CONST_CASH.MAP.CHIP_SIZE,
@@ -1236,7 +1241,6 @@ var Amida = function() {
             len,
             castles,
             castle;
-
 
         if (
             (mc = mc[unitPoint.y]) &&
@@ -1727,6 +1731,7 @@ var Thumb = function(config) {
 
         countdown.text = count;
         sprite.opacity = 0.3;
+        return true;
     };
 
     //add array
@@ -1740,7 +1745,7 @@ var Thumb = function(config) {
      * init unit object
      */
     sprite.init = function() {
-        sprite.reverse(sprite.unit);
+        return sprite.reverse(sprite.unit);
     };
 
     //add Layer
@@ -1825,6 +1830,7 @@ var Unit = function(config) {
     };
     /**
      * unit kill process
+     * @return {Boolean} true.
      */
     sprite.kill = function() {
         var x = sprite.x,
@@ -1853,6 +1859,8 @@ var Unit = function(config) {
         if (sprite.thumb !== undefined) {
             sprite.thumb.reverse(sprite);
         }
+
+        return true;
     };
 
     /**
@@ -1860,7 +1868,7 @@ var Unit = function(config) {
      * @return {Boolean} death flg.
      */
     sprite.checkDeath = function() {
-        if (sprite.hp === 0) {
+        if (sprite.hp <= 0) {
             return true;
         }
         return false;
@@ -1871,9 +1879,11 @@ var Unit = function(config) {
     /**
      * change sprite view
      * @param {Object} unit Unit Object.
+     * @return {Boolean} true.
      */
     sprite.changeUnit = function(unit) {
         default_frame = unit.frame;
+        return true;
     };
 
     /**
@@ -2017,10 +2027,12 @@ var Unit = function(config) {
 
     /**
      * unit stop and walk effect
+     * @return {Boolean} true.
      */
     sprite.stay = function() {
         GROUP[mode].UNIT.removeChild(hplabel);
         sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
+        return true;
     };
 
     //add array
@@ -2123,13 +2135,16 @@ var Countdown = function(config) {
 
     /**
      * view update
+     * @return {String} timelimit text.
      */
     label.update = function() {
         label.text = 'TIME-LIMIT : ' + (timelimit - sec);
+        return label.text;
     };
 
     /**
      * countdown start
+     * @return {Boolean} true.
      */
     label.init = function() {
         label.stop();
@@ -2137,14 +2152,17 @@ var Countdown = function(config) {
             count();
             label.update();
         }, 1000);
+        return true;
     };
 
     /**
      * set after
      * @param {Function} func after function.
+     * @return {Function} set function.
      */
     label.setAfter = function(func) {
         after = func;
+        return after;
     };
 
     /**
@@ -2157,9 +2175,11 @@ var Countdown = function(config) {
 
     /**
      * stop countdown process
+     * @return {Boolean} true.
      */
     label.stop = function() {
         clearInterval(limitID);
+        return true;
     };
 
     return label;
@@ -2208,6 +2228,8 @@ var Effect = function(config) {
     sprite.x = config.x;
     sprite.y = config.y;
     sprite.frame = frame_start;
+    sprite.endFlg = false;
+    sprite.effect = effect;
 
     //effect action
     sprite.addEventListener(enchant.Event.ENTER_FRAME, effect);
@@ -2216,6 +2238,8 @@ var Effect = function(config) {
     sprite.end = function() {
         sprite.removeEventListener(enchant.Event.ENTER_FRAME, effect);
         layer.removeChild(sprite);
+        sprite.endFlg = true;
+        return true;
     };
 
     //add Layer
@@ -2226,7 +2250,7 @@ var Effect = function(config) {
 };
 //Enemy AI
 var EnemyAction = {
-    aiid: 0,
+    aiid: null,
     /* race: 'UNDEAD', */
     /* race: 'HUMAN', */
     race: '',
@@ -2260,7 +2284,8 @@ var EnemyAction = {
                 ];
                 break;
 
-            case 'UNDEAD':
+            /* case 'UNDEAD': */
+            default:
                 ea.race = 'HUMAN';
                 ea.order = [
                     'LANCER',
@@ -2272,9 +2297,8 @@ var EnemyAction = {
                     'FROST_MAGE',
                     'WIZARD'
                 ];
-                break;
+                /* break; */
 
-            default:
                 break;
         }
         unit_status = unit_status[ea.race];
@@ -2318,11 +2342,13 @@ var EnemyAction = {
      */
     end: function() {
         clearInterval(EnemyAction.aiid);
+        EnemyAction.aiid = null;
     }
 };
 var Battle = {
     /**
      * Battle init
+     * @return {Function} Surveillant function.
      */
     init: function() {
         var func = function() {
@@ -2352,9 +2378,11 @@ var Battle = {
             }
         };
         Surveillant.add(func, 'battle');
+        return func;
     },
     /**
      * @param {Object} obj Sprite object.
+     * @return {Number} score.
      */
     score: function(obj) {
         var have = CONST_CASH.HAVE,
@@ -2362,7 +2390,8 @@ var Battle = {
             type = CONST_CASH.TYPE,
             obj_type = obj.type,
             score = LABEL.SCORE,
-            point = CONST_CASH.POINT;
+            point = CONST_CASH.POINT,
+            ret;
 
         if (
             (
@@ -2373,11 +2402,14 @@ var Battle = {
                 obj_mode === have.ENEMY
             )
         ) {
-            score.add(point[obj_type]);
+            ret = point[obj_type];
         }
         else if (obj_type === type.CASTLE && obj_mode === have.USER) {
-            score.add(-point[obj_type]);
+            ret = -point[obj_type];
         }
+
+        score.add(ret);
+        return ret;
     },
     /**
      * battole unit and unit
@@ -2430,12 +2462,16 @@ var Surveillant = {
     //process surveillant
     exefunc: function() {
         var i,
+            ret = [],
             funcs = Surveillant.functions;
+
         for (i in funcs) {
             if (funcs.hasOwnProperty(i) === true) {
-                funcs[i]();
+                ret.push(funcs[i]());
             }
         }
+
+        return ret;
     },
     /**
      * add surveillant process
@@ -2528,9 +2564,11 @@ var StatusViwer = function(config) {
         group.update = function(obj) {
             label.text = viewcash[obj.name];
             unit.changeUnit(obj);
+
+            return true;
         };
 
-        group.update(obj);
+        return group.update(obj);
     };
 
     group.init = function() {
@@ -2545,6 +2583,7 @@ var StatusViwer = function(config) {
             }
         }
         bg.opacity = 1;
+        return viewcash;
     };
 
     group.addChild(bg);
@@ -2616,10 +2655,12 @@ var Log = {
         //         'application/x-www-form-urlencoded'
         // );
         // httpRequest.send('log=' + JSON.stringify(Log.data));
+        return true;
     },
     reset: function() {
         Log.data = {
             time: 0,
+            victory: 0,
             unit: {
                 USER: 0,
                 ENEMY: 0
@@ -2642,10 +2683,12 @@ var Log = {
         Log.reset();
         /* Log.end(); */
         /* Log.logid = setInterval(Log.send, 30000); */
+        return true;
     },
     end: function() {
         Log.send();
         clearInterval(Log.logid);
+        return true;
     }
 };
 var Result = function(end) {
@@ -2707,9 +2750,12 @@ var Result = function(end) {
     resultView.addChild(title);
     resultView.addChild(result);
     resultView.backgroundColor = 'rgba(0,0,0,0.3)';
+    resultView.result = end;
 
     GAME.pushScene(resultView);
     GAME.end(score, end + ':' + score);
+
+    return resultView;
 };
     PUBLIC = {
         GAME: GAME,

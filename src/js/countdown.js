@@ -27,13 +27,16 @@ var Countdown = function(config) {
 
     /**
      * view update
+     * @return {String} timelimit text.
      */
     label.update = function() {
         label.text = 'TIME-LIMIT : ' + (timelimit - sec);
+        return label.text;
     };
 
     /**
      * countdown start
+     * @return {Boolean} true.
      */
     label.init = function() {
         label.stop();
@@ -41,14 +44,17 @@ var Countdown = function(config) {
             count();
             label.update();
         }, 1000);
+        return true;
     };
 
     /**
      * set after
      * @param {Function} func after function.
+     * @return {Function} set function.
      */
     label.setAfter = function(func) {
         after = func;
+        return after;
     };
 
     /**
@@ -61,9 +67,11 @@ var Countdown = function(config) {
 
     /**
      * stop countdown process
+     * @return {Boolean} true.
      */
     label.stop = function() {
         clearInterval(limitID);
+        return true;
     };
 
     return label;

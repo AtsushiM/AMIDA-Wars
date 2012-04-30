@@ -49,9 +49,11 @@ var StatusViwer = function(config) {
         group.update = function(obj) {
             label.text = viewcash[obj.name];
             unit.changeUnit(obj);
+
+            return true;
         };
 
-        group.update(obj);
+        return group.update(obj);
     };
 
     group.init = function() {
@@ -66,6 +68,7 @@ var StatusViwer = function(config) {
             }
         }
         bg.opacity = 1;
+        return viewcash;
     };
 
     group.addChild(bg);

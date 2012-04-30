@@ -61,10 +61,12 @@ var Log = {
         //         'application/x-www-form-urlencoded'
         // );
         // httpRequest.send('log=' + JSON.stringify(Log.data));
+        return true;
     },
     reset: function() {
         Log.data = {
             time: 0,
+            victory: 0,
             unit: {
                 USER: 0,
                 ENEMY: 0
@@ -87,9 +89,11 @@ var Log = {
         Log.reset();
         /* Log.end(); */
         /* Log.logid = setInterval(Log.send, 30000); */
+        return true;
     },
     end: function() {
         Log.send();
         clearInterval(Log.logid);
+        return true;
     }
 };

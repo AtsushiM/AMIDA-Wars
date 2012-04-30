@@ -57,7 +57,10 @@ var Result = function(end) {
     resultView.addChild(title);
     resultView.addChild(result);
     resultView.backgroundColor = 'rgba(0,0,0,0.3)';
+    resultView.result = end;
 
     GAME.pushScene(resultView);
     GAME.end(score, end + ':' + score);
+
+    return resultView;
 };

@@ -1,6 +1,6 @@
 //Enemy AI
 var EnemyAction = {
-    aiid: 0,
+    aiid: null,
     /* race: 'UNDEAD', */
     /* race: 'HUMAN', */
     race: '',
@@ -34,7 +34,8 @@ var EnemyAction = {
                 ];
                 break;
 
-            case 'UNDEAD':
+            /* case 'UNDEAD': */
+            default:
                 ea.race = 'HUMAN';
                 ea.order = [
                     'LANCER',
@@ -46,9 +47,8 @@ var EnemyAction = {
                     'FROST_MAGE',
                     'WIZARD'
                 ];
-                break;
+                /* break; */
 
-            default:
                 break;
         }
         unit_status = unit_status[ea.race];
@@ -92,5 +92,6 @@ var EnemyAction = {
      */
     end: function() {
         clearInterval(EnemyAction.aiid);
+        EnemyAction.aiid = null;
     }
 };

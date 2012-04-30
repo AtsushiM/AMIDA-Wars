@@ -210,6 +210,7 @@ var Thumb = function(config) {
 
         countdown.text = count;
         sprite.opacity = 0.3;
+        return true;
     };
 
     //add array
@@ -223,7 +224,7 @@ var Thumb = function(config) {
      * init unit object
      */
     sprite.init = function() {
-        sprite.reverse(sprite.unit);
+        return sprite.reverse(sprite.unit);
     };
 
     //add Layer

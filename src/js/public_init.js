@@ -175,7 +175,7 @@ var init = function(config) {
     }());
 
     //new Game
-    GAME = new Game(size.W, size.H);
+    AW.GAME = GAME = new Game(size.W, size.H);
     //preload set
     GAME.preload(
         img.UNIT,

@@ -1,6 +1,7 @@
 var Battle = {
     /**
      * Battle init
+     * @return {Function} Surveillant function.
      */
     init: function() {
         var func = function() {
@@ -30,9 +31,11 @@ var Battle = {
             }
         };
         Surveillant.add(func, 'battle');
+        return func;
     },
     /**
      * @param {Object} obj Sprite object.
+     * @return {Number} score.
      */
     score: function(obj) {
         var have = CONST_CASH.HAVE,
@@ -40,7 +43,8 @@ var Battle = {
             type = CONST_CASH.TYPE,
             obj_type = obj.type,
             score = LABEL.SCORE,
-            point = CONST_CASH.POINT;
+            point = CONST_CASH.POINT,
+            ret;
 
         if (
             (
@@ -51,11 +55,14 @@ var Battle = {
                 obj_mode === have.ENEMY
             )
         ) {
-            score.add(point[obj_type]);
+            ret = point[obj_type];
         }
         else if (obj_type === type.CASTLE && obj_mode === have.USER) {
-            score.add(-point[obj_type]);
+            ret = -point[obj_type];
         }
+
+        score.add(ret);
+        return ret;
     },
     /**
      * battole unit and unit

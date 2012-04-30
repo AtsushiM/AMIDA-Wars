@@ -3,12 +3,16 @@ var Surveillant = {
     //process surveillant
     exefunc: function() {
         var i,
+            ret = [],
             funcs = Surveillant.functions;
+
         for (i in funcs) {
             if (funcs.hasOwnProperty(i) === true) {
-                funcs[i]();
+                ret.push(funcs[i]());
             }
         }
+
+        return ret;
     },
     /**
      * add surveillant process

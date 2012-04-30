@@ -42,6 +42,8 @@ var Effect = function(config) {
     sprite.x = config.x;
     sprite.y = config.y;
     sprite.frame = frame_start;
+    sprite.endFlg = false;
+    sprite.effect = effect;
 
     //effect action
     sprite.addEventListener(enchant.Event.ENTER_FRAME, effect);
@@ -50,6 +52,8 @@ var Effect = function(config) {
     sprite.end = function() {
         sprite.removeEventListener(enchant.Event.ENTER_FRAME, effect);
         layer.removeChild(sprite);
+        sprite.endFlg = true;
+        return true;
     };
 
     //add Layer
