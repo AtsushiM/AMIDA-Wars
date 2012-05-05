@@ -10,8 +10,12 @@ let s:html = join(readfile('../deploy/index.php'), '')
 let s:html = substitute(s:html, '<script src="enchant\/enchant.js"><\/script>', '', 'g')
 let s:html = substitute(s:html, '<script src="enchant\/plugins\/nineleap.enchant.js"><\/script>', '', 'g')
 let s:html = substitute(s:html, 'amidawars.js', 'a.js', 'g')
+let s:html = substitute(s:html, 'css/common.css', 'c.css', 'g')
 call writefile([s:html], '../deploy/index.php')
 call system('cp -f ../deploy/index.php ../deploy/index.html')
+
+" css
+CSSMinifier -input=css/common.css -output=../deploy/c.css
 
 " file copy
 call system('cp -f aw.js ../deploy/a.js')

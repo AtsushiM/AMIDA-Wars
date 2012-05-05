@@ -18,21 +18,24 @@ var Effect = function(config) {
     if (loop === true) {
         effect = function(e) {
             if (GAME.frame % rate === 0) {
-                if (sprite.frame >= frame_end) {
-                    sprite.frame = frame_start;
-                }
-                else {
+                if (sprite.frame < frame_end) {
                     sprite.frame++;
                 }
+                else {
+                    sprite.frame = frame_start;
+                }
+                console.log(sprite.frame);
             }
         };
     }
     else {
         effect = function(e) {
             if (GAME.frame % rate === 0) {
-                sprite.frame++;
                 if (sprite.frame >= frame_end) {
                     sprite.end();
+                }
+                else {
+                    sprite.frame++;
                 }
             }
         };
@@ -51,8 +54,8 @@ var Effect = function(config) {
     //effect end
     sprite.end = function() {
         sprite.removeEventListener(enchant.Event.ENTER_FRAME, effect);
-        layer.removeChild(sprite);
         sprite.endFlg = true;
+        layer.removeChild(sprite);
         return true;
     };
 

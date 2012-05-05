@@ -247,14 +247,15 @@ var CONST = function() {
                                 var mine = obj.mine,
                                     ef = new Effect({
                                         type: mine.type.toUpperCase(),
+                                        etype: 'FIRE',
                                         x: mine.x,
                                         y: mine.y,
                                         frames: CONST_CASH.EFFECT.FRAME.FIRE
                                     });
-                                addLayer({
-                                    layer: GROUP.EFFECT.UNIT,
-                                    sprite: ef
-                                });
+
+                                setTimeout(function() {
+                                    ef.end();
+                                }, 10000);
                             }
                         },
                         FROST_MAGE: {
@@ -269,14 +270,11 @@ var CONST = function() {
                                 var mine = obj.mine,
                                     ef = new Effect({
                                         type: mine.type.toUpperCase(),
+                                        etype: 'FROST',
                                         x: mine.x,
                                         y: mine.y,
                                         frames: CONST_CASH.EFFECT.FRAME.FROST
                                     });
-                                addLayer({
-                                    layer: GROUP.EFFECT.UNIT,
-                                    sprite: ef
-                                });
                             }
                         },
                         WIZARD: {
@@ -583,7 +581,7 @@ var CONST = function() {
                         start: 6,
                         end: 8,
                         rate: 50,
-                        loop: false
+                        loop: true
                     },
                     FROST: {
                         start: 11,
@@ -2204,21 +2202,24 @@ var Effect = function(config) {
     if (loop === true) {
         effect = function(e) {
             if (GAME.frame % rate === 0) {
-                if (sprite.frame >= frame_end) {
-                    sprite.frame = frame_start;
-                }
-                else {
+                if (sprite.frame < frame_end) {
                     sprite.frame++;
                 }
+                else {
+                    sprite.frame = frame_start;
+                }
+                console.log(sprite.frame);
             }
         };
     }
     else {
         effect = function(e) {
             if (GAME.frame % rate === 0) {
-                sprite.frame++;
                 if (sprite.frame >= frame_end) {
                     sprite.end();
+                }
+                else {
+                    sprite.frame++;
                 }
             }
         };
@@ -2237,8 +2238,8 @@ var Effect = function(config) {
     //effect end
     sprite.end = function() {
         sprite.removeEventListener(enchant.Event.ENTER_FRAME, effect);
-        layer.removeChild(sprite);
         sprite.endFlg = true;
+        layer.removeChild(sprite);
         return true;
     };
 

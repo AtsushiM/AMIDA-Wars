@@ -722,7 +722,8 @@ describe('AW.Resultクラスは ', function() {
 
 describe('AW.Effectクラスは ', function() {
     AW.GAME.start();
-    var EffectLoop, EffectUnLoop;
+    var EffectLoop, EffectUnLoop,
+        Gframe = AW.GAME.frame;
     beforeEach(function() {
         EffectLoop = new AW.Effect({
             type: 'unit',
@@ -750,13 +751,16 @@ describe('AW.Effectクラスは ', function() {
     afterEach(function() {
         EffectLoop = null;
         EffectUnLoop = null;
+        AW.GAME.frame = Gframe;
     });
 
     it('frames.loopオプションでループするかどうかが決定する', function() {
         expect(EffectLoop.endFlg).toBeFalsy();
         expect(EffectUnLoop.endFlg).toBeFalsy();
 
-        EffectLoop.effect();
+        //テスト用
+        AW.GAME.frame = 3;
+
         EffectLoop.effect();
         EffectLoop.effect();
         EffectLoop.effect();
@@ -765,7 +769,6 @@ describe('AW.Effectクラスは ', function() {
 
         expect(EffectLoop.endFlg).toBeFalsy();
 
-        EffectUnLoop.effect();
         EffectUnLoop.effect();
         EffectUnLoop.effect();
         EffectUnLoop.effect();

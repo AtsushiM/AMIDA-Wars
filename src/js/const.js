@@ -106,14 +106,15 @@ var CONST = function() {
                                 var mine = obj.mine,
                                     ef = new Effect({
                                         type: mine.type.toUpperCase(),
+                                        etype: 'FIRE',
                                         x: mine.x,
                                         y: mine.y,
                                         frames: CONST_CASH.EFFECT.FRAME.FIRE
                                     });
-                                addLayer({
-                                    layer: GROUP.EFFECT.UNIT,
-                                    sprite: ef
-                                });
+
+                                setTimeout(function() {
+                                    ef.end();
+                                }, 10000);
                             }
                         },
                         FROST_MAGE: {
@@ -128,14 +129,11 @@ var CONST = function() {
                                 var mine = obj.mine,
                                     ef = new Effect({
                                         type: mine.type.toUpperCase(),
+                                        etype: 'FROST',
                                         x: mine.x,
                                         y: mine.y,
                                         frames: CONST_CASH.EFFECT.FRAME.FROST
                                     });
-                                addLayer({
-                                    layer: GROUP.EFFECT.UNIT,
-                                    sprite: ef
-                                });
                             }
                         },
                         WIZARD: {
@@ -442,7 +440,7 @@ var CONST = function() {
                         start: 6,
                         end: 8,
                         rate: 50,
-                        loop: false
+                        loop: true
                     },
                     FROST: {
                         start: 11,
