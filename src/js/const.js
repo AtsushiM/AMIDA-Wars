@@ -134,6 +134,10 @@ var CONST = function() {
                                         y: mine.y,
                                         frames: CONST_CASH.EFFECT.FRAME.FROST
                                     });
+
+                                setTimeout(function() {
+                                    ef.end();
+                                }, 10000);
                             }
                         },
                         WIZARD: {
@@ -319,7 +323,7 @@ var CONST = function() {
                         {
                             direction: 0,
                             prop: 'y',
-                            sign: 1,
+                            sign: -1,
                             order: [
                                 3,
                                 1,
@@ -443,10 +447,10 @@ var CONST = function() {
                         loop: true
                     },
                     FROST: {
-                        start: 11,
-                        end: 11,
-                        rate: 10,
-                        loop: false
+                        start: 12,
+                        end: 12,
+                        rate: 1000,
+                        loop: true
                     }
                 }
             };

@@ -10,25 +10,28 @@ var Battle = {
                 unit_user, unit_enemy,
                 i, j;
 
-            for (i in units_enemy) {
-                if (units_enemy.hasOwnProperty(i) === true) {
-                    unit_enemy = units_enemy[i];
-                    for (j in units_user) {
-                        if (units_user.hasOwnProperty(j) === true) {
-                            unit_user = units_user[j];
-                            if (
-                                unit_enemy.intersect(unit_user) === true &&
-                                (
-                                    unit_user.x === unit_enemy.x ||
-                                    unit_user.y === unit_enemy.y
-                                )
-                            ) {
-                                Battle.unitAndUnit(unit_enemy, unit_user);
+            func = function() {
+                for (i in units_enemy) {
+                    if (units_enemy.hasOwnProperty(i) === true) {
+                        unit_enemy = units_enemy[i];
+                        for (j in units_user) {
+                            if (units_user.hasOwnProperty(j) === true) {
+                                unit_user = units_user[j];
+                                if (
+                                    unit_enemy.intersect(unit_user) === true &&
+                                    (
+                                        unit_user.x === unit_enemy.x ||
+                                        unit_user.y === unit_enemy.y
+                                    )
+                                ) {
+                                    Battle.unitAndUnit(unit_enemy, unit_user);
+                                }
                             }
                         }
                     }
                 }
-            }
+            };
+            return func();
         };
         Surveillant.add(func, 'battle');
         return func;
@@ -39,30 +42,38 @@ var Battle = {
      */
     score: function(obj) {
         var have = CONST_CASH.HAVE,
-            obj_mode = obj.mode,
             type = CONST_CASH.TYPE,
-            obj_type = obj.type,
             score = LABEL.SCORE,
             point = CONST_CASH.POINT,
+            obj_mode,
+            obj_type,
             ret;
 
-        if (
-            (
-                obj_type !== type.CASTLE &&
-                obj_mode === have.USER
-            ) || (
-                obj_type === type.CASTLE &&
-                obj_mode === have.ENEMY
-            )
-        ) {
-            ret = point[obj_type];
-        }
-        else if (obj_type === type.CASTLE && obj_mode === have.USER) {
-            ret = -point[obj_type];
-        }
+        Battle.score = function(obj) {
+            obj_mode = obj.mode;
+            obj_type = obj.type;
+            ret = null;
 
-        score.add(ret);
-        return ret;
+            if (
+                (
+                    obj_type !== type.CASTLE &&
+                    obj_mode === have.USER
+                ) || (
+                    obj_type === type.CASTLE &&
+                    obj_mode === have.ENEMY
+                )
+            ) {
+                ret = point[obj_type];
+            }
+            else if (obj_type === type.CASTLE && obj_mode === have.USER) {
+                ret = -point[obj_type];
+            }
+
+            score.add(ret);
+            return ret;
+        };
+
+        return Battle.score(obj);
     },
     /**
      * battole unit and unit

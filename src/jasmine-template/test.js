@@ -774,6 +774,7 @@ describe('AW.Effectクラスは ', function() {
         EffectUnLoop.effect();
         EffectUnLoop.effect();
         EffectUnLoop.effect();
+        EffectUnLoop.effect();
 
         expect(EffectUnLoop.endFlg).toBeTruthy();
     });

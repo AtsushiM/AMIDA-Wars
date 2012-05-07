@@ -24,7 +24,6 @@ var Effect = function(config) {
                 else {
                     sprite.frame = frame_start;
                 }
-                console.log(sprite.frame);
             }
         };
     }
@@ -45,8 +44,8 @@ var Effect = function(config) {
     sprite.x = config.x;
     sprite.y = config.y;
     sprite.frame = frame_start;
-    sprite.endFlg = false;
     sprite.effect = effect;
+    sprite.endFlg = false;
 
     //effect action
     sprite.addEventListener(enchant.Event.ENTER_FRAME, effect);
@@ -54,8 +53,21 @@ var Effect = function(config) {
     //effect end
     sprite.end = function() {
         sprite.removeEventListener(enchant.Event.ENTER_FRAME, effect);
-        sprite.endFlg = true;
         layer.removeChild(sprite);
+        sprite.endFlg = true;
+
+        setTimeout(function() {
+            size =
+            frames =
+            frame_start =
+            frame_end =
+            rate =
+            loop =
+            type =
+            layer =
+            sprite =
+            effect = null;
+        }, 10);
         return true;
     };
 

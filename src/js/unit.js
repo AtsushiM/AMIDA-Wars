@@ -59,14 +59,14 @@ var Unit = function(config) {
     sprite.attack = function(vsUnit, damage) {
         vsUnit.hp -= damage;
         sprite.attacked({
-            mine: sprite,
-            enemy: vsUnit
+            mine: vsUnit,
+            enemy: sprite
         });
         vsUnit.hplabel.update();
         if (vsUnit.hp <= 0) {
             vsUnit.dead({
-                mine: sprite,
-                enemy: vsUnit
+                mine: vsUnit,
+                enemy: sprite
             });
             vsUnit.kill();
         }
@@ -104,6 +104,29 @@ var Unit = function(config) {
             sprite.thumb.reverse(sprite);
         }
 
+        sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
+        sprite.removeEventListener(enchant.Event.ENTER_FRAME, walk);
+
+        setTimeout(function() {
+            size =
+            map_chip_size =
+            unit_size_diff_x =
+            unit_size_diff_y =
+            moveVal =
+            image =
+            mode =
+            hplabel =
+            have =
+            line_num =
+            walk_count =
+            ai =
+            chip_direction =
+            mapPoint =
+            checkMoveSquere =
+            getCollision =
+            walk =
+            move = null;
+        }, 10);
         return true;
     };
 

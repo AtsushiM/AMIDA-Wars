@@ -18,9 +18,11 @@ var Amida = function() {
         score_position = CONST_CASH.SCORE.POSITION,
         countdown, countdown_position = CONST_CASH.COUNTDOWN.POSITION,
         statusviewer, statusviewer_position = CONST_CASH.STATUS_VIEWER.POSITION,
-        i, j, len, ary, castle, score, animeID;
+        i, j, len, ary, castle, score, animeID,
+        DOMStyle;
 
     DOM = document.getElementById('enchant-stage');
+    DOMStyle = DOM.style;
 
     //map set
     map.image = map_image;
@@ -32,23 +34,21 @@ var Amida = function() {
      * @param {Number} num vibrate value.
      */
     map.vibrate = function(num) {
-        var style = DOM.style;
-
         num += 'px';
 
         clearInterval(animeID);
         animeID = setTimeout(function() {
-            style.top = 0;
-            style.left = num;
+            DOMStyle.top = 0;
+            DOMStyle.left = num;
             animeID = setTimeout(function() {
-                style.top = num;
-                style.left = 0;
+                DOMStyle.top = num;
+                DOMStyle.left = 0;
                 animeID = setTimeout(function() {
-                    style.top = 0;
-                    style.left = '-' + num;
+                    DOMStyle.top = 0;
+                    DOMStyle.left = '-' + num;
                     animeID = setTimeout(function() {
-                        style.top = 0;
-                        style.left = 0;
+                        DOMStyle.top = 0;
+                        DOMStyle.left = 0;
                     }, 30);
                 }, 30);
             }, 30);
@@ -104,7 +104,17 @@ var Amida = function() {
                         for (j = 0, len = castles.length; j < len; j++) {
                             castle = castles[j];
                             if (obj.intersect(castle) === true) {
-                                ret = castle;
+                                if (castle.checkBreak() === true) {
+                                    if (castle.mode !== user_mode) {
+                                        ret = [0, 0, 1, 0];
+                                    }
+                                    else {
+                                        ret = [1, 0, 0, 0];
+                                    }
+                                }
+                                else {
+                                    ret = castle;
+                                }
                                 break;
                             }
                         }

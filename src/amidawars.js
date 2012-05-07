@@ -275,6 +275,10 @@ var CONST = function() {
                                         y: mine.y,
                                         frames: CONST_CASH.EFFECT.FRAME.FROST
                                     });
+
+                                setTimeout(function() {
+                                    ef.end();
+                                }, 10000);
                             }
                         },
                         WIZARD: {
@@ -460,7 +464,7 @@ var CONST = function() {
                         {
                             direction: 0,
                             prop: 'y',
-                            sign: 1,
+                            sign: -1,
                             order: [
                                 3,
                                 1,
@@ -584,10 +588,10 @@ var CONST = function() {
                         loop: true
                     },
                     FROST: {
-                        start: 11,
-                        end: 11,
-                        rate: 10,
-                        loop: false
+                        start: 12,
+                        end: 12,
+                        rate: 1000,
+                        loop: true
                     }
                 }
             };
@@ -1165,9 +1169,11 @@ var Amida = function() {
         score_position = CONST_CASH.SCORE.POSITION,
         countdown, countdown_position = CONST_CASH.COUNTDOWN.POSITION,
         statusviewer, statusviewer_position = CONST_CASH.STATUS_VIEWER.POSITION,
-        i, j, len, ary, castle, score, animeID;
+        i, j, len, ary, castle, score, animeID,
+        DOMStyle;
 
     DOM = document.getElementById('enchant-stage');
+    DOMStyle = DOM.style;
 
     //map set
     map.image = map_image;
@@ -1179,23 +1185,21 @@ var Amida = function() {
      * @param {Number} num vibrate value.
      */
     map.vibrate = function(num) {
-        var style = DOM.style;
-
         num += 'px';
 
         clearInterval(animeID);
         animeID = setTimeout(function() {
-            style.top = 0;
-            style.left = num;
+            DOMStyle.top = 0;
+            DOMStyle.left = num;
             animeID = setTimeout(function() {
-                style.top = num;
-                style.left = 0;
+                DOMStyle.top = num;
+                DOMStyle.left = 0;
                 animeID = setTimeout(function() {
-                    style.top = 0;
-                    style.left = '-' + num;
+                    DOMStyle.top = 0;
+                    DOMStyle.left = '-' + num;
                     animeID = setTimeout(function() {
-                        style.top = 0;
-                        style.left = 0;
+                        DOMStyle.top = 0;
+                        DOMStyle.left = 0;
                     }, 30);
                 }, 30);
             }, 30);
@@ -1251,7 +1255,17 @@ var Amida = function() {
                         for (j = 0, len = castles.length; j < len; j++) {
                             castle = castles[j];
                             if (obj.intersect(castle) === true) {
-                                ret = castle;
+                                if (castle.checkBreak() === true) {
+                                    if (castle.mode !== user_mode) {
+                                        ret = [0, 0, 1, 0];
+                                    }
+                                    else {
+                                        ret = [1, 0, 0, 0];
+                                    }
+                                }
+                                else {
+                                    ret = castle;
+                                }
                                 break;
                             }
                         }
@@ -1813,14 +1827,14 @@ var Unit = function(config) {
     sprite.attack = function(vsUnit, damage) {
         vsUnit.hp -= damage;
         sprite.attacked({
-            mine: sprite,
-            enemy: vsUnit
+            mine: vsUnit,
+            enemy: sprite
         });
         vsUnit.hplabel.update();
         if (vsUnit.hp <= 0) {
             vsUnit.dead({
-                mine: sprite,
-                enemy: vsUnit
+                mine: vsUnit,
+                enemy: sprite
             });
             vsUnit.kill();
         }
@@ -1858,6 +1872,29 @@ var Unit = function(config) {
             sprite.thumb.reverse(sprite);
         }
 
+        sprite.removeEventListener(enchant.Event.ENTER_FRAME, move);
+        sprite.removeEventListener(enchant.Event.ENTER_FRAME, walk);
+
+        setTimeout(function() {
+            size =
+            map_chip_size =
+            unit_size_diff_x =
+            unit_size_diff_y =
+            moveVal =
+            image =
+            mode =
+            hplabel =
+            have =
+            line_num =
+            walk_count =
+            ai =
+            chip_direction =
+            mapPoint =
+            checkMoveSquere =
+            getCollision =
+            walk =
+            move = null;
+        }, 10);
         return true;
     };
 
@@ -2208,7 +2245,6 @@ var Effect = function(config) {
                 else {
                     sprite.frame = frame_start;
                 }
-                console.log(sprite.frame);
             }
         };
     }
@@ -2229,8 +2265,8 @@ var Effect = function(config) {
     sprite.x = config.x;
     sprite.y = config.y;
     sprite.frame = frame_start;
-    sprite.endFlg = false;
     sprite.effect = effect;
+    sprite.endFlg = false;
 
     //effect action
     sprite.addEventListener(enchant.Event.ENTER_FRAME, effect);
@@ -2238,8 +2274,21 @@ var Effect = function(config) {
     //effect end
     sprite.end = function() {
         sprite.removeEventListener(enchant.Event.ENTER_FRAME, effect);
-        sprite.endFlg = true;
         layer.removeChild(sprite);
+        sprite.endFlg = true;
+
+        setTimeout(function() {
+            size =
+            frames =
+            frame_start =
+            frame_end =
+            rate =
+            loop =
+            type =
+            layer =
+            sprite =
+            effect = null;
+        }, 10);
         return true;
     };
 
@@ -2358,25 +2407,28 @@ var Battle = {
                 unit_user, unit_enemy,
                 i, j;
 
-            for (i in units_enemy) {
-                if (units_enemy.hasOwnProperty(i) === true) {
-                    unit_enemy = units_enemy[i];
-                    for (j in units_user) {
-                        if (units_user.hasOwnProperty(j) === true) {
-                            unit_user = units_user[j];
-                            if (
-                                unit_enemy.intersect(unit_user) === true &&
-                                (
-                                    unit_user.x === unit_enemy.x ||
-                                    unit_user.y === unit_enemy.y
-                                )
-                            ) {
-                                Battle.unitAndUnit(unit_enemy, unit_user);
+            func = function() {
+                for (i in units_enemy) {
+                    if (units_enemy.hasOwnProperty(i) === true) {
+                        unit_enemy = units_enemy[i];
+                        for (j in units_user) {
+                            if (units_user.hasOwnProperty(j) === true) {
+                                unit_user = units_user[j];
+                                if (
+                                    unit_enemy.intersect(unit_user) === true &&
+                                    (
+                                        unit_user.x === unit_enemy.x ||
+                                        unit_user.y === unit_enemy.y
+                                    )
+                                ) {
+                                    Battle.unitAndUnit(unit_enemy, unit_user);
+                                }
                             }
                         }
                     }
                 }
-            }
+            };
+            return func();
         };
         Surveillant.add(func, 'battle');
         return func;
@@ -2387,30 +2439,38 @@ var Battle = {
      */
     score: function(obj) {
         var have = CONST_CASH.HAVE,
-            obj_mode = obj.mode,
             type = CONST_CASH.TYPE,
-            obj_type = obj.type,
             score = LABEL.SCORE,
             point = CONST_CASH.POINT,
+            obj_mode,
+            obj_type,
             ret;
 
-        if (
-            (
-                obj_type !== type.CASTLE &&
-                obj_mode === have.USER
-            ) || (
-                obj_type === type.CASTLE &&
-                obj_mode === have.ENEMY
-            )
-        ) {
-            ret = point[obj_type];
-        }
-        else if (obj_type === type.CASTLE && obj_mode === have.USER) {
-            ret = -point[obj_type];
-        }
+        Battle.score = function(obj) {
+            obj_mode = obj.mode;
+            obj_type = obj.type;
+            ret = null;
 
-        score.add(ret);
-        return ret;
+            if (
+                (
+                    obj_type !== type.CASTLE &&
+                    obj_mode === have.USER
+                ) || (
+                    obj_type === type.CASTLE &&
+                    obj_mode === have.ENEMY
+                )
+            ) {
+                ret = point[obj_type];
+            }
+            else if (obj_type === type.CASTLE && obj_mode === have.USER) {
+                ret = -point[obj_type];
+            }
+
+            score.add(ret);
+            return ret;
+        };
+
+        return Battle.score(obj);
     },
     /**
      * battole unit and unit
