@@ -101,7 +101,7 @@ var Battle = {
             Battle.score(unit2);
         }
 
-        /* MAP.PATH.vibrate(1); */
+        MAP.PATH.vibrate(1);
     },
     /**
      * battle unit and castle
