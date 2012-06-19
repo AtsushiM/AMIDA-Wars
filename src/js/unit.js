@@ -29,6 +29,10 @@ var Unit = function(config) {
     sprite.image = image;
     sprite = propOverride(sprite, config);
 
+    if (sprite.moveVal) {
+        moveVal = sprite.moveVal;
+    }
+
     //hp label
     sprite.hplabel = hplabel;
     hplabel.x = config.x - 2;
@@ -64,6 +68,7 @@ var Unit = function(config) {
         });
         vsUnit.hplabel.update();
         if (vsUnit.hp <= 0) {
+            vsUnit.moveVal = moveVal;
             vsUnit.dead({
                 mine: vsUnit,
                 enemy: sprite

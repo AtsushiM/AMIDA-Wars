@@ -46,6 +46,7 @@ var CONST = function() {
                     HUMAN: {
                         WARRIOR: {
                             name: 'WARRIOR',
+                            race: 'HUMAN',
                             frame: 0,
                             hp: 3,
                             speed: 2,
@@ -56,6 +57,8 @@ var CONST = function() {
                         },
                         LANCER: {
                             name: 'LANCER',
+                            race: 'HUMAN',
+                            frame: 0,
                             frame: 4,
                             hp: 4,
                             speed: 2,
@@ -66,6 +69,8 @@ var CONST = function() {
                         },
                         KNIGHT: {
                             name: 'KNIGHT',
+                            race: 'HUMAN',
+                            frame: 0,
                             frame: 8,
                             hp: 5,
                             speed: 1.8,
@@ -76,6 +81,8 @@ var CONST = function() {
                         },
                         ARCHER: {
                             name: 'ARCHER',
+                            race: 'HUMAN',
+                            frame: 0,
                             frame: 12,
                             hp: 2,
                             speed: 2.2,
@@ -86,6 +93,8 @@ var CONST = function() {
                         },
                         CLELIC: {
                             name: 'CLELIC',
+                            race: 'HUMAN',
+                            frame: 0,
                             frame: 48,
                             hp: 2,
                             speed: 1,
@@ -96,6 +105,8 @@ var CONST = function() {
                         },
                         FIRE_MAGE: {
                             name: 'FIRE_MAGE',
+                            race: 'HUMAN',
+                            frame: 0,
                             frame: 52,
                             hp: 2,
                             speed: 1.6,
@@ -119,6 +130,8 @@ var CONST = function() {
                         },
                         FROST_MAGE: {
                             name: 'FROST_MAGE',
+                            race: 'HUMAN',
+                            frame: 0,
                             frame: 56,
                             hp: 2,
                             speed: 1.6,
@@ -142,6 +155,8 @@ var CONST = function() {
                         },
                         WIZARD: {
                             name: 'WIZARD',
+                            race: 'HUMAN',
+                            frame: 0,
                             frame: 60,
                             hp: 2,
                             speed: 1.6,
@@ -154,6 +169,8 @@ var CONST = function() {
                     UNDEAD: {
                         BONE_DOG: {
                             name: 'BONE_DOG',
+                            race: 'UNDEAD',
+                            frame: 0,
                             frame: 96,
                             hp: 1,
                             speed: 2.8,
@@ -164,16 +181,39 @@ var CONST = function() {
                         },
                         BONE_WARRIER: {
                             name: 'BONE_WARRIER',
+                            race: 'UNDEAD',
                             frame: 100,
                             hp: 2,
                             speed: 2,
                             siege: 1,
                             reverse: 1,
                             attacked: function() {},
-                            dead: function() {}
+                            dead: function(obj) {
+                                var mine = obj.mine,
+                                    ef = new Effect({
+                                        type: mine.type.toUpperCase(),
+                                        etype: 'BONE',
+                                        x: mine.x,
+                                        y: mine.y,
+                                        frames: CONST_CASH.EFFECT.FRAME.BONE
+                                    });
+
+                                setTimeout(function() {
+                                    new Unit(
+                                        propOverride({
+                                            mode: mine.mode,
+                                            x: mine.x - 16,
+                                            y: mine.y - 16,
+                                            moveVal: mine.moveVal
+                                        }, CONST_CASH.UNIT.STATUS[mine.race][mine.name])
+                                    );
+                                    ef.end();
+                                }, 5000);
+                            }
                         },
                         BONE_ARCHER: {
                             name: 'BONE_ARCHER',
+                            race: 'UNDEAD',
                             frame: 104,
                             hp: 1,
                             speed: 2,
@@ -184,6 +224,7 @@ var CONST = function() {
                         },
                         SHADE: {
                             name: 'SHADE',
+                            race: 'UNDEAD',
                             frame: 108,
                             hp: 1,
                             speed: 1.8,
@@ -194,6 +235,7 @@ var CONST = function() {
                         },
                         BONE_SNAKE: {
                             name: 'BONE_SNAKE',
+                            race: 'UNDEAD',
                             frame: 144,
                             hp: 2,
                             speed: 2.6,
@@ -204,6 +246,7 @@ var CONST = function() {
                         },
                         GOLEM: {
                             name: 'GOLEM',
+                            race: 'UNDEAD',
                             frame: 148,
                             hp: 7,
                             speed: 1,
@@ -214,6 +257,7 @@ var CONST = function() {
                         },
                         SPECTOR: {
                             name: 'SPECTOR',
+                            race: 'UNDEAD',
                             frame: 152,
                             hp: 1,
                             speed: 1.8,
@@ -224,6 +268,7 @@ var CONST = function() {
                         },
                         ARACHNE: {
                             name: 'ARACHNE',
+                            race: 'UNDEAD',
                             frame: 156,
                             hp: 3,
                             speed: 2,
@@ -449,6 +494,12 @@ var CONST = function() {
                     FROST: {
                         start: 12,
                         end: 12,
+                        rate: 1000,
+                        loop: true
+                    },
+                    BONE: {
+                        start: 18,
+                        end: 18,
                         rate: 1000,
                         loop: true
                     }
